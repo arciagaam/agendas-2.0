@@ -1,0 +1,84 @@
+<?php
+
+use App\Http\Controllers\admin\user_management\AccountController;
+use App\Http\Controllers\admin\user_management\RoleController;
+use App\Http\Controllers\admin\assignment\ClassroomController as AssignmentClassroomContoller;
+use App\Http\Controllers\admin\assignment\TeacherController as AssignmentTeacherController;
+use App\Http\Controllers\admin\information\BuildingController;
+use App\Http\Controllers\admin\information\DashboardController;
+use App\Http\Controllers\admin\information\RoomController;
+use App\Http\Controllers\admin\information\SectionController;
+use App\Http\Controllers\admin\information\SubjectController;
+use App\Http\Controllers\admin\information\TeacherController;
+use App\Http\Controllers\admin\information\TemplateController;
+use App\Http\Controllers\admin\ReportController;
+use App\Http\Controllers\admin\schedules\ClassController;
+use App\Http\Controllers\admin\schedules\EventController;
+use App\Http\Controllers\admin\schedules\ExamController;
+use App\Http\Controllers\AuthenticationController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+
+Route::get('/', [AuthenticationController::class, 'userLogin']);
+Route::post('/authenticate', [AuthenticationController::class, 'authenticate'])->name('authenticate'); 
+Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout'); 
+
+
+
+
+Route::prefix('admin')->name('admin.')->group(function() {
+
+    Route::get('/', [AuthenticationController::class, 'adminLogin']);
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('information')->name('information.')->group(function() {
+        Route::resource('buildings', BuildingController::class);
+        Route::resource('rooms', RoomController::class);
+        Route::resource('sections', SectionController::class);
+        Route::resource('schedule-templates', TemplateController::class);
+        Route::resource('teachers', TeacherController::class);
+        Route::resource('subjects', SubjectController::class);
+    });
+
+    Route::prefix('assignments')->name('assignments.')->group(function() {
+        Route::resource('classrooms', AssignmentClassroomContoller::class);
+        Route::resource('teachers', AssignmentTeacherController::class);
+    });
+
+    Route::prefix('schedules')->name('schedules.')->group(function() {
+        Route::resource('classes', ClassController::class);
+        Route::resource('events', EventController::class);
+        Route::resource('exams', ExamController::class);
+    });
+
+    Route::resource('reports', ReportController::class);
+
+    Route::prefix('user-management')->name('user-management.')->group(function() {
+        Route::resource('accounts', AccountController::class);
+        Route::resource('roles', RoleController::class);
+    });
+
+});
+
+
+// gumawa ng middleware for user and admin
+
+Route::middleware(['guest'])->group(function () {
+    
+});
+
+Route::middleware(['auth'])->group(function () {
+    
+});

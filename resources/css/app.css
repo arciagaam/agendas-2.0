@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Flex:wght@400;500;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number'] {
+      -webkit-appearance: none;
+      margin: 0;
+      -moz-appearance: textfield !important;
+    }
+ }
+
+@layer components {
+    .form-input-container {
+        @apply flex flex-col gap-1;
+    }
+
+    .form-input {
+        @apply flex items-center border rounded-lg overflow-hidden py-1 px-2 bg-white outline-none;
+    }
+
+    .form-input-container > label {
+        @apply text-project-gray-dark;
+    }
+}
