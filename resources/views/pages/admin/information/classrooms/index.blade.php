@@ -1,12 +1,12 @@
 <x-main-layout>
     <div class="flex justify-between items-center">
-        <x-page.header title="Sections" />
+        <x-page.header title="Classroom" />
         <x-page.actions>
-            <x-button label="Add Section" type="primary">
+            <x-anchor url="{{route('admin.information.classrooms.create')}}" label="Add Classroom" type="primary">
                 <x-slot:icon>
                     <box-icon name='plus-circle'></box-icon>
                 </x-slot:icon>
-            </x-button>
+            </x-anchor>
         </x-page>
     </div>
 
@@ -38,43 +38,26 @@
 
     </x-table.actions>
 
-    @php
-        $sections = [
-            collect([
-                'grade_level' => 3,
-                'section' => 'Mars',
-            ]),
-
-            collect([
-                'grade_level' => 3,
-                'section' => 'Jupiter',
-            ]),
-
-            collect([
-                'grade_level' => 3,
-                'section' => 'Pluto',
-            ]),
-
-            collect([
-                'grade_level' => 3,
-                'section' => 'Earth',
-            ]),
-        ]
-    @endphp
 
     <table class="border-separate border-spacing-0">
         <thead>
             <x-table.tr :isHeader="true">
                 <x-table.td :isHeader="true">Grade Level</x-table.td>
                 <x-table.td :isHeader="true">Section</x-table.td>
+                <x-table.td :isHeader="true">Adviser</x-table.td>
+                <x-table.td :isHeader="true">Room</x-table.td>
+                <x-table.td :isHeader="true">Building</x-table.td>
                 <x-table.td :isHeader="true">Actions</x-table.td>
             </x-table.tr>
         </thead>
         <tbody>
-            @foreach ($sections as $index => $section)
+            @foreach ($classrooms as $classroom)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$section['grade_level']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last">{{$section['section']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom->grade_level}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom->section}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom->adviser_id ?? 'N/A'}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom->room}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom->building}}</x-table.td>
                     <x-table.td :trPosition="$loop->last"></x-table.td>
                 </tr>
             @endforeach

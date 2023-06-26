@@ -4,20 +4,19 @@
             <box-icon name='chevrons-right' type='solid' color="white"></box-icon>
         </div>
 
-        <div class="flex flex-col gap-6 pr-5">
+        <div class="flex flex-col gap-6 pr-4">
             <x-navigation.navlink name="home-alt" label="Dashboard" url="{{route('admin.dashboard')}}"/>
 
             <x-navigation.nav-accordion label="Information Management" name="info-circle">
                 <x-navigation.navlink name="buildings" label="Buildings" url="{{route('admin.information.buildings.index')}}"/>
                 <x-navigation.navlink name="door-open" label="Rooms" url="{{route('admin.information.rooms.index')}}"/>
-                <x-navigation.navlink name="grid-alt" label="Sections" url="{{route('admin.information.sections.index')}}"/>
+                <x-navigation.navlink name="chalkboard" label="Classrooms" url="{{route('admin.information.classrooms.index')}}"/>
                 <x-navigation.navlink name="calendar" label="Schedule Templates" url="{{route('admin.information.schedule-templates.index')}}"/>
                 <x-navigation.navlink name="user-check" label="Teachers" url="{{route('admin.information.teachers.index')}}"/>
                 <x-navigation.navlink name="book-content" label="Subjects" url="{{route('admin.information.subjects.index')}}"/>
             </x-navigation.nav-accordion>
 
             <x-navigation.nav-accordion label="Assignment Module" name="message-square-add">
-                <x-navigation.navlink name="chalkboard" label="Classrooms" url="{{route('admin.assignments.classrooms.index')}}"/>
                 <x-navigation.navlink name="user-plus" label="Teachers" url="{{route('admin.assignments.teachers.index')}}"/>
             </x-navigation.nav-accordion>
 

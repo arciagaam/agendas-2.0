@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\admin\assignment;
+namespace App\Http\Controllers\admin\information;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClassroomStoreRequest;
+use App\Models\Classroom;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -12,7 +15,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.assignment.classrooms.index');
+        return view('pages.admin.information.classrooms.index', ['classrooms' => Classroom::getClassrooms()]);
     }
 
     /**
@@ -20,15 +23,17 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.information.classrooms.create', ['rooms' => Room::get()]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ClassroomStoreRequest $request)
     {
-        //
+        Classroom::create($request->validated());
+        return redirect()->route('admin.information.classrooms.index');
+
     }
 
     /**

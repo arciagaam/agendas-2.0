@@ -2,12 +2,11 @@
 
 use App\Http\Controllers\admin\user_management\AccountController;
 use App\Http\Controllers\admin\user_management\RoleController;
-use App\Http\Controllers\admin\assignment\ClassroomController as AssignmentClassroomContoller;
 use App\Http\Controllers\admin\assignment\TeacherController as AssignmentTeacherController;
 use App\Http\Controllers\admin\information\BuildingController;
 use App\Http\Controllers\admin\information\DashboardController;
 use App\Http\Controllers\admin\information\RoomController;
-use App\Http\Controllers\admin\information\SectionController;
+use App\Http\Controllers\admin\information\ClassroomController;
 use App\Http\Controllers\admin\information\SubjectController;
 use App\Http\Controllers\admin\information\TeacherController;
 use App\Http\Controllers\admin\information\TemplateController;
@@ -46,14 +45,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::prefix('information')->name('information.')->group(function() {
         Route::resource('buildings', BuildingController::class);
         Route::resource('rooms', RoomController::class);
-        Route::resource('sections', SectionController::class);
+        Route::resource('classrooms', ClassroomController::class);
         Route::resource('schedule-templates', TemplateController::class);
         Route::resource('teachers', TeacherController::class);
         Route::resource('subjects', SubjectController::class);
     });
 
     Route::prefix('assignments')->name('assignments.')->group(function() {
-        Route::resource('classrooms', AssignmentClassroomContoller::class);
         Route::resource('teachers', AssignmentTeacherController::class);
     });
 
