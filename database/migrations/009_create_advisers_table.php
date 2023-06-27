@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('advisers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('teacher_id')->constrained('teachers')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('classroom_id')->constrained('classrooms')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('classroom_id')->nullable()->constrained('classrooms')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

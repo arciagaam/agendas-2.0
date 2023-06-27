@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('honorific_id')->constrained('honorifics')->cascadeOnUpdate()->cascadeOnDelete();
             $table->integer('max_hrs');
             $table->integer('regular_load');
-            $table->integer('is_avail');
+            $table->integer('is_avail')->default(1);
             $table->timestamps();
         });
     }

@@ -2,22 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Teacher extends Model
+class Adviser extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'honorific_id',
-        'max_hrs',
-        'regular_load',
-        'user_id',
-        'is_avail'
+        'teacher_id',
+        'classroom_id',
     ];
 
-
+    
 }
