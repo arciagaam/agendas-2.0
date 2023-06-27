@@ -20,7 +20,7 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.information.teachers.create');
     }
 
     /**

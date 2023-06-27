@@ -9,11 +9,11 @@
                 </x-slot:icon>
             </x-button>
 
-            <x-button label="Add Teacher" type="primary">
+            <x-anchor url="{{route('admin.information.subjects.create')}}" label="Add Subject" type="primary">
                 <x-slot:icon>
                     <box-icon name='plus-circle'></box-icon>
                 </x-slot:icon>
-            </x-button>
+            </x-anchor>
         </x-page>
     </div>
 
