@@ -62,5 +62,42 @@ class DatabaseSeeder extends Seeder
             'sex' => 1,
             'user_type_id' => 3,
         ]);
+
+        DB::table('honorifics')->insert([
+            [
+                'honorific' => 'Mr.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'honorific' => 'Mrs.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'honorific' => 'Ms.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'honorific' => 'Mx.',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+
+        for ($i = 1; $i <= 10; $i++) {
+            DB::table('grade_levels')->insert([
+                [
+                    'gr_level' => strval($i),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        }
     }
 }
