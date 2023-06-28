@@ -1,5 +1,7 @@
 <x-main-layout>
 
+
+
     <div id="table_container" class="flex flex-wrap gap-5">
         <table data-tableNumber="1" class="w-fit border-separate border-spacing-2">
             <thead>
