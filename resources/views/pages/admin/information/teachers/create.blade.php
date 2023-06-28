@@ -46,8 +46,8 @@
             </div>
 
             <div class="form-input-container">
-                <label for="max_hrs">Max Hours</label>
-                <input class="form-input " type="number" name="max_hrs" id="max_hrs">
+                <label for="max_hours">Max Hours</label>
+                <input class="form-input " type="number" name="max_hours" id="max_hours">
 
                 @error('max_hrs')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

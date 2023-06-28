@@ -99,5 +99,62 @@ class DatabaseSeeder extends Seeder
                 ],
             ]);
         }
+
+        DB::table('grade_levels')->insert([
+            [
+                'gr_level' => 'All',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'gr_level' => 'Not Applicable',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        $default_subjects = [
+            'Mathematics',
+            'English',
+            'Science',
+            'Mother Tongue',
+            'Araling Panlipunan',
+            'Filipino',
+            'Music',
+            'Arts',
+            'Physical Education',
+            'Health',
+            'MAPEH',
+            'Edukasyong Pantahanan at Pangkabuhayan (EPP)',
+            'Technology Livelihood Education (TLE)',
+            'Edukasyon sa Pagpapakatao (EsP)',
+            'Homeroom',
+            'Recess',
+            'Lunch',
+            'Not Applicable',
+            'ALL',
+        ];
+
+        foreach ($default_subjects as $default_subject) {
+            DB::table('default_subjects')->insert([
+                [
+                    'name' => $default_subject,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        }
+
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        foreach ($days as $day) {
+            DB::table('days')->insert([
+                [
+                    'name' => $day,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        }
     }
 }

@@ -13,10 +13,10 @@ class Teacher extends Model
 
     protected $fillable = [
         'honorific_id',
-        'max_hrs',
+        'max_hours',
         'regular_load',
         'user_id',
-        'is_avail'
+        'is_available'
     ];
 
 
