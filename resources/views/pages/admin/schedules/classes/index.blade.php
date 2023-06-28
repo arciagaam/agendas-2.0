@@ -31,9 +31,9 @@
     <x-table.actions>
         
         <div class="form-input-container">
-            <label class="text-sm" for="grade_level">Grade Level</label>
+            <label class="text-sm" for="grade_level_id">Grade Level</label>
             
-            <select class="form-input text-sm" name="grade_level" id="grade_level">
+            <select class="form-input text-sm" name="grade_level_id" id="grade_level_id">
                 <option value={{null}}>Select Grade Level</option>
                 <option value="1">1</option>
                 <option value="2">2</option>

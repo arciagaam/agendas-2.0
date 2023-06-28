@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('classrooms', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id')->constrained('rooms');
-            $table->foreignId('grade_level')->constrained('grade_levels');
+            $table->foreignId('grade_level_id')->constrained('grade_levels');
             $table->string('section');
             $table->string('class_link')->nullable();
             $table->softDeletes();

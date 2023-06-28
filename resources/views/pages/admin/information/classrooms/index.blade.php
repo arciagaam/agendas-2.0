@@ -53,7 +53,7 @@
         <tbody>
             @foreach ($classrooms as $classroom)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$classroom->grade_level}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom->grade_level_id}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom->section}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom->adviser_id ?? 'N/A'}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom->room}}</x-table.td>
