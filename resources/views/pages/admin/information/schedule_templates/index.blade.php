@@ -2,11 +2,11 @@
     <div class="flex justify-between items-center">
         <x-page.header title="Schedule Templates" />
         <x-page.actions>
-            <x-button label="Add Schedule Template" type="primary">
+            <x-anchor url="{{route('admin.information.schedule-templates.create')}}" label="Add Schedule Template" type="primary">
                 <x-slot:icon>
                     <box-icon name='plus-circle'></box-icon>
                 </x-slot:icon>
-            </x-button>
+            </x-anchor>
         </x-page>
     </div>
 

@@ -25,4 +25,43 @@
     .form-input-container > label {
         @apply text-project-gray-dark;
     }
+
+    #table_container table tr div{
+        @apply p-5;
+    } 
+
+    /* #table_container table tbody tr:last-child td:first-child {
+        @apply rounded-bl-lg border border-r-0 border-t-0 border-black;
+    }
+
+    #table_container table tbody tr:last-child td:last-child {
+        @apply rounded-br-lg border border-l-0 border-t-0 border-black;
+    }
+
+    #table_container table tbody td:first-child {
+        @apply border-t-0 border-l border-black;
+    }
+
+    #table_container table tbody td:last-child {
+        @apply border-t-0 border-r border-black;
+    }
+
+    #table_container table tbody td {
+        @apply border-b border-black;
+    } */
+
+    #table_container table td {
+        @apply border border-[#e5e7eb] bg-gray-100 rounded-lg overflow-hidden;
+    }
+
+    #table_container table th {
+        @apply border border-[#e5e7eb] bg-gray-100 rounded-lg overflow-hidden;
+    }
+
+    #table_container table thead th:last-child, #table_container table td:last-child {
+        @apply border-none bg-transparent;
+    }
+
+
+    
 }

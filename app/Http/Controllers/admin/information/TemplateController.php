@@ -20,7 +20,7 @@ class TemplateController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.information.schedule_templates.create');
     }
 
     /**
@@ -28,7 +28,7 @@ class TemplateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
