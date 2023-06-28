@@ -5,8 +5,9 @@ const timetableSelections = document.querySelectorAll('select[name="timetable_se
 
 document.addEventListener('click', (e) => {
     const target = e.target;
-
     if(target.tagName.toLowerCase() == 'button') {
+        const table = target.closest('table');
+
         if(target.classList.contains('add-row')) {
             const rowIndex = target.closest('tr').rowIndex; 
             const cloned = table.querySelectorAll('tr')[rowIndex].cloneNode(true);
@@ -14,6 +15,12 @@ document.addEventListener('click', (e) => {
         }
 
         if(target.classList.contains('remove-row')) {
+
+            if(table.querySelectorAll('tbody tr').length <= 1) {
+                alert('Each timetable requires at least one row.');
+                return;
+            }
+
             const rowIndex = target.closest('tr').rowIndex;
             table.querySelectorAll('tr')[rowIndex].remove();
         }
@@ -117,12 +124,16 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 
 function handleSubmit() {
     const schedule = [];
-    const tableRows = table.querySelectorAll('tbody tr');
+    const tables = document.querySelectorAll('table');
+    const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 
     tableRows.forEach((row, rowindex) => {
-        row.querySelectorAll('td').forEach((col, colindex) => {
-            if(colindex != 0) {
+        const cols = row.querySelectorAll('td');
+        cols.forEach((col, colindex) => {
+            if(colindex != 0 && colindex != cols.length-1) {
+
                 const rowData = {
+                    timetable_number: col.closest('table').dataset.tablenumber,
                     time_start: row.children[0].querySelector('input[name="time_start[]"]').value,
                     time_end : row.children[0].querySelector('input[name="time_end[]"]').value,
                     day_id : colindex,
