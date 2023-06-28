@@ -14,9 +14,9 @@
             </div>
 
             <div class="form-input-container">
-                <label for="grade_level">Grade Level</label>
+                <label for="grade_level_id">Grade Level</label>
 
-                <select class="form-input" name="grade_level" id="grade_level">
+                <select class="form-input" name="grade_level_id" id="grade_level_id">
                     @for ($i = 0; $i<10; $i++)
                         <option value="{{$i+1}}" >{{$i+1}}</option>
                     @endfor

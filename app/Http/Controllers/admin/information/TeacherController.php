@@ -16,7 +16,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.information.teachers.index');
+        return view('pages.admin.information.teachers.index', ['teachers' => Teacher::getTeachers()]);
     }
 
     /**

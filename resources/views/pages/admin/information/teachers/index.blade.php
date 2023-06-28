@@ -45,7 +45,7 @@
 
     </x-table.actions>
 
-    @php
+    {{-- @php
         $teachers = [
             collect([
                 'full_name' => 'Allen Padilla',
@@ -67,7 +67,7 @@
                 'specializations' => 'Earth',
             ]),
         ]
-    @endphp
+    @endphp --}}
 
     <table class="border-separate border-spacing-0">
         <thead>
@@ -80,8 +80,8 @@
         <tbody>
             @foreach ($teachers as $index => $teacher)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$teacher['full_name']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last">{{$teacher['specializations']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$teacher['honorific'].' '.$teacher['first_name'].' '.$teacher['last_name']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$teacher['max_hours']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last"></x-table.td>
                 </tr>
             @endforeach

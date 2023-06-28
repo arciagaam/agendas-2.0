@@ -19,5 +19,16 @@ class Teacher extends Model
         'is_available'
     ];
 
+    public function scopeGetTeachers(Builder $query) {
+        return $query
+        ->join('honorifics', 'honorifics.id', 'honorific_id')
+        ->join('users', 'users.id', 'user_id')
+        ->when(request()->search || request()->search != '', function ($query) {
+            $query->where('name', 'like', request()->search . '%');
+        })
+        ->latest('teachers.created_at')
+        ->paginate(request()->rows ?? 10)
+        ->appends(request()->query());
+    }
 
 }
