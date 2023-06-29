@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Room;
 use App\Models\User;
+use App\Models\Building;
+use App\Models\Classroom;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -156,5 +159,9 @@ class DatabaseSeeder extends Seeder
                 ],
             ]);
         }
+
+        Building::factory()->count(2)->create();
+        Room::factory()->count(50)->create();
+        Classroom::factory()->count(50)->create();
     }
 }

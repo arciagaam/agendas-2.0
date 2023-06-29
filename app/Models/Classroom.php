@@ -12,7 +12,7 @@ class Classroom extends Model
 
     protected $fillable = [
         'room_id',
-        'grade_level',
+        'grade_level_id',
         'section',
         'adviser_id',
         'class_link',
