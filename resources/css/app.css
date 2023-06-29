@@ -51,16 +51,17 @@
     } */
 
     #table_container table td {
-        @apply border border-[#e5e7eb] bg-gray-100 rounded-lg overflow-hidden;
+        @apply relative border border-[#e5e7eb] bg-gray-100 rounded-lg overflow-hidden cursor-pointer hover:bg-gray-200 duration-100;
     }
 
     #table_container table th {
-        @apply border border-[#e5e7eb] bg-gray-100 rounded-lg overflow-hidden;
+        @apply relative overflow-hidden px-10 pt-8;
     }
 
     #table_container table thead th:last-child, #table_container table td:last-child {
         @apply border-none bg-transparent;
     }
+
 
 
     

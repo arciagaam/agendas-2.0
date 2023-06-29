@@ -1,42 +1,42 @@
 <x-main-layout>
 
     <div id="table_container" class="flex flex-wrap gap-5">
-        <table data-tableNumber="1" class="w-fit border-separate border-spacing-2">
+        <table data-tableNumber="1" class="mt-12 table-auto border-separate border-spacing-2">
             <thead>
-                <tr class="text-center">
+                <tr class="relative text-center">
                     <th>Time</th>
     
-                    <th aria-colindex="1">
-                        <div class="flex flex-col gap-2">
+                    <th aria-colindex="1" class="">
+                        <div class="flex flex-col gap-5 w-full">
                             <x-timetable-selection/>
-                            <p>Monday</p>
+                            <p class="align-middle w-full">Monday</p>
                         </div>
                     </th>
     
-                    <th aria-colindex="2">
-                        <div class="flex flex-col gap-2">
+                    <th aria-colindex="2" class="">
+                        <div class="flex flex-col gap-4">
                             <x-timetable-selection/>
                             <p>Tuesday</p>
                         </div>
                     </th>
     
-                    <th aria-colindex="3">
-                        <div class="flex flex-col gap-2">
+                    <th aria-colindex="3" class="">
+                        <div class="flex flex-col gap-4">
                             <x-timetable-selection/>
                             <p>Wednesday</p>
                         </div>
                     </th>
     
-                    <th aria-colindex="4">
-                        <div class="flex flex-col gap-2">
+                    <th aria-colindex="4" class="">
+                        <div class="flex flex-col gap-4">
                             <x-timetable-selection/>
                             <p>Thursday</p>
                         </div>
                     </th>
                     
     
-                    <th aria-colindex="5">
-                        <div class="flex flex-col gap-2">
+                    <th aria-colindex="5" class="">
+                        <div class="flex flex-col gap-4">
                             <x-timetable-selection/>
                             <p>Friday</p>
                         </div>
@@ -48,37 +48,37 @@
             <tbody>
                 <tr class="text-center">
                     <td>
-                        <div class="flex flex-col gap-2">
-                            <input type="time" name="time_start[]">
-                            <input type="time" name="time_end[]">
+                        <div class="flex flex-col">
+                            <input class="absolute top-0 left-0 h-1/2 w-full bg-transparent outline-0 cursor-pointer text-center" type="time" name="time_start[]">
+                            <input class="absolute bottom-0 left-0 h-1/2 w-full bg-transparent outline-0 cursor-pointer text-center" type="time" name="time_end[]">
                         </div>
                     </td>
     
-                    <td aria-colindex="1">
+                    <td class="td-container" aria-colindex="1">
                         <div>
                             <x-cell-type />
                         </div>
                     </td>
     
-                    <td aria-colindex="2">
+                    <td class="td-container" aria-colindex="2">
                         <div>
                             <x-cell-type />
                         </div>
                     </td>
     
-                    <td aria-colindex="3">
+                    <td class="td-container" aria-colindex="3">
                         <div>
                             <x-cell-type />
                         </div>
                     </td>
     
-                    <td aria-colindex="4">
+                    <td class="td-container" aria-colindex="4">
                         <div>
                             <x-cell-type />
                         </div>
                     </td>
     
-                    <td aria-colindex="5">
+                    <td class="td-container" aria-colindex="5">
                         <div>
                             <x-cell-type />
                         </div>

@@ -1,7 +1,6 @@
 @props(['id' => ''])
-
-<select name="celltypes[]" id={{$id}}>
-    <option value="1">Class</option>
+<select class="absolute top-0 left-0 outline-none rounded-md appearance-none text-center h-full w-full bg-transparent cursor-pointer" name="celltypes[]" id={{$id}}>
+    <option value="1">Select a class</option>
     <option value="2">Flag Ceremony</option>
     <option value="3">Recess</option>
     <option value="4">Lunch Break</option>
