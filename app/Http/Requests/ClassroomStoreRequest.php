@@ -23,7 +23,7 @@ class ClassroomStoreRequest extends FormRequest
     {
         return [
             'room_id' => 'required',
-            'grade_level' => 'required',
+            'grade_level_id' => 'required',
             'section' => 'required',
             'adviser_id' => 'nullable',
             'class_link' => 'nullable',
