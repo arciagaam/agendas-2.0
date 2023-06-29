@@ -14,7 +14,6 @@ class Classroom extends Model
         'room_id',
         'grade_level_id',
         'section',
-        'adviser_id',
         'class_link',
     ];
 

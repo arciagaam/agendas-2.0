@@ -46,7 +46,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('buildings', BuildingController::class);
         Route::resource('rooms', RoomController::class);
         Route::resource('classrooms', ClassroomController::class);
-        Route::resource('schedule-templates', TemplateController::class);
+        Route::post('schedule-templates/store', [TemplateController::class, 'store']);
+        Route::resource('schedule-templates', TemplateController::class)->only(['index', 'create']);
         Route::resource('teachers', TeacherController::class);
         Route::resource('subjects', SubjectController::class);
     });

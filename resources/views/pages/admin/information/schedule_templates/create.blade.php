@@ -1,5 +1,34 @@
 <x-main-layout>
 
+<label for="sap"> SAP</label>
+
+    <select name="" id="sap">
+        <option value="">tite</option>
+    </select>
+
+    <div class="flex gap-5">
+        <x-sections-dropdown>
+            @foreach ($sections as $section)
+    
+                <x-sections-selection gradeLevel="{{$section->gr_level}}">
+                    @foreach ($section->classrooms as $classroom)
+    
+                        <div class="flex gap-2 pl-3">
+                            <input type="checkbox" name="select_sections[]" class="select_sections" value="{{$classroom->id}}" data-section="{{$classroom->section}}">
+                            <p>{{$classroom->section}}</p>
+                        </div>
+    
+                    @endforeach
+                </x-sections-selection>
+    
+            @endforeach
+        </x-sections-dropdown>
+
+        <div id="selected_sections_container" class="flex flex-wrap">
+            
+        </div>
+    </div>
+
     <div id="table_container" class="flex flex-wrap gap-5">
         <table data-tableNumber="1" class="mt-12 table-auto border-separate border-spacing-2">
             <thead>
