@@ -1,4 +1,4 @@
-<select class="bg-project-gray-light rounded-md py-1 px-2 font-normal" name="timetable_selection[]">
+<select class="absolute top-0 left-0 h-1/3 w-full text-center appearance-none outline-none ring-1 ring-[#e5e7eb] ring-inset hover:ring-gray-400 rounded-md cursor-pointer font-normal duration-100" name="timetable_selection[]">
     <option value="1">Timetable 1</option>
     <option value="new">New Timetable</option>
 </select>
