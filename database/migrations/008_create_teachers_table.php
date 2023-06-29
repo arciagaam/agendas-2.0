@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('honorific_id')->constrained('honorifics')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->integer('max_hrs');
+            $table->integer('max_hours');
             $table->integer('regular_load');
-            $table->integer('is_avail');
+            $table->integer('is_available')->default(1);
             $table->timestamps();
         });
     }

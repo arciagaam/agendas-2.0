@@ -2,11 +2,11 @@
     <div class="flex justify-between items-center">
         <x-page.header title="Schedule Templates" />
         <x-page.actions>
-            <x-button label="Add Schedule Template" type="primary">
+            <x-anchor url="{{route('admin.information.schedule-templates.create')}}" label="Add Schedule Template" type="primary">
                 <x-slot:icon>
                     <box-icon name='plus-circle'></box-icon>
                 </x-slot:icon>
-            </x-button>
+            </x-anchor>
         </x-page>
     </div>
 
@@ -41,25 +41,25 @@
     @php
         $templates = [
             collect([
-                'grade_level' => 3,
+                'grade_level_id' => 3,
                 'section' => 'Mars',
                 'school_year' => '2022-2023',
             ]),
 
             collect([
-                'grade_level' => 3,
+                'grade_level_id' => 3,
                 'section' => 'Jupiter',
                 'school_year' => '2022-2023',
             ]),
 
             collect([
-                'grade_level' => 3,
+                'grade_level_id' => 3,
                 'section' => 'Pluto',
                 'school_year' => '2022-2023',
             ]),
 
             collect([
-                'grade_level' => 3,
+                'grade_level_id' => 3,
                 'section' => 'Earth',
                 'school_year' => '2022-2023',
             ]),
@@ -78,7 +78,7 @@
         <tbody>
             @foreach ($templates as $index => $template)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$template['grade_level']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$template['grade_level_id']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$template['section']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$template['school_year']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last"></x-table.td>

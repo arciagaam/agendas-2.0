@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\admin\information;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TeacherStoreRequest;
+use App\Http\Requests\AdviserStoreRequest;
 use App\Models\Adviser;
-use App\Models\Teacher;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -16,7 +14,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.information.teachers.index', ['teachers' => Teacher::getTeachers()]);
+        //
     }
 
     /**
@@ -24,22 +22,15 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.information.teachers.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TeacherStoreRequest $request)
+    public function store(AdviserStoreRequest $request)
     {
-        $createdUser = User::create([...$request->validated(), 'password' => bcrypt('password'), 'user_type_id' => 2]);
-
-        $teacher = Teacher::create([...$request->validated(), 'user_id' => $createdUser->id]);
-
-        if ($request->validated('is_adviser') == 1) {
-            Adviser::create(['teacher_id' => $teacher->id, 'classroom_id' => null]);
-        }
-
+        // Adviser::create($request->validated());
         return redirect()->route('admin.information.teachers.index');
     }
 

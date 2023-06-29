@@ -45,30 +45,6 @@
 
     </x-table.actions>
 
-    @php
-        $subjects = [
-            collect([
-                'name' => 'Math',
-                'code' => 'MATH-1',
-            ]),
-
-            collect([
-                'name' => 'English',
-                'code' => 'ENG-1',
-            ]),
-
-            collect([
-                'name' => 'Science',
-                'code' => 'SCI-1',
-            ]),
-
-            collect([
-                'name' => 'Filipino',
-                'code' => 'FIL-1',
-            ]),
-        ]
-    @endphp
-
     <table class="border-separate border-spacing-0">
         <thead>
             <x-table.tr :isHeader="true">
@@ -80,8 +56,8 @@
         <tbody>
             @foreach ($subjects as $index => $subject)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$subject['name']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last">{{$subject['code']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$subject['subject_name']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$subject['subject_code']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last"></x-table.td>
                 </tr>
             @endforeach

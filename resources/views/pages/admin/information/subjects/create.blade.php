@@ -1,15 +1,20 @@
 <x-main-layout>
     <form method="POST" action="{{route('admin.information.subjects.store')}}">
+        @csrf
         <div class="flex flex-col gap-5 w-1/2">
 
             <div class="form-input-container">
-                <label for="default_subject">Default Subject</label>
-                <select class="form-input" name="default_subject" id="default_subject">
+                <label for="default_subject_id">Default Subject</label>
+                <select class="form-input" name="default_subject_id" id="default_subject_id">
                     <option value="">Select Default Subject</option>
-                    {{-- @foreach ($default_subjects as $default_subject)
+                    @foreach ($default_subjects as $default_subject)
                         <option value="{{$default_subject->id}}">{{$default_subject->name}}</option>
-                    @endforeach --}}
+                    @endforeach
                 </select>
+
+                @error('default_subject_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="form-input-container">
@@ -18,13 +23,17 @@
             </div>
 
             <div class="form-input-container">
-                <label for="grade_level">Grade Level</label>
-                <select class="form-input" name="grade_level" id="grade_level">
+                <label for="gr_level_id">Grade Level</label>
+                <select class="form-input" name="gr_level_id" id="gr_level_id">
                     <option value="">Select Grade Level</option>
-                    {{-- @foreach ($grade_levels as $grade_level)
-                        <option value="{{$grade_level->id}}">{{$grade_level->name}}</option>
-                    @endforeach --}}
+                    @foreach ($grade_levels as $grade_level)
+                        <option value="{{$grade_level->id}}">{{$grade_level->gr_level}}</option>
+                    @endforeach
                 </select>
+
+                @error('gr_level_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="form-input-container">
@@ -33,26 +42,44 @@
             </div>
 
             <div class="form-input-container">
-                <label for="sp_count">Single Period Count</label>
-                <input class="form-input" type="number" name="sp_count" id="sp_count">
+                <label for="sp_frequency">Single Period Count</label>
+                <input class="form-input" type="number" name="sp_frequency" id="sp_frequency">
             </div>
 
             <div class="form-input-container">
-                <label for="dp_count">Double Period Count</label>
-                <input class="form-input" type="number" name="dp_count" id="dp_count">
+                <label for="dp_frequency">Double Period Count</label>
+                <input class="form-input" type="number" name="dp_frequency" id="dp_frequency">
             </div>
 
             <div class="form-input-container">
-                <label for="prio_num">Priority Number</label>
-                <select class="form-input" name="prio_num" id="prio_num">
-                    <option value="">Select Priority Number</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    {{-- @foreach ($grade_levels as $grade_level)
-                        <option value="{{$grade_level->id}}">{{$grade_level->name}}</option>
-                    @endforeach --}}
+                <label for="is_priority">Priority Subject</label>
+                <select class="form-input" name="is_priority" id="is_priority">
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
                 </select>
+            </div>
+
+            <div class="form-input-container hidden" id="priority_time_div">
+                <label for="priority_time">Priority Time</label>
+                <input class="form-input" type="time" name="priority_time" id="priority_time">
+                
+                @error('priority_time')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="form-input-container hidden" id="priority_day_div">
+                <label for="priority_day">Priority Day</label>
+                <select class="form-input" name="priority_day" id="priority_day">
+                    <option value="">Select Day</option>
+                    @foreach ($days as $day)
+                        <option value="{{$day->id}}">{{$day->name}}</option>
+                    @endforeach
+                </select>
+
+                @error('priority_day')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="form-input-container">
@@ -64,3 +91,5 @@
         </div>
     </form>
 </x-main-layout>
+
+@vite('resources/js/subject_priority.js')

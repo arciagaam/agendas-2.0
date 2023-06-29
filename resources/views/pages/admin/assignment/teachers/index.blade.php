@@ -36,28 +36,28 @@
             collect([
                 'subject_name' => 'Math 1',
                 'subject_code' => 'MATH-1',
-                'grade_level' => '1',
+                'grade_level_id' => '1',
                 'assigned_teachers' => 'Teacher 1',
             ]),
 
             collect([
                 'subject_name' => 'English 1 ',
                 'subject_code' => 'ENG-1',
-                'grade_level' => '1',
+                'grade_level_id' => '1',
                 'assigned_teachers' => 'Teacher 2',
             ]),
 
             collect([
                 'subject_name' => 'Science 1',
                 'subject_code' => 'SCI-1',
-                'grade_level' => '1',
+                'grade_level_id' => '1',
                 'assigned_teachers' => 'Teacher 3',
             ]),
 
             collect([
                 'subject_name' => 'Filipino 1',
                 'subject_code' => 'FIL-1',
-                'grade_level' => '1',
+                'grade_level_id' => '1',
                 'assigned_teachers' => 'Teacher 4',
             ]),
         ]
@@ -78,7 +78,7 @@
                 <tr>
                     <x-table.td :trPosition="$loop->last">{{$classroom['subject_name']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom['subject_code']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last">{{$classroom['grade_level']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$classroom['grade_level_id']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom['assigned_teachers']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last"></x-table.td>
                 </tr>
