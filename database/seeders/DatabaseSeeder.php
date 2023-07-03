@@ -116,32 +116,54 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
+        DB::table('subject_types')->insert([
+            [
+                'type' => 'Academic',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'type' => 'Non-Academic',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'type' => 'Break',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
         $default_subjects = [
-            'Mathematics',
-            'English',
-            'Science',
-            'Mother Tongue',
-            'Araling Panlipunan',
-            'Filipino',
-            'Music',
-            'Arts',
-            'Physical Education',
-            'Health',
-            'MAPEH',
-            'Edukasyong Pantahanan at Pangkabuhayan (EPP)',
-            'Technology Livelihood Education (TLE)',
-            'Edukasyon sa Pagpapakatao (EsP)',
-            'Homeroom',
-            'Recess',
-            'Lunch',
-            'Not Applicable',
-            'ALL',
+            ['Mathematics', 1],
+            ['English', 1],
+            ['Science', 1],
+            ['Mother Tongue', 1],
+            ['Araling Panlipunan', 1],
+            ['Filipino', 1],
+            ['Music', 1],
+            ['Arts', 1],
+            ['Physical Education', 1],
+            ['Health', 1],
+            ['MAPEH', 1],
+            ['Edukasyong Pantahanan at Pangkabuhayan (EPP)', 1],
+            ['Technology Livelihood Education (TLE)', 1],
+            ['Edukasyon sa Pagpapakatao (EsP)', 1],
+            ['Flag Ceremony', 2],
+            ['Homeroom', 2],
+            ['Clubs', 2],
+            ['Break', 3],
+            ['Recess', 3],
+            ['Lunch', 3],
+            ['Not Applicable', null],
+            ['ALL', null],
         ];
 
         foreach ($default_subjects as $default_subject) {
             DB::table('default_subjects')->insert([
                 [
-                    'name' => $default_subject,
+                    'name' => $default_subject[0],
+                    'subject_type_id' => $default_subject[1],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

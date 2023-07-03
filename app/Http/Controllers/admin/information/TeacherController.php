@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin\information;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherStoreRequest;
 use App\Models\Adviser;
+use App\Models\TeacherSpecialization;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,6 +36,12 @@ class TeacherController extends Controller
         $createdUser = User::create([...$request->validated(), 'password' => bcrypt('password'), 'user_type_id' => 2]);
 
         $teacher = Teacher::create([...$request->validated(), 'user_id' => $createdUser->id]);
+
+        if ($request->specializations) {
+            foreach ($request->specializations as $specialization) {
+                TeacherSpecialization::create(['teacher_id' => $teacher->id, 'specialization_id' => $specialization]);
+            }
+        }
 
         if ($request->validated('is_adviser') == 1) {
             Adviser::create(['teacher_id' => $teacher->id, 'classroom_id' => null]);
