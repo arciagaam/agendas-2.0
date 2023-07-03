@@ -27,7 +27,7 @@ class SubjectController extends Controller
     public function create()
     {
         return view('pages.admin.information.subjects.create', 
-            ['default_subjects' => DefaultSubject::all(), 'grade_levels' => GradeLevel::all(), 'days' => Day::all()]);
+            ['default_subjects' => DefaultSubject::getDefaultSubjectsOnly()->get(), 'grade_levels' => GradeLevel::all(), 'days' => Day::all()]);
     }
 
     /**

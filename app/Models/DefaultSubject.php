@@ -15,14 +15,23 @@ class DefaultSubject extends Model
         'name',
     ];
 
-    // public function scopeGetDefaultSubjects(Builder $query) {
-    //     return $query
-    //     ->when(request()->search || request()->search != '', function ($query) {
-    //         $query->where('name', 'like', request()->search . '%');
-    //     })
-    //     ->latest()
-    //     ->paginate(request()->rows ?? 10)
-    //     ->appends(request()->query());
-    // }
+    public function scopeGetAllDefaultSubjects(Builder $query) {
+        return $query
+        ->when(request()->search || request()->search != '', function ($query) {
+            $query->where('name', 'like', request()->search . '%');
+        })
+        ->latest()
+        ->paginate(request()->rows ?? 10)
+        ->appends(request()->query());
+    }
+
+    public function scopeGetDefaultSubjectsOnly(Builder $query) {
+        return $query
+        ->where('subject_type_id', 1)
+        ->when(request()->search || request()->search != '', function ($query) {
+            $query->where('name', 'like', request()->search . '%');
+        })
+        ->latest();
+    }
 
 }
