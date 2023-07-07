@@ -47,15 +47,16 @@ class BuildingController extends Controller
      */
     public function edit(Building $building)
     {
-        //
+        return view('pages.admin.information.buildings.edit', ['building' => $building]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Building $building)
+    public function update(BuildingStoreRequest $request, Building $building)
     {
-        //
+        $building->update($request->validated());
+        return redirect()->route('admin.information.buildings.index');
     }
 
     /**

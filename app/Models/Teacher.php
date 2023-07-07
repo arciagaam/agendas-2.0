@@ -24,7 +24,7 @@ class Teacher extends Model
         ->join('honorifics', 'honorifics.id', 'honorific_id')
         ->join('users', 'users.id', 'user_id')
         ->when(request()->search || request()->search != '', function ($query) {
-            $query->where('name', 'like', request()->search . '%');
+            $query->where('first_name', 'like', request()->search . '%');
         })
         ->latest('teachers.created_at')
         ->paginate(request()->rows ?? 10)

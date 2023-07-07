@@ -58,7 +58,15 @@
                     <x-table.td :trPosition="$loop->last">{{$classroom->adviser_id ?? 'N/A'}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom->room}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$classroom->building}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last"></x-table.td>
+                    <x-table.td :trPosition="$loop->last">
+                        <x-page.actions>
+                            <x-anchor url="{{route('admin.information.classrooms.edit', ['classroom' => $classroom->id])}}" label="Edit" type="primary">
+                                <x-slot:icon>
+                                    <box-icon name='edit'></box-icon>
+                                </x-slot:icon>
+                            </x-anchor>
+                        </x-page.actions>
+                    </x-table.td>
                 </tr>
             @endforeach
         </tbody>
