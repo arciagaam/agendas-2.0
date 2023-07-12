@@ -70,7 +70,7 @@ function fetchSpecializations(searchQuery) {
                 });
 
                 const searchItem = Object.assign(document.createElement('p'), {
-                    className: 'text-sm w-full',
+                    className: 'text-sm w-full cursor-pointer',
                     innerText: specialization.name,
                     onmousedown: () => {handleSelectSpecialization(specialization)}
                 });
@@ -110,4 +110,30 @@ function handleSelectSpecialization(specialization) {
     capsuleContainer.append(capsule);
     capsuleContainer.append(input);
     selectedSpecializationsContainer.insertBefore(capsuleContainer,searchInput);
+}
+
+function fetchTeacherSpecializations(id) {
+    const form = new FormData();
+    form.append('id', JSON.stringify(id));
+
+    fetch(BASE_PATH + `/api/teacher_specializations/${id}`, {
+        headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        method: 'POST',
+        body: form
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.payload) {
+            data.payload.forEach(specialization => {
+                // console.log(specialization);
+                handleSelectSpecialization(specialization);
+            });
+        }
+    });
+}
+
+if (teacher_id) {
+    fetchTeacherSpecializations(teacher_id);
 }

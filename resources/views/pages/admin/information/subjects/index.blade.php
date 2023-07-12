@@ -58,7 +58,15 @@
                 <tr>
                     <x-table.td :trPosition="$loop->last">{{$subject['subject_name']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$subject['subject_code']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last"></x-table.td>
+                    <x-table.td :trPosition="$loop->last">
+                        <x-page.actions>
+                            <x-anchor url="{{route('admin.information.subjects.edit', ['subject' => $subject->id])}}" label="Edit" type="primary">
+                                <x-slot:icon>
+                                    <box-icon name='edit'></box-icon>
+                                </x-slot:icon>
+                            </x-anchor>
+                        </x-page.actions>
+                    </x-table.td>
                 </tr>
             @endforeach
         </tbody>

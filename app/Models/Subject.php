@@ -30,4 +30,7 @@ class Subject extends Model
         ->appends(request()->query());
     }
     
+    public function prioritizedSubjects() {
+        return $this->hasOne(PrioritizedSubjects::class);
+    }
 }

@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class PrioritizedSubjects extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'subject_id',
@@ -17,5 +19,7 @@ class PrioritizedSubjects extends Model
         'priority_day',
     ];
 
-    
+    public function subject() {
+        return $this->belongsTo(Subject::class);
+    }
 }

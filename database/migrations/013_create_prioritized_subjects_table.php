@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('subject_id')->constrained('subjects')->cascadeOnUpdate()->cascadeOnDelete();
             $table->time('priority_time');
             $table->string('priority_day');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

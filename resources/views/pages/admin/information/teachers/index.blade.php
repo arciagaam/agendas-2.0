@@ -82,7 +82,15 @@
                 <tr>
                     <x-table.td :trPosition="$loop->last">{{$teacher['honorific'].' '.$teacher['first_name'].' '.$teacher['last_name']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">{{$teacher['max_hours']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last"></x-table.td>
+                    <x-table.td :trPosition="$loop->last">
+                        <x-page.actions>
+                            <x-anchor url="{{route('admin.information.teachers.edit', ['teacher' => $teacher['teacher_id']])}}" label="Edit" type="primary">
+                                <x-slot:icon>
+                                    <box-icon name='edit'></box-icon>
+                                </x-slot:icon>
+                            </x-anchor>
+                        </x-page.actions>
+                    </x-table.td>
                 </tr>
             @endforeach
         </tbody>
