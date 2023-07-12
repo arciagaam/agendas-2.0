@@ -96,7 +96,7 @@ function handleSelectSpecialization(specialization) {
     });
 
     const capsule = Object.assign(document.createElement('div'), {
-        className: 'flex ring-1 ring-blue-400 px-3 text-xs rounded-full text-blue-400 w-full',
+        className: 'flex ring-1 ring-blue-400 px-3 text-xs rounded-full text-blue-400 w-full gap-3',
         innerText: specialization.name
     });
 
@@ -107,9 +107,21 @@ function handleSelectSpecialization(specialization) {
         value: specialization.id
     });
 
+    const deleteButton = Object.assign(document.createElement('button'), {
+        className: 'delete-button',
+        innerText: 'x',
+        onclick: () => { handleDeleteSpecialization(capsuleContainer); }
+    });
+
+    
     capsuleContainer.append(capsule);
+    capsule.append(deleteButton);
     capsuleContainer.append(input);
     selectedSpecializationsContainer.insertBefore(capsuleContainer,searchInput);
+}
+
+function handleDeleteSpecialization(container) {
+    container.remove();
 }
 
 function fetchTeacherSpecializations(id) {

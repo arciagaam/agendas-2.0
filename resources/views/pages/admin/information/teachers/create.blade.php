@@ -96,7 +96,7 @@
                             <input id="search_specialization" name="search_specialization" class="outline-none min-w-[40px] flex-1 text-regular" type="text">
                         </div>
     
-                        <div id="specializations_container" aria-hidden="true" class="absolute top-[100%] border border-t-0 rounded-b-lg border-gray-3 p-2 w-full flex flex-col aria-hidden:hidden gap-2">
+                        <div id="specializations_container" aria-hidden="true" class="absolute top-[100%] bg-project-dominant border border-t-0 rounded-b-lg border-gray-3 p-2 w-full flex flex-col aria-hidden:hidden gap-2">
                         </div>
                     </div>
             </div>

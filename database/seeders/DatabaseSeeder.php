@@ -6,6 +6,8 @@ namespace Database\Seeders;
 
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\Building;
 use App\Models\Classroom;
 use Illuminate\Database\Seeder;
@@ -185,5 +187,7 @@ class DatabaseSeeder extends Seeder
         Building::factory()->count(2)->create();
         Room::factory()->count(50)->create();
         Classroom::factory()->count(50)->create();
+        Subject::factory()->count(140)->create();
+        Teacher::factory()->count(35)->create();
     }
 }
