@@ -22,8 +22,11 @@ class Subject extends Model
 
     public function scopeGetSubjects(Builder $query) {
         return $query
+        ->when(request()->gr_level_id != '', function ($query) {
+            $query->where('gr_level_id', request()->gr_level_id);
+        })
         ->when(request()->search || request()->search != '', function ($query) {
-            $query->where('name', 'like', request()->search . '%');
+            $query->where('subject_name', 'like', request()->search . '%');
         })
         ->latest()
         ->paginate(request()->rows ?? 10)

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DefaultSubject;
+use App\Models\SubjectTeacher;
 use App\Models\TeacherSpecialization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,3 +45,51 @@ Route::post('/teacher_specializations/{id}', function (Request $request, $id) {
 
     return response()->json(['payload' => $result], 200);
 })->name('teacher_specializations.get');
+
+Route::post('/teacher_assignment', function (Request $request) {
+    $subject_id = json_decode($request->subject_id);
+    $teachers = json_decode($request->teachers) ?? [];
+    $result = TeacherSpecialization::where('specialization_id', $subject_id)
+        ->join('teachers', 'teacher_specializations.teacher_id', 'teachers.id')
+        ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
+        ->join('users', 'teachers.user_id', 'users.id')
+        ->select('teacher_specializations.*', 'honorifics.honorific', 'users.first_name', 'users.last_name')
+        ->whereNotIn('teacher_id', $teachers)
+        ->take(10)->get();
+
+    if ($result->isEmpty()) {
+        return response()->json(['message' => 'No results found.'], 404);
+    }
+
+    return response()->json(['payload' => $result], 200);
+})->name('teacher_assignment.get');
+
+Route::post('/create_subject_teacher', function (Request $request) {
+    SubjectTeacher::create(['teacher_id' => $request->teacher_id, 'subject_id' => $request->subject_id]);
+
+    return response()->json(['message' => 'Subject_teacher created successfully']);
+})->name('teacher_assignment.create');
+
+Route::post('/delete_subject_teacher', function (Request $request) {
+    $subjectTeacher = SubjectTeacher::where('teacher_id', $request->teacher_id)
+        ->where('subject_id', $request->subject_id)
+        ->first();
+
+    if ($subjectTeacher) {
+        $subjectTeacher->delete();
+        return response()->json(['message' => 'Subject_teacher deleted successfully']);
+    } else {
+        return response()->json(['message' => 'Subject_teacher not found'], 404);
+    }
+})->name('teacher_assignment.destroy');
+
+Route::post('/subject_teachers/{id}', function (Request $request, $id) {
+    $result = SubjectTeacher::where('subject_id', $id)
+        ->join('teachers', 'subject_teachers.teacher_id', 'teachers.id')
+        ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
+        ->join('users', 'teachers.user_id', 'users.id')
+        ->select('subject_teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name')
+        ->get();
+
+    return response()->json(['payload' => $result], 200);
+})->name('subject_teachers.get');

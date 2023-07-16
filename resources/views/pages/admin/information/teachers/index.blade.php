@@ -31,15 +31,15 @@
         
         <div class="form-input-container">
             <label class="text-sm" for="rows">Rows</label>
+
+            @php
+                $rowValues = [10,20,30,40,50,75];
+            @endphp
             
-            <select class="form-input text-sm" name="rows" id="rows">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
-                <option value="75">75</option>
-                <option value="100">100</option>
+            <select class="form-input text-sm" name="rows" id="rows" onchange="this.form.submit()">
+                @foreach ($rowValues as $rowValue)
+                    <option value="{{$rowValue}}" @if ($rowValue == count($teachers)) selected @endif>{{$rowValue}}</option>
+                @endforeach
             </select>
         </div>
 

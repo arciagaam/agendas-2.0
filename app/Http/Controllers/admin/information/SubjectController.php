@@ -18,7 +18,9 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.information.subjects.index', ['subjects' => Subject::getSubjects()]);
+        return view('pages.admin.information.subjects.index', [
+            'subjects' => Subject::getSubjects(),
+            'grade_levels' => GradeLevel::getGradeLevelsOnly()->get()]);
     }
 
     /**

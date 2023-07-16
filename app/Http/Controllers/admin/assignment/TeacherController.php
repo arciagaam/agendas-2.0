@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin\assignment;
 
 use App\Http\Controllers\Controller;
+use App\Models\GradeLevel;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -12,7 +14,9 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.assignment.teachers.index');
+        return view('pages.admin.assignment.teachers.index', [
+            'grade_levels' => GradeLevel::getGradeLevelsOnly()->get(),
+            'subjects' => Subject::getSubjects()]);
     }
 
     /**

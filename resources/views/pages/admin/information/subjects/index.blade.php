@@ -43,6 +43,16 @@
             </select>
         </div>
 
+        <div class="form-input-container">
+            <label class="text-sm" for="gr_level_id">Grade level</label>
+
+            <select class="form-input" name="gr_level_id" id="gr_level_id" onchange="this.form.submit()">
+                @foreach ($grade_levels as $grade_level)
+                    <option value="{{ $grade_level->id }}" @if ($grade_level->id == $subjects[0]->gr_level_id) selected @endif>{{ $grade_level->gr_level }}</option>
+                @endforeach
+            </select>
+        </div>
+
     </x-table.actions>
 
     <table class="border-separate border-spacing-0">

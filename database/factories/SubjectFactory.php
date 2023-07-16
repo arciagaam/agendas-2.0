@@ -37,7 +37,7 @@ class SubjectFactory extends Factory
 
         return [
             'subject_name' => 'Subject ' . $this->faker->colorName(),
-            'subject_code' => $this->faker->numberBetween(10, 99),
+            'subject_code' => 'Subj-'.$this->faker->numberBetween(10, 99),
             'subject_description' => null,
             'default_subject_id' => $subjectId,
             'gr_level_id' => $grLevelId,
