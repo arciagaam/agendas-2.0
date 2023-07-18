@@ -23,7 +23,7 @@
                     </select>
                 </div>
             </x-table.actions>
-            
+            @dd($classSchedule)
             @if (request()->classroom_id && request()->grade_level_id)
                 @for ($tables = 0; $tables < getTimetableCount($classSchedule); $tables++)
 
