@@ -204,19 +204,6 @@ class DatabaseSeeder extends Seeder
             ),
             DB::table('subjects')->insertGetId(
                 [
-                    'subject_name' => 'Flag Ceremony',
-                    'subject_code' => null,
-                    'subject_description' => null,
-                    'default_subject_id' => 15,
-                    'gr_level_id' => 11,
-                    'sp_frequency' => 0,
-                    'dp_frequency' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            ),
-            DB::table('subjects')->insertGetId(
-                [
                     'subject_name' => 'Homeroom',
                     'subject_code' => null,
                     'subject_description' => null,

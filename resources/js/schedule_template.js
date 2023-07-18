@@ -141,10 +141,11 @@ function handleSubmit() {
             const cols = row.querySelectorAll('td');
             cols.forEach((col, colindex) => {
                 if(colindex != 0 && colindex != cols.length-1) {
-    
+                    console.log(col.querySelector('select[name="celltypes[]"]').value);
                     const rowData = {
                         classroom_id: section,
-                        timetable_number: col.closest('table').dataset.tablenumber,
+                        timetable: col.closest('table').dataset.tablenumber,
+                        subject_teacher_id: col.querySelector('select[name="celltypes[]"]').value,
                         time_start: row.children[0].querySelector('input[name="time_start[]"]').value,
                         time_end : row.children[0].querySelector('input[name="time_end[]"]').value,
                         day_id : colindex,
@@ -156,15 +157,15 @@ function handleSubmit() {
         })
     })
     
-    const form = new FormData;
-    form.append('schedules', JSON.stringify(schedule));
+    // const form = new FormData;
+    // form.append('schedules', JSON.stringify(schedule));
 
-    fetch(`${BASE_PATH}/admin/information/schedule-templates/store`, {
-        headers:{
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        method: "POST",
-        body: form,
-    })
-    .then(res => console.log(res));
+    // fetch(`${BASE_PATH}/admin/information/schedule-templates/store`, {
+    //     headers:{
+    //         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    //     },
+    //     method: "POST",
+    //     body: form,
+    // })
+    // .then(res => console.log(res));
 }

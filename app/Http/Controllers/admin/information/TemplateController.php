@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\admin\information;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassSchedule;
 use App\Models\GradeLevel;
+use App\Models\SubjectTeacher;
+use App\Models\Template;
 use Illuminate\Http\Request;
 
 class TemplateController extends Controller
@@ -22,7 +25,8 @@ class TemplateController extends Controller
     public function create()
     {
         return view('pages.admin.information.schedule_templates.create',[
-            'sections' => GradeLevel::latest()->with('classrooms')->get(),
+            'sections' => GradeLevel::getGradeLevelsOnly()->with('classrooms')->get(),
+            'types' => SubjectTeacher::getTypes()->get(),
         ]);
     }
 
@@ -31,7 +35,13 @@ class TemplateController extends Controller
      */
     public function store(Request $request)
     {
-        dd(json_decode($request->schedules));
+        $classSchedule = [];
+        foreach (json_decode($request->schedules) as $value) {
+            array_push($classSchedule, (array) $value);
+        }
+
+        // dd($classSchedule);
+        ClassSchedule::insert((array) $classSchedule);
     }
 
     /**
