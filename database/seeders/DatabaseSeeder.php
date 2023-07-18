@@ -155,8 +155,6 @@ class DatabaseSeeder extends Seeder
             ['Homeroom', 2],
             ['Clubs', 2],
             ['Break', 3],
-            ['Recess', 3],
-            ['Lunch', 3],
             ['Not Applicable', null],
             ['ALL', null],
         ];
@@ -189,5 +187,97 @@ class DatabaseSeeder extends Seeder
         Classroom::factory()->count(50)->create();
         Subject::factory()->count(140)->create();
         Teacher::factory()->count(35)->create();
+
+        $subjectIds = [
+            DB::table('subjects')->insertGetId(
+                [
+                    'subject_name' => 'Flag Ceremony',
+                    'subject_code' => null,
+                    'subject_description' => null,
+                    'default_subject_id' => 15,
+                    'gr_level_id' => 11,
+                    'sp_frequency' => 0,
+                    'dp_frequency' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ),
+            DB::table('subjects')->insertGetId(
+                [
+                    'subject_name' => 'Flag Ceremony',
+                    'subject_code' => null,
+                    'subject_description' => null,
+                    'default_subject_id' => 15,
+                    'gr_level_id' => 11,
+                    'sp_frequency' => 0,
+                    'dp_frequency' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ),
+            DB::table('subjects')->insertGetId(
+                [
+                    'subject_name' => 'Homeroom',
+                    'subject_code' => null,
+                    'subject_description' => null,
+                    'default_subject_id' => 16,
+                    'gr_level_id' => 11,
+                    'sp_frequency' => 0,
+                    'dp_frequency' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ),
+
+            DB::table('subjects')->insertGetId(
+                [
+                    'subject_name' => 'Clubs',
+                    'subject_code' => null,
+                    'subject_description' => null,
+                    'default_subject_id' => 17,
+                    'gr_level_id' => 11,
+                    'sp_frequency' => 0,
+                    'dp_frequency' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ),
+            DB::table('subjects')->insertGetId(
+                [
+                    'subject_name' => 'Recess',
+                    'subject_code' => null,
+                    'subject_description' => null,
+                    'default_subject_id' => 18,
+                    'gr_level_id' => 11,
+                    'sp_frequency' => 0,
+                    'dp_frequency' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ),
+
+            DB::table('subjects')->insertGetId(
+                [
+                    'subject_name' => 'Lunch',
+                    'subject_code' => null,
+                    'subject_description' => null,
+                    'default_subject_id' => 18,
+                    'gr_level_id' => 11,
+                    'sp_frequency' => 0,
+                    'dp_frequency' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ),
+        ];
+
+        foreach ($subjectIds as $subjectId) {
+            DB::table('subject_teachers')->insert([
+                'teacher_id' => null,
+                'subject_id' => $subjectId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }
