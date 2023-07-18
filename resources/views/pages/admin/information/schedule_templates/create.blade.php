@@ -103,25 +103,25 @@
     
                     <td class="td-container" aria-colindex="2">
                         <div>
-                            <x-cell-type />
+                            <x-cell-type :types="$types" />
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="3">
                         <div>
-                            <x-cell-type />
+                            <x-cell-type :types="$types" />
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="4">
                         <div>
-                            <x-cell-type />
+                            <x-cell-type :types="$types" />
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="5">
                         <div>
-                            <x-cell-type />
+                            <x-cell-type :types="$types" />
                         </div>
                     </td>
     
