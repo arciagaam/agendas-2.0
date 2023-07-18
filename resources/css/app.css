@@ -26,9 +26,13 @@
         @apply text-project-gray-dark;
     }
 
-    #table_container table tr div{
-        @apply p-5;
+    #table_container table tr div:not(.schedule_dropdown_body){
+        /* @apply p-5; */
     } 
+
+    .selection_dropdown_body, .subject_selection_dropdown_body {
+        @apply !p-0;
+    }
 
     /* #table_container table tbody tr:last-child td:first-child {
         @apply rounded-bl-lg border border-r-0 border-t-0 border-black;
@@ -51,7 +55,7 @@
     } */
 
     #table_container table td {
-        @apply relative border border-[#e5e7eb] bg-gray-100 rounded-lg overflow-hidden cursor-pointer hover:bg-gray-200 duration-100;
+        @apply relative border border-[#e5e7eb] bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 duration-100;
     }
 
     #table_container table th {

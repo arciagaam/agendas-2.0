@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin\schedules;
 
 use App\Http\Controllers\Controller;
+use App\Models\GradeLevel;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class ClassController extends Controller
@@ -12,7 +14,10 @@ class ClassController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.schedules.classes.index');
+        return view('pages.admin.schedules.classes.index',[
+            'sections' => GradeLevel::latest()->with('classrooms')->get(),
+            'subjects' => Subject::latest('gr_level_id')->get()
+        ]);
     }
 
     /**
