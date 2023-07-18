@@ -20,8 +20,7 @@ class GradeLevel extends Model
         ->whereNotIn('id', [11, 12])
         ->when(request()->search || request()->search != '', function ($query) {
             $query->where('name', 'like', request()->search . '%');
-        })
-        ->latest();
+        });
     }
 
     public function classrooms() : HasMany {
