@@ -23,7 +23,6 @@
                     </select>
                 </div>
             </x-table.actions>
-            @dd($classSchedule)
             @if (request()->classroom_id && request()->grade_level_id)
                 @for ($tables = 0; $tables < getTimetableCount($classSchedule); $tables++)
 
@@ -57,15 +56,16 @@
 
                                         @if($index == 0)
                                             <td class="td-container">
-                                                <div>
-                                                    Oras {{$row + 1}} {{$day->id}} {{$cellData->id ?? 'sumth wrong'}}
+                                                <div class="flex flex-col gap-1 items-center justify-center">
+                                                    <p>{{$cellData->time_start}}</p>
+                                                    <p>{{$cellData->time_end}}</p>
                                                 </div>
                                             </td>
                                         @endif
 
-                                        <td class="td-container" aria-colindex="{{$day->id}}">
-                                            <div>
-                                                Subject {{$row + 1}} {{$day->id}} {{$cellData->id ?? 'sumth wrong'}}
+                                        <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" class="td-container" aria-colindex="{{$day->id}}">
+                                            <div class="flex justify-center items-center">
+                                                {{$cellData->subject_name ?? 'Vacant'}}
                                             </div>
                                         </td>
 

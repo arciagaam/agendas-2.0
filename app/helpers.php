@@ -37,13 +37,15 @@ function getTimetableRowColCount($classSchedule, int $timetableNumber) : array {
 
 function getCellData($classSchedule, int $timetableNumber, int $row, int $day_id) {
     $filteredClassSchedule = filterClassSchedule($classSchedule, $timetableNumber);
-
+    
     $cellData = array();
     foreach($filteredClassSchedule as $value) {
         if($value->period_slot == $row && $value->day_id == $day_id) {
             array_push($cellData, $value);
         }
     }
+
+    // dd($classSchedule);
 
     return $cellData[0] ?? null;
 

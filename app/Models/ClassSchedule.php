@@ -25,9 +25,9 @@ class ClassSchedule extends Model
         $query->when(request()->classroom_id, function($classroomQuery) {
             $classroomQuery->where('classroom_id', request()->classroom_id);
         })
-        ->join('subject_teachers', 'subject_teachers.id', 'class_schedules.subject_teacher_id')
-        ->join('subjects', 'subjects.id', 'subject_teachers.subject_id')
-        ->join('default_subjects', 'default_subjects.id', 'subjects.default_subject_id')
+        ->leftjoin('subject_teachers', 'subject_teachers.id', 'class_schedules.subject_teacher_id')
+        ->leftjoin('subjects', 'subjects.id', 'subject_teachers.subject_id')
+        ->leftjoin('default_subjects', 'default_subjects.id', 'subjects.default_subject_id')
         ->leftjoin('teachers', 'teachers.id', 'subject_teachers.teacher_id')
         ->leftjoin('honorifics', 'honorifics.id', 'teachers.honorific_id')
         ->leftjoin('users', 'users.id', 'teachers.user_id')
