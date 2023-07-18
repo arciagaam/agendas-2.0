@@ -24,7 +24,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage school
                                     years.</p>
                             </div>
-                            <x-button.toggle id="school_year" name="school_year" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="school_year" name="school_year" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
@@ -32,7 +32,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage
                                     buildings.</p>
                             </div>
-                            <x-button.toggle id="buildings" name="buildings" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="buildings" name="buildings" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
@@ -40,7 +40,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage room
                                     information.</p>
                             </div>
-                            <x-button.toggle id="rooms" name="rooms" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="rooms" name="rooms" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
@@ -48,7 +48,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage
                                     classrooms.</p>
                             </div>
-                            <x-button.toggle id="classrooms" name="classrooms" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="classrooms" name="classrooms" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
@@ -56,7 +56,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage schedule
                                     templates.</p>
                             </div>
-                            <x-button.toggle id="schedule_templates" name="schedule_templates" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="schedule_templates" name="schedule_templates" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
@@ -64,7 +64,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage teacher
                                     information.</p>
                             </div>
-                            <x-button.toggle id="teachers" name="teachers" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="teachers" name="teachers" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
@@ -72,7 +72,7 @@
                                 <p class="italic text-sm text-[#717171]">Users with this permission can manage subject
                                     information.</p>
                             </div>
-                            <x-button.toggle id="subjects" name="subjects" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="subjects" name="subjects" isChecked="true"/>
                         </div>
                     </div>
                 </div>
@@ -104,21 +104,21 @@
                                 <p class="text-xl">Class Schedules</p>
                                 <p class="italic text-sm text-[#717171]">Users with this permission can create class schedules.</p>
                             </div>
-                            <x-button.toggle id="class_schedules" name="class_schedules" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="class_schedules" name="class_schedules" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
                                 <p class="text-xl">Exams</p>
                                 <p class="italic text-sm text-[#717171]">Users with this permission can create exam schedules.</p>
                             </div>
-                            <x-button.toggle id="exams" name="exams" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="exams" name="exams" isChecked="true"/>
                         </div>
                         <div class="perm-items flex px-10 items-center justify-between">
                             <div class="flex flex-col">
                                 <p class="text-xl">Events</p>
                                 <p class="italic text-sm text-[#717171]">Users with this permission can create event schedules.</p>
                             </div>
-                            <x-button.toggle id="events" name="events" isChecked="true"/>
+                            <x-button.toggle class="toggle-button" id="events" name="events" isChecked="true"/>
                         </div>
                     </div>
                 </div>
