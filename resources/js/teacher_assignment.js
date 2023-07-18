@@ -6,14 +6,47 @@ const selectedTeachersContainerList = document.querySelectorAll('.selected-teach
 let timeout;
 let teachersArray = [];
 
-
 buttonList.forEach(function (button, index) {
   button.addEventListener('click', function () {
     var input = inputList[index];
+    var noTeacher = selectedTeachersContainerList[index].querySelector(".no-teacher");
+    var selectedTeacher = selectedTeachersContainerList[index].querySelector(".selected-teacher");
     input.disabled = !input.disabled;
+
+    if (input.classList.contains('hidden')) {
+      input.classList.remove('hidden');
+    } else if (selectedTeachersContainerList[index].childElementCount >= 2 && selectedTeacher) {
+      console.log('meron');
+      input.classList.add("hidden");
+    }
+
+    if (selectedTeachersContainerList[index].childElementCount <= 2 && !selectedTeacher) {
+      console.log(!input.classList.contains('hidden'));
+      console.log(!noTeacher);
+      if (!noTeacher) {
+        console.log('add no teacher div')
+        input.classList.add('hidden');
+        const listItemContainer = Object.assign(document.createElement('div'), {
+          className: 'no-teacher whitespace-nowrap'
+        });
+  
+        const listItem = Object.assign(document.createElement('div'), {
+          className: 'flex px-3 text-sm w-full gap-3',
+          innerText: 'No teacher/s assigned.'
+        });
+  
+        listItemContainer.append(listItem);
+        selectedTeachersContainerList[index].append(listItemContainer);
+      } else {  
+        console.log('remove no teacher div');      
+        input.classList.remove('hidden');
+        noTeacher.remove();
+      }
+    }
+
     const selectedTeachers = selectedTeachersContainerList[index].querySelectorAll('.delete-button');
     selectedTeachers.forEach(teacher => {
-      if (teacher.classList.contains('hidden') && !input.disabled) {
+      if (teacher.classList.contains('hidden') && !input.classList.contains('hidden')) {
         teacher.classList.remove('hidden');
       } else {
         teacher.classList.add('hidden');
@@ -58,6 +91,40 @@ inputList.forEach((input, index) => {
   });
 
   fetchSubjectTeachers(selectedTeachersContainerList[index].id, index);
+
+  var observer = new MutationObserver((mutationList) => {
+  var noTeacher = selectedTeachersContainerList[index].querySelector(".no-teacher");
+  var selectedTeachers = selectedTeachersContainerList[index].querySelector(".selected-teacher");
+    if (selectedTeachersContainerList[index].childElementCount > 1 && selectedTeachers) {
+      input.classList.add("hidden");
+
+      if (noTeacher) {
+        noTeacher.remove();
+      }
+    }
+
+    observer.disconnect();
+
+  });
+
+  observer.observe(selectedTeachersContainerList[index], { childList: true });
+
+  
+  if (selectedTeachersContainerList[index].childElementCount <= 2) {
+    input.classList.add('hidden');
+        const listItemContainer = Object.assign(document.createElement('div'), {
+          className: 'no-teacher whitespace-nowrap'
+        });
+  
+        const listItem = Object.assign(document.createElement('div'), {
+          className: 'flex px-3 text-sm w-full gap-3',
+          innerText: 'No teacher/s assigned.'
+        });
+  
+        listItemContainer.append(listItem);
+        selectedTeachersContainerList[index].append(listItemContainer);
+  }
+
 });
 
 function fetchTeachers(searchQuery, id, index) {
@@ -67,8 +134,6 @@ function fetchTeachers(searchQuery, id, index) {
   selectedTeachers.forEach(teacher => {
     teachersArray.push(teacher.value);
   });
-
-  // console.log(selectedTeachersContainerList[index]);
 
   const form = new FormData();
   form.append('teachers', JSON.stringify(teachersArray));
@@ -119,7 +184,7 @@ function fetchTeachers(searchQuery, id, index) {
 function handleSelectTeacher(teacher, index) {
   inputList[index].value = "";
   const listItemContainer = Object.assign(document.createElement('div'), {
-    className: 'whitespace-nowrap'
+    className: 'selected-teacher whitespace-nowrap'
   });
 
   const listItem = Object.assign(document.createElement('div'), {
@@ -189,7 +254,7 @@ function handleDeleteTeacher(container, index) {
 function displayTeacher(teacher, index) {
   inputList[index].value = "";
   const listItemContainer = Object.assign(document.createElement('div'), {
-    className: 'whitespace-nowrap'
+    className: 'selected-teacher whitespace-nowrap'
   });
 
   const listItem = Object.assign(document.createElement('div'), {
@@ -214,7 +279,7 @@ function displayTeacher(teacher, index) {
   listItem.append(deleteButton);
   listItemContainer.append(input);
   selectedTeachersContainerList[index].insertBefore(listItemContainer, inputList[index]);
-} 
+}
 
 function fetchSubjectTeachers(id, index) {
   const form = new FormData();
