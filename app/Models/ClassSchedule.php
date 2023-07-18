@@ -28,9 +28,9 @@ class ClassSchedule extends Model
         ->join('subject_teachers', 'subject_teachers.id', 'class_schedules.subject_teacher_id')
         ->join('subjects', 'subjects.id', 'subject_teachers.subject_id')
         ->join('default_subjects', 'default_subjects.id', 'subjects.default_subject_id')
-        // ->join('teachers', 'teachers.id', 'subject_teachers.teacher_id')
-        // ->join('honorifics', 'honorifics.id', 'teachers.honorific_id')
-        // ->join('users', 'users.id', 'teachers.user_id')
+        ->leftjoin('teachers', 'teachers.id', 'subject_teachers.teacher_id')
+        ->leftjoin('honorifics', 'honorifics.id', 'teachers.honorific_id')
+        ->leftjoin('users', 'users.id', 'teachers.user_id')
         ->orderBy('timetable')
         ->orderBy('day_id')
         ->orderBy('period_slot')
@@ -48,10 +48,10 @@ class ClassSchedule extends Model
             'subjects.subject_name as subject_name',
             'default_subjects.id as default_subject_id',
             'default_subjects.subject_type_id as subject_type_id',
-            // 'teachers.id as teacher_id',
-            // 'honorifics.honorific as honorific',
-            // 'users.first_name as first_name',
-            // 'users.last_name as last_name',
+            'teachers.id as teacher_id',
+            'honorifics.honorific as honorific',
+            'users.first_name as first_name',
+            'users.last_name as last_name',
         ]);
     }
 }
