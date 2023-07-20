@@ -32,6 +32,14 @@ class Subject extends Model
         ->paginate(request()->rows ?? 10)
         ->appends(request()->query());
     }
+
+    public function scopeGetSubjectsByGradeLevel(Builder $query) {
+        return $query
+        // ->join('default_subjects', 'default_subjects.id', 'subjects.default_subject_id')
+        ->where('gr_level_id', request()->grade_level_id)
+        ->orWhere('gr_level_id', 11)
+        ->latest();
+    }
     
     public function prioritizedSubjects() {
         return $this->hasOne(PrioritizedSubjects::class);
