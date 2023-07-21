@@ -62,7 +62,7 @@
                                                 </div>
                                             </td>
                                         @endif
-
+                                        
                                         <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" class="td-container" aria-colindex="{{$day->id}}">
                                             <div class="flex flex-col justify-center items-center">
                                                 {{-- {{$cellData->subject_name ?? 'Vacant'}} --}}
@@ -71,7 +71,7 @@
                                                     $teachers = ['Mr. Alberto Arciaga', 'Mr. Allen Padilla', 'Mr. Justine Valenzuela', 'Mr. Paul Caabay'];
                                                 @endphp
 
-                                                <x-subject-select fetchedSubject="{{$cellData->subject_name}}">
+                                                <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
                                                     @foreach ($subjects as $subject)
                                                         <div class="subject" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
                                                             <p>{{$subject->subject_name}}</p>

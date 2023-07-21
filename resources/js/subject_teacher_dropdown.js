@@ -24,13 +24,41 @@ subjectItems.forEach(item => {
         const selectedSubject = dropdown.querySelector('.selectedOption');
 
         console.log('Content', content)
-        console.log('selectedSubject Content', selectedSubject.value);
+        console.log('selectedSubject Content');
 
         selectedSubject.textContent = content;
         dropdown.id = id;
 
 
 
+    });
+});
+
+const teacherLabels = document.querySelectorAll('.teacher_select_dropdown_label');
+
+teacherLabels.forEach(teacherSelection => {
+    teacherSelection.addEventListener('click', () => {
+        const teacherSelectionBody = teacherSelection.closest('div').querySelector('.teacher_select_dropdown_body');
+
+        if (teacherSelectionBody.ariaExpanded == 'true') {
+            teacherSelectionBody.ariaExpanded = false;
+        } else {
+            teacherSelectionBody.ariaExpanded = true;
+        }
+    });
+});
+
+const teacherItems = document.querySelectorAll('.teacher-select-dropdown .teacher');
+
+teacherItems.forEach(teacherItem => {
+    teacherItem.addEventListener('click', () => {
+        const teacherContent = teacherItem.dataset.content;
+        const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
+        const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
+
+        console.log('Teacher Content', teacherContent);
+
+        selectedTeacher.textContent = teacherContent;
     });
 });
 

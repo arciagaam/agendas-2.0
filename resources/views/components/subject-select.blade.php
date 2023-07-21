@@ -1,12 +1,12 @@
-@props(['fetchedSubject' => '',])
+@props(['fetchedSubject' => '', 'fetchedSubjectId'])
 
 <div {{$attributes->class([
     'subject-select-dropdown',
     'relative flex flex-col'
 ])}}>
-
+    {{-- @dd($fetchedSubject) --}}
     <button class="subject_select_dropdown_label flex gap-2">
-        <p class="selectedOption">{{$fetchedSubject ?? ''}}</p>
+        <p id="{{$fetchedSubjectId ?? ''}}" class="selectedOption">{{$fetchedSubject ?? ''}}</p>
         <box-icon name="chevron-down"></box-icon>
     </button>
 
