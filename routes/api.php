@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\Subject;
+use Illuminate\Http\Request;
 use App\Models\DefaultSubject;
 use App\Models\SubjectTeacher;
 use App\Models\TeacherSpecialization;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -93,3 +94,15 @@ Route::post('/subject_teachers/{id}', function (Request $request, $id) {
 
     return response()->json(['payload' => $result], 200);
 })->name('subject_teachers.get');
+
+Route::post('/teachers_by_subject/{id}', function ($id) {
+    $result = Subject::where('subjects.id', $id)
+    ->join('subject_teachers', 'subject_teachers.subject_id', 'subjects.id')
+    ->join('teachers', 'teachers.id', 'subject_teachers.teacher_id')
+    ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
+    ->join('users', 'teachers.user_id', 'users.id')
+    ->select('teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name')
+    ->get();
+    
+    return response()->json(['payload' => $result], 200);
+});

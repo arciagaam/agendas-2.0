@@ -1,3 +1,4 @@
+const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const labels = document.querySelectorAll('.subject_select_dropdown_label');
 const selectSubjects = document.querySelectorAll('input[name="select_subjects[]"]');
 const selectionBodies = document.querySelectorAll('.subject_select_dropdown_body');
@@ -37,6 +38,16 @@ subjectItems.forEach(item => {
         dropdown.id = id;
 
         //fetch( na kukuha ng teachers ng pinili na subject)
+        fetch(BASE_PATH + `/api/teachers_by_subject/${id}`, {
+            headers: {
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+              },
+              method: 'POST',
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        });
 
         closeAllSubjectSelections();
     });
