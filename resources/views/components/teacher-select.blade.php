@@ -4,9 +4,8 @@
     'teacher-select-dropdown',
     'relative flex flex-col'
 ])}}>
-
     <button class="teacher_select_dropdown_label flex gap-2">
-        <p id="{{$fetchedTeacherId ?? ''}}" class="selectedOption">{{$fetchedTeacher ?? ''}}</p>
+        <p id="{{$fetchedTeacherId ?? ''}}" class="selectedOption">{{$fetchedTeacher == '' ? 'Select Teacher' : $fetchedTeacher ?? 'Select Teacher'}}</p>
         <box-icon name="chevron-down"></box-icon>
     </button>
 

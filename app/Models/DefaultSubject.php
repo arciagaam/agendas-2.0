@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DefaultSubject extends Model
@@ -32,6 +33,10 @@ class DefaultSubject extends Model
             $query->where('name', 'like', request()->search . '%');
         })
         ->latest();
+    }
+
+    public function subjectType() : BelongsTo {
+        return $this->belongsTo(SubjectType::class, 'subject_type_id');
     }
 
 }

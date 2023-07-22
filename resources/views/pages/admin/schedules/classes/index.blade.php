@@ -64,7 +64,7 @@
                                         @endif
                                         
                                         <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" class="td-container" aria-colindex="{{$day->id}}">
-                                            <div class="flex flex-col justify-center items-center">
+                                            <div class="absolute inset-0 flex flex-col justify-center items-center h-full">
                                                 {{-- {{$cellData->subject_name ?? 'Vacant'}} --}}
                                                 @php
                                                     // $subjects = ['Math', 'Science', 'English'];
@@ -72,12 +72,42 @@
                                                 @endphp
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
-                                                    @foreach ($subjects as $subject)
+
+                                                    <div class="flex flex-col gap-2">
+                                                        Academic Subjects
+            
+                                                        @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
                                                         <div class="subject" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
                                                             <p>{{$subject->subject_name}}</p>
                                                         </div>
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
+
+                                                    <div class="flex flex-col gap-2">
+                                                        Non-Academic Subjects
+            
+                                                        @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 2) as $subject)
+                                                        <div class="subject" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                            <p>{{$subject->subject_name}}</p>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                    <div class="flex flex-col gap-2">
+                                                        Breaks
+            
+                                                        @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 3) as $subject)
+                                                        <div class="subject whitespace-nowrap" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                            <p class="whitespace-nowrap">{{$subject->subject_name}}</p>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
                                                 </x-subject-select>
+
+                                                <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName($cellData)}}">
+
+
+                                                </x-teacher-select>
                                             </div>
                                         </td>
 

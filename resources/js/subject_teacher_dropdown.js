@@ -1,14 +1,21 @@
 const labels = document.querySelectorAll('.subject_select_dropdown_label');
 const selectSubjects = document.querySelectorAll('input[name="select_subjects[]"]');
+const selectionBodies = document.querySelectorAll('.subject_select_dropdown_body');
 
+function closeAllSubjectSelections() {
+    selectionBodies.forEach(selectionBody => {
+        selectionBody.ariaExpanded = false;
+    })
+}
 
 labels.forEach(selection => {
     selection.addEventListener('click', () => {
         const selectionBody = selection.closest('div').querySelector('.subject_select_dropdown_body');
-
+        
         if (selectionBody.ariaExpanded == 'true') {
             selectionBody.ariaExpanded = false;
         } else {
+            closeAllSubjectSelections();
             selectionBody.ariaExpanded = true;
         }
     });
@@ -29,8 +36,7 @@ subjectItems.forEach(item => {
         selectedSubject.textContent = content;
         dropdown.id = id;
 
-
-
+        closeAllSubjectSelections();
     });
 });
 

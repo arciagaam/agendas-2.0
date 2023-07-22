@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Subject extends Model
 {
@@ -41,7 +43,11 @@ class Subject extends Model
         ->latest();
     }
     
-    public function prioritizedSubjects() {
+    public function prioritizedSubjects() : HasOne {
         return $this->hasOne(PrioritizedSubjects::class);
+    }
+    
+    public function defaultSubject() : BelongsTo {
+        return $this->belongsTo(DefaultSubject::class, 'default_subject_id');
     }
 }
