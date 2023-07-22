@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ClassSchedule;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Models\DefaultSubject;
@@ -101,8 +102,21 @@ Route::post('/teachers_by_subject/{id}', function ($id) {
     ->join('teachers', 'teachers.id', 'subject_teachers.teacher_id')
     ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
     ->join('users', 'teachers.user_id', 'users.id')
-    ->select('teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name')
+    ->select('teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name', 'subject_teachers.id as subject_teacher_id')
     ->get();
     
     return response()->json(['payload' => $result], 200);
+});
+
+Route::post('/schedule/store', function(Request $request) {
+
+    $schedules = json_decode($request->schedules);
+    foreach($schedules as $schedule) {
+        ClassSchedule::where('classroom_id', $schedule->classroom_id)
+        ->where('school_year_id', 1)
+        ->where('timetable', $schedule->timetable)
+        ->where('day_id', $schedule->day_id)
+        ->where('period_slot', $schedule->period_slot)
+        ->update(['subject_teacher_id' => $schedule->subject_teacher_id]);
+    }
 });

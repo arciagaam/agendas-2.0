@@ -23,6 +23,9 @@
                     </select>
                 </div>
             </x-table.actions>
+
+            <input id="classroom_id" type="hidden" value="{{request()->classroom_id}}">
+
             @if (request()->classroom_id && request()->grade_level_id)
                 @for ($tables = 0; $tables < getTimetableCount($classSchedule); $tables++)
 
@@ -117,6 +120,8 @@
              
                             </tbody>
                         </table>
+
+                        <button id="save_schedule" class="bg-green-500 text-white py-2 px-4 rounded-md">Save Class Schedule</button>
                     </div>
                 @endfor
             @else
@@ -127,9 +132,9 @@
             </div>
         </div>
     
-    
-    
     </x-main-layout>
+
+    @vite('resources/js/class_schedule.js')
     
 
     

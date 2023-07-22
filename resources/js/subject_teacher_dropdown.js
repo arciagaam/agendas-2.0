@@ -37,6 +37,12 @@ subjectItems.forEach(item => {
         selectedSubject.textContent = content;
         dropdown.id = id;
 
+        // empty teacher dropdown
+        const td = item.closest('td');
+        const teacherDropdown = td.querySelector('.teacher_select_dropdown_body');
+        teacherDropdown.innerText = "";
+
+
         //fetch( na kukuha ng teachers ng pinili na subject)
         fetch(BASE_PATH + `/api/teachers_by_subject/${id}`, {
             headers: {
@@ -46,7 +52,22 @@ subjectItems.forEach(item => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
+            data.payload.forEach(teacher => {
+                const mainContainer = Object.assign(document.createElement('div'), {
+                    className: 'teacher'
+                });
+                mainContainer.dataset.id = teacher.id;
+                mainContainer.dataset.content = `${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
+
+                const teacherName = Object.assign(document.createElement('p'), {
+                    innerText: `${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`
+                })
+
+                mainContainer.append(teacherName);
+                teacherDropdown.append(mainContainer);
+                teacherDropdown.id = teacher.id;
+                td.dataset.subjectteacherid = teacher.subject_teacher_id;
+            })
         });
 
         closeAllSubjectSelections();
@@ -69,8 +90,12 @@ teacherLabels.forEach(teacherSelection => {
 
 const teacherItems = document.querySelectorAll('.teacher-select-dropdown .teacher');
 
-teacherItems.forEach(teacherItem => {
-    teacherItem.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
+    const target = e.target;
+    console.log(target);
+    if(target.classList.contains('teacher') || target.closest('.teacher')) {
+        const teacherItem = target.closest('.teacher') ?? target;
+
         const teacherContent = teacherItem.dataset.content;
         const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
         const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
@@ -78,6 +103,18 @@ teacherItems.forEach(teacherItem => {
         console.log('Teacher Content', teacherContent);
 
         selectedTeacher.textContent = teacherContent;
-    });
-});
+    }
+})
+
+// teacherItems.forEach(teacherItem => {
+//     teacherItem.addEventListener('click', () => {
+//         const teacherContent = teacherItem.dataset.content;
+//         const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
+//         const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
+
+//         console.log('Teacher Content', teacherContent);
+
+//         selectedTeacher.textContent = teacherContent;
+//     });
+// });
 

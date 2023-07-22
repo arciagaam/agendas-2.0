@@ -141,6 +141,7 @@ function handleSubmit() {
             const cols = row.querySelectorAll('td');
             cols.forEach((col, colindex) => {
                 if(colindex != 0 && colindex != cols.length-1) {
+                    console.log(col);
                     console.log(col.querySelector('select[name="celltypes[]"]').value);
                     const rowData = {
                         classroom_id: section,
@@ -148,7 +149,7 @@ function handleSubmit() {
                         subject_teacher_id: col.querySelector('select[name="celltypes[]"]').value == '' ? null : col.querySelector('select[name="celltypes[]"]').value,
                         time_start: row.children[0].querySelector('input[name="time_start[]"]').value,
                         time_end : row.children[0].querySelector('input[name="time_end[]"]').value,
-                        day_id : colindex,
+                        day_id : col.ariaColIndex,
                         period_slot : rowindex+1,
                     }
                     schedule.push(rowData);
