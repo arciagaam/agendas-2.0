@@ -36,6 +36,8 @@ subjectItems.forEach(item => {
         selectedSubject.textContent = content;
         dropdown.id = id;
 
+        //fetch( na kukuha ng teachers ng pinili na subject)
+
         closeAllSubjectSelections();
     });
 });
