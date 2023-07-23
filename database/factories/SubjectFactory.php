@@ -23,7 +23,7 @@ class SubjectFactory extends Factory
         $subjectId = $defaultSubjectId++;
         $grLevelId = $gradeLevelId;
 
-        if ($defaultSubjectId > 14) {
+        if ($defaultSubjectId > 6) {
             $defaultSubjectId = 1; // Reset default_subject_id to 1 after reaching 14
             $gradeLevelId++;
         }

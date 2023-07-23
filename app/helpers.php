@@ -50,3 +50,9 @@ function getCellData($classSchedule, int $timetableNumber, int $row, int $day_id
     return $cellData[0] ?? null;
 
 }
+
+function formatCellPersonName($holder) : null|string {
+    if(!$holder->first_name && !$holder->last_name) return null;
+    
+    return $holder->honorific ?? '' . ' ' . $holder->first_name ?? '' . ' ' . $holder->middle_name ?? '' . ' ' . $holder->last_name ?? '';
+}

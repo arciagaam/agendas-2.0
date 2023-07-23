@@ -1,9 +1,12 @@
 <?php
 
+use App\Models\Subject;
+use App\Models\Classroom;
+use Illuminate\Http\Request;
+use App\Models\ClassSchedule;
 use App\Models\DefaultSubject;
 use App\Models\SubjectTeacher;
 use App\Models\TeacherSpecialization;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -93,3 +96,39 @@ Route::post('/subject_teachers/{id}', function (Request $request, $id) {
 
     return response()->json(['payload' => $result], 200);
 })->name('subject_teachers.get');
+
+Route::post('/teachers_by_subject/{id}', function ($id) {
+    $result = Subject::where('subjects.id', $id)
+    ->join('subject_teachers', 'subject_teachers.subject_id', 'subjects.id')
+    ->join('teachers', 'teachers.id', 'subject_teachers.teacher_id')
+    ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
+    ->join('users', 'teachers.user_id', 'users.id')
+    ->select('teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name', 'subject_teachers.id as subject_teacher_id')
+    ->get();
+    
+    return response()->json(['payload' => $result], 200);
+});
+
+Route::post('/schedule/store', function(Request $request) {
+
+    $schedules = json_decode($request->schedules);
+    foreach($schedules as $schedule) {
+        ClassSchedule::where('classroom_id', $schedule->classroom_id)
+        ->where('school_year_id', 1)
+        ->where('timetable', $schedule->timetable)
+        ->where('day_id', $schedule->day_id)
+        ->where('period_slot', $schedule->period_slot)
+        ->update(['subject_teacher_id' => $schedule->subject_teacher_id]);
+    }
+});
+
+Route::post('/subjects/{classroom_id}', function ($classroom_id) {
+    $result = Classroom::where('classrooms.id', $classroom_id)
+        ->join('subjects', 'subjects.gr_level_id', 'classrooms.grade_level_id')
+        ->join('default_subjects', 'default_subjects.id', 'subjects.default_subject_id')
+        ->where('default_subjects.subject_type_id', 1)
+        ->select('subjects.*')
+        ->get();
+
+        return response()->json(['payload' => $result], 200);
+});

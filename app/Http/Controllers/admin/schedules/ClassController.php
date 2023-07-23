@@ -24,7 +24,7 @@ class ClassController extends Controller
         return view('pages.admin.schedules.classes.index',[
             'gradeLevels' => GradeLevel::getGradeLevelsOnly()->latest()->get(),
             'sections' => Classroom::classScheduleClassrooms()->latest()->get(),
-            'subjects' => Subject::latest('gr_level_id')->get(),
+            'subjects' => Subject::getSubjectsByGradeLevel()->with('defaultSubject')->get(),
             'classSchedule' => ClassSchedule::getClassSchedule()->get(),
         ]);
     }

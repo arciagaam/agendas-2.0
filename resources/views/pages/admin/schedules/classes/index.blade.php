@@ -23,6 +23,9 @@
                     </select>
                 </div>
             </x-table.actions>
+
+            <input id="classroom_id" type="hidden" value="{{request()->classroom_id}}">
+
             @if (request()->classroom_id && request()->grade_level_id)
                 @for ($tables = 0; $tables < getTimetableCount($classSchedule); $tables++)
 
@@ -62,10 +65,52 @@
                                                 </div>
                                             </td>
                                         @endif
-
+                                        
                                         <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" class="td-container" aria-colindex="{{$day->id}}">
-                                            <div class="flex justify-center items-center">
-                                                {{$cellData->subject_name ?? 'Vacant'}}
+                                            <div class="absolute inset-0 flex flex-col justify-center items-center h-full">
+                                                {{-- {{$cellData->subject_name ?? 'Vacant'}} --}}
+                                                @php
+                                                    // $subjects = ['Math', 'Science', 'English'];
+                                                    $teachers = ['Mr. Alberto Arciaga', 'Mr. Allen Padilla', 'Mr. Justine Valenzuela', 'Mr. Paul Caabay'];
+                                                @endphp
+
+                                                <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
+
+                                                    <div class="flex flex-col gap-2">
+                                                        Academic Subjects
+            
+                                                        @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
+                                                        <div class="subject" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                            <p>{{$subject->subject_name}}</p>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                    <div class="flex flex-col gap-2">
+                                                        Non-Academic Subjects
+            
+                                                        @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 2) as $subject)
+                                                        <div class="subject" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                            <p>{{$subject->subject_name}}</p>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                    <div class="flex flex-col gap-2">
+                                                        Breaks
+            
+                                                        @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 3) as $subject)
+                                                        <div class="subject whitespace-nowrap" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                            <p class="whitespace-nowrap">{{$subject->subject_name}}</p>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
+                                                </x-subject-select>
+
+                                                <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName($cellData)}}">
+
+
+                                                </x-teacher-select>
                                             </div>
                                         </td>
 
@@ -75,6 +120,8 @@
              
                             </tbody>
                         </table>
+
+                        <button id="save_schedule" class="bg-green-500 text-white py-2 px-4 rounded-md">Save Class Schedule</button>
                     </div>
                 @endfor
             @else
@@ -85,9 +132,9 @@
             </div>
         </div>
     
-    
-    
     </x-main-layout>
+
+    @vite('resources/js/class_schedule.js')
     
 
     

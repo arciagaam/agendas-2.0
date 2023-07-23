@@ -10,6 +10,7 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Building;
 use App\Models\Classroom;
+use App\Models\TeacherSpecialization;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -185,8 +186,9 @@ class DatabaseSeeder extends Seeder
         Building::factory()->count(2)->create();
         Room::factory()->count(50)->create();
         Classroom::factory()->count(50)->create();
-        Subject::factory()->count(140)->create();
-        Teacher::factory()->count(35)->create();
+        Subject::factory()->count(80)->create();
+        Teacher::factory()->count(20)->create();
+        TeacherSpecialization::factory()->count(30)->create();
 
         $subjectIds = [
             DB::table('subjects')->insertGetId(
