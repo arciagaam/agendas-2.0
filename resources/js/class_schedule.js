@@ -1,16 +1,16 @@
 const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const classroomId = document.querySelector('#classroom_id').value;
+const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 const subjects = {};
 const teacher_hours = {};
 
-saveBtn.addEventListener('click', handleSubmit);
+if(saveBtn) {
+    saveBtn.addEventListener('click', handleSubmit);
+}
 
 function handleSubmit() {
     const schedule = [];
-
-    const tables = document.querySelectorAll('table');
-    const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 
     tableRows.forEach((row, rowindex) => {
         const cols = row.querySelectorAll('td');
@@ -38,57 +38,113 @@ function handleSubmit() {
         method: "POST",
         body: form,
     })
-        .then(res => console.log(res));
+    .then(res => console.log(res));
 }
 
-function getSubjectsByGradeLevel(classroom_id) {
-    fetch(`${BASE_PATH}/api/subjects/${classroom_id}`, {
+async function getSubjectsByGradeLevel(classroom_id) {
+    await fetch(`${BASE_PATH}/api/subjects/${classroom_id}`, {
         headers: {
             'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
         method: "POST",
     })
-        .then(res => res.json())
-        .then(data => {
-
-            data.payload.forEach(subject => {
-                subjects[subject.id] = {
-                    sp: subject.sp_frequency,
-                    dp: subject.dp_frequency,
-                };
-            });
-            console.log(subjects);
+    .then(res => res.json())
+    .then(data => {
+        data.payload.forEach(subject => {
+            subjects[subject.id] = {
+                sp: subject.sp_frequency,
+                dp: subject.dp_frequency,
+            };
         });
+    });
+    
 }
 
-function getTeacherHours() {
-    fetch(`${BASE_PATH}/api/teacher_hours`, {
+async function getTeacherHours() {
+    await fetch(`${BASE_PATH}/api/teacher_hours`, {
         headers: {
             'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
         method: "POST",
     })
-        .then(res => res.json())
-        .then(data => {
+    .then(res => res.json())
+    .then(data => {
 
-            data.payload.forEach(teacher => {
-                teacher_hours[`${teacher.id}`] = {
-                    max_hours: teacher.max_hours,
-                    regular_load: teacher.regular_load,
+        data.payload.forEach(teacher => {
+            teacher_hours[`${teacher.id}`] = {
+                max_hours: teacher.max_hours,
+                regular_load: teacher.regular_load,
+            }
+        });
+    });
+}
+
+async function getClassSchedules() {
+    await fetch(`${BASE_PATH}/api/schedules`, {
+        headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        method: "POST",
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        data.payload.forEach(schedule => {
+
+            if(schedule.teacher_id in teacher_hours) {
+
+                // install mo moment using npm 
+                // pa kuha nung difference nung time_start at time_end
+                // teacher hours - yung difference ni TS and TE
+                // pa convert to hours yung sagot?
+                // pa console log ty
+            }
+
+        })
+
+    });
+}
+
+
+
+function initialCountSpDp() {
+    tableRows.forEach((row, rowindex) => {
+        const cols = row.querySelectorAll('td');
+        cols.forEach((col, colindex) => {
+            if (colindex != 0) {
+                const subjectId = col.querySelector('.subject-select-dropdown .selectedOption').id;
+                if(subjects[subjectId]) {
+                    computeSpDp(subjectId, 'sp', 'subtract');
                 }
-            });
-        });
+            }
+        })
+    })
+}
+
+function computeSpDp(subjectId, type, operation) {
+    switch(operation) {
+        case 'add' : subjects[subjectId][type] += 1; break;
+        case 'subtract' : subjects[subjectId][type] -= 1; break;
+    }
 }
 
 const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subject');
 
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
-        subjects[item.dataset.id]["sp"] -= 1;
-        console.log(subjects);
+        computeSpDp(item.dataset.id, 'sp', 'subtract');
     });
 });
 
-getSubjectsByGradeLevel(classroomId);
-getTeacherHours();
+window.addEventListener('load', async () => {
+    if(saveBtn) {
+        await getSubjectsByGradeLevel(classroomId);
+        await getTeacherHours();
+        await getClassSchedules();
+    
+        initialCountSpDp();
+
+        console.log(teacher_hours);
+    }
+})
 
