@@ -1,3 +1,6 @@
+import moment from "moment/moment";
+
+// import moment from 'moment';
 const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const classroomId = document.querySelector('#classroom_id').value;
@@ -5,7 +8,7 @@ const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 const subjects = {};
 const teacher_hours = {};
 
-if(saveBtn) {
+if (saveBtn) {
     saveBtn.addEventListener('click', handleSubmit);
 }
 
@@ -38,7 +41,7 @@ function handleSubmit() {
         method: "POST",
         body: form,
     })
-    .then(res => console.log(res));
+        .then(res => console.log(res));
 }
 
 async function getSubjectsByGradeLevel(classroom_id) {
@@ -48,16 +51,16 @@ async function getSubjectsByGradeLevel(classroom_id) {
         },
         method: "POST",
     })
-    .then(res => res.json())
-    .then(data => {
-        data.payload.forEach(subject => {
-            subjects[subject.id] = {
-                sp: subject.sp_frequency,
-                dp: subject.dp_frequency,
-            };
+        .then(res => res.json())
+        .then(data => {
+            data.payload.forEach(subject => {
+                subjects[subject.id] = {
+                    sp: subject.sp_frequency,
+                    dp: subject.dp_frequency,
+                };
+            });
         });
-    });
-    
+
 }
 
 async function getTeacherHours() {
@@ -67,16 +70,16 @@ async function getTeacherHours() {
         },
         method: "POST",
     })
-    .then(res => res.json())
-    .then(data => {
+        .then(res => res.json())
+        .then(data => {
 
-        data.payload.forEach(teacher => {
-            teacher_hours[`${teacher.id}`] = {
-                max_hours: teacher.max_hours,
-                regular_load: teacher.regular_load,
-            }
+            data.payload.forEach(teacher => {
+                teacher_hours[`${teacher.id}`] = {
+                    max_hours: teacher.max_hours,
+                    regular_load: teacher.regular_load,
+                }
+            });
         });
-    });
 }
 
 async function getClassSchedules() {
@@ -86,23 +89,44 @@ async function getClassSchedules() {
         },
         method: "POST",
     })
-    .then(res => res.json())
-    .then(data => {
+        .then(res => res.json())
+        .then(data => {
 
-        data.payload.forEach(schedule => {
+            data.payload.forEach(schedule => {
+                //TESTING LANG KASI ALA YUNG TEACHER ID SA TEACHER HOURS PA
+                const time_start = moment(schedule.time_start, "HH:mm");
+                const time_end = moment(schedule.time_end, "HH:mm");
 
-            if(schedule.teacher_id in teacher_hours) {
+                const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
-                // install mo moment using npm 
-                // pa kuha nung difference nung time_start at time_end
-                // teacher hours - yung difference ni TS and TE
-                // pa convert to hours yung sagot?
-                // pa console log ty
-            }
+                const result = teacher_hours[1]['regular_load'] - period_duration;
 
-        })
+                console.log(result);
+                if (schedule.teacher_id in teacher_hours) {
 
-    });
+                    // install mo moment using npm --DONE
+                    // pa kuha nung difference nung time_start at time_end --DONE
+                    // teacher hours - yung difference ni TS and TE --DONE
+                    // pa convert to hours yung sagot? --DONE
+                    // pa console log ty --DONE
+                    // const regular_load = teacher_hours[schedule.teacher_id]['regular_load'];
+
+                    const time_start = moment(schedule.time_start, "HH:mm");
+                    const time_end = moment(schedule.time_end, "HH:mm");
+
+                    const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
+
+                    const result = teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
+
+                    console.log(result);
+
+                    console.log(period_duration);
+
+                }
+
+            })
+
+        });
 }
 
 
@@ -113,7 +137,7 @@ function initialCountSpDp() {
         cols.forEach((col, colindex) => {
             if (colindex != 0) {
                 const subjectId = col.querySelector('.subject-select-dropdown .selectedOption').id;
-                if(subjects[subjectId]) {
+                if (subjects[subjectId]) {
                     computeSpDp(subjectId, 'sp', 'subtract');
                 }
             }
@@ -122,9 +146,9 @@ function initialCountSpDp() {
 }
 
 function computeSpDp(subjectId, type, operation) {
-    switch(operation) {
-        case 'add' : subjects[subjectId][type] += 1; break;
-        case 'subtract' : subjects[subjectId][type] -= 1; break;
+    switch (operation) {
+        case 'add': subjects[subjectId][type] += 1; break;
+        case 'subtract': subjects[subjectId][type] -= 1; break;
     }
 }
 
@@ -137,11 +161,11 @@ subjectItems2.forEach(item => {
 });
 
 window.addEventListener('load', async () => {
-    if(saveBtn) {
+    if (saveBtn) {
         await getSubjectsByGradeLevel(classroomId);
         await getTeacherHours();
         await getClassSchedules();
-    
+
         initialCountSpDp();
 
         console.log(teacher_hours);
