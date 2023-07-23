@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
 use App\Models\ClassSchedule;
@@ -99,26 +100,26 @@ Route::post('/subject_teachers/{id}', function (Request $request, $id) {
 
 Route::post('/teachers_by_subject/{id}', function ($id) {
     $result = Subject::where('subjects.id', $id)
-    ->join('subject_teachers', 'subject_teachers.subject_id', 'subjects.id')
-    ->join('teachers', 'teachers.id', 'subject_teachers.teacher_id')
-    ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
-    ->join('users', 'teachers.user_id', 'users.id')
-    ->select('teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name', 'subject_teachers.id as subject_teacher_id')
-    ->get();
-    
+        ->join('subject_teachers', 'subject_teachers.subject_id', 'subjects.id')
+        ->join('teachers', 'teachers.id', 'subject_teachers.teacher_id')
+        ->join('honorifics', 'teachers.honorific_id', 'honorifics.id')
+        ->join('users', 'teachers.user_id', 'users.id')
+        ->select('teachers.*', 'honorifics.honorific', 'users.first_name', 'users.last_name', 'subject_teachers.id as subject_teacher_id')
+        ->get();
+
     return response()->json(['payload' => $result], 200);
 });
 
-Route::post('/schedule/store', function(Request $request) {
+Route::post('/schedule/store', function (Request $request) {
 
     $schedules = json_decode($request->schedules);
-    foreach($schedules as $schedule) {
+    foreach ($schedules as $schedule) {
         ClassSchedule::where('classroom_id', $schedule->classroom_id)
-        ->where('school_year_id', 1)
-        ->where('timetable', $schedule->timetable)
-        ->where('day_id', $schedule->day_id)
-        ->where('period_slot', $schedule->period_slot)
-        ->update(['subject_teacher_id' => $schedule->subject_teacher_id]);
+            ->where('school_year_id', 1)
+            ->where('timetable', $schedule->timetable)
+            ->where('day_id', $schedule->day_id)
+            ->where('period_slot', $schedule->period_slot)
+            ->update(['subject_teacher_id' => $schedule->subject_teacher_id]);
     }
 });
 
@@ -130,5 +131,17 @@ Route::post('/subjects/{classroom_id}', function ($classroom_id) {
         ->select('subjects.*')
         ->get();
 
-        return response()->json(['payload' => $result], 200);
+    return response()->json(['payload' => $result], 200);
+});
+
+Route::post('/teacher_hours', function () {
+    $result = Teacher::select('id', 'max_hours', 'regular_load')->get();
+
+    return response()->json(['payload' => $result], 200);
+});
+
+Route::post('/schedules/show', function () {
+    $result = ClassSchedule::where('school_year_id', 1)->get();
+
+    return response()->json(['payload' => $result], 200);
 });
