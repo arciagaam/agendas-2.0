@@ -66,7 +66,7 @@
                                             </td>
                                         @endif
                                         
-                                        <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" class="td-container" aria-colindex="{{$day->id}}">
+                                        <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" data-timeStart="{{$cellData->time_start}}" data-timeEnd="{{$cellData->time_end}}" class="td-container" aria-colindex="{{$day->id}}">
                                             <div class="absolute inset-0 flex flex-col justify-center items-center h-full">
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">

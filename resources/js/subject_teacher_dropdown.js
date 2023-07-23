@@ -1,7 +1,7 @@
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const labels = document.querySelectorAll('.subject_select_dropdown_label');
 const selectSubjects = document.querySelectorAll('input[name="select_subjects[]"]');
-const selectionBodies = document.querySelectorAll('.subject_select_dropdown_body');
+const selectionBodies = document.querySelectorAll('.subject_select_dropdown_body, .teacher_select_dropdown_body');
 
 function closeAllSubjectSelections() {
     selectionBodies.forEach(selectionBody => {
@@ -83,7 +83,11 @@ teacherLabels.forEach(teacherSelection => {
         if (teacherSelectionBody.ariaExpanded == 'true') {
             teacherSelectionBody.ariaExpanded = false;
         } else {
+            closeAllSubjectSelections();
             teacherSelectionBody.ariaExpanded = true;
+            const previousTeacherId = teacherSelection.querySelector('.selectedOption').id;
+            const teacherSelectDropdown = teacherSelection.closest('.teacher-select-dropdown');
+            teacherSelectDropdown.dataset.previousteacherid = previousTeacherId;
         }
     });
 });
@@ -92,17 +96,9 @@ const teacherItems = document.querySelectorAll('.teacher-select-dropdown .teache
 
 document.addEventListener('click', (e) => {
     const target = e.target;
-    console.log(target);
     if(target.classList.contains('teacher') || target.closest('.teacher')) {
-        const teacherItem = target.closest('.teacher') ?? target;
-
-        const teacherContent = teacherItem.dataset.content;
-        const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
-        const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
-
-        console.log('Teacher Content', teacherContent);
-
-        selectedTeacher.textContent = teacherContent;
+        
+        closeAllSubjectSelections();
     }
 })
 

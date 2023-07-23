@@ -109,18 +109,18 @@ async function getClassSchedules() {
                     // teacher hours - yung difference ni TS and TE --DONE
                     // pa convert to hours yung sagot? --DONE
                     // pa console log ty --DONE
-                    // const regular_load = teacher_hours[schedule.teacher_id]['regular_load'];
 
                     const time_start = moment(schedule.time_start, "HH:mm");
                     const time_end = moment(schedule.time_end, "HH:mm");
 
                     const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
+                    teacher_hours = teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
+
                     const result = teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
 
-                    console.log(result);
+                    // console.log(result);
 
-                    console.log(period_duration);
 
                 }
 
@@ -159,6 +159,44 @@ subjectItems2.forEach(item => {
         computeSpDp(item.dataset.id, 'sp', 'subtract');
     });
 });
+
+function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
+
+    const time_start = moment(timeStart, "HH:mm");
+    const time_end = moment(timeEnd, "HH:mm");
+
+    const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
+
+    const result = teacher_hours[teacherId]['regular_load'] - period_duration;
+
+    switch (operation) {
+        case 'add': teacher_hours = teacher_hours[teacherId]['regular_load'] + period_duration; break;
+        case 'subtract': teacher_hours = teacher_hours[teacherId]['regular_load'] - period_duration; break;
+    }
+}
+
+document.addEventListener('click', (e) => {
+    const target = e.target;
+    if(target.classList.contains('teacher') || target.closest('.teacher')) {
+        const teacherItem = target.closest('.teacher') ?? target;
+        
+        const time_start = teacherItem.closest('td').dataset.timestart;
+        const time_end = teacherItem.closest('td').dataset.timeend;
+        const teacher_id = teacherItem.dataset.id;
+        const previous_teacher_id = teacherItem.closest('.teacher-select-dropdown').dataset.previousteacherid;
+
+        const teacherContent = teacherItem.dataset.content;
+        const teacherId = teacherItem.dataset.id;
+        const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
+        const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
+
+        selectedTeacher.textContent = teacherContent;
+        selectedTeacher.id = teacherId;
+
+        computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
+        computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
+    }
+})
 
 window.addEventListener('load', async () => {
     if (saveBtn) {
