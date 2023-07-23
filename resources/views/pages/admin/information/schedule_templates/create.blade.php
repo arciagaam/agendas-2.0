@@ -1,33 +1,25 @@
 <x-main-layout>
+    <div class="flex justify-between items-center">
+        <x-page.header title="New Template" />
+        <x-page.actions>
+            <x-button id="submit_schedule_template" label="Save" type="primary">
+                <x-slot:icon>
+                    <box-icon name='save'></box-icon>
+                </x-slot:icon>
+            </x-button>
+        </x-page.actions>
+    </div>
 
-    <div class="flex gap-5 border p-4 rounded-lg">
-        <div class="form-input-container">
-            <label class="text-sm" for="grade_level_id">Grade Level</label>
-            
-            <select class="form-input text-sm" name="grade_level_id" id="grade_level_id">
-                <option value={{null}}>Select Grade Level</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="6">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-
+    <div class="grid grid-cols-8 gap-5 border bg-project-gray-light p-4 rounded-lg">
         <x-sections-dropdown label="Choose Section/s">
             @foreach ($sections as $section)
     
                 <x-sections-selection gradeLevel="{{$section->gr_level}}">
                     @foreach ($section->classrooms as $classroom)
     
-                        <div class="flex gap-2 pl-3">
-                            <input type="checkbox" name="select_sections[]" class="select_sections" value="{{$classroom->id}}" data-section="{{$classroom->section}}">
-                            <p>{{$classroom->section}}</p>
+                        <div class="flex gap-2 pl-3 hover:bg-project-gray-default">
+                            <input id="{{$classroom->section}}" type="checkbox" name="select_sections[]" class="select_sections" value="{{$classroom->id}}" data-section="{{$classroom->section}}">
+                            <label class="w-full text-sm" for="{{$classroom->section}}">{{$classroom->section}}</label>
                         </div>
     
                     @endforeach
@@ -35,9 +27,11 @@
     
             @endforeach
         </x-sections-dropdown>
-
-        <div id="selected_sections_container" class="flex flex-wrap">
-            
+        <div class="flex flex-col w-full gap-1 col-span-6">
+            <p class="text-sm whitespace-nowrap">Selected <strong id="section_count" class="font-normal text-amber-500">0</strong> Section/s</p>
+            <div id="selected_sections_container" class="flex flex-wrap gap-2">
+                <p id="empty_text" class=" text-amber-500 text-sm">No selected sections yet.</p>
+            </div>
         </div>
     </div>
 
@@ -136,9 +130,6 @@
             </tbody>
         </table>
     </div>
-
-    <button class="w-fit self-end rounded-lg px-4 py-2 bg-project-dominant text-project-primary ring-1 ring-project-gray-default hover:text-project-accent hover:ring-project-accent duration-100" id="submit_schedule_template">Save</button>
-
 
 </x-main-layout>
 
