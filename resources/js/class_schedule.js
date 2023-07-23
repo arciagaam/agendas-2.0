@@ -1,10 +1,10 @@
 const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
+const classroomId = document.querySelector('#classroom_id').value;
 
 saveBtn.addEventListener('click', handleSubmit);
 
 function handleSubmit() {
-    const classroomId = document.querySelector('#classroom_id').value;
     const schedule = [];
 
     const tables = document.querySelectorAll('table');
@@ -38,3 +38,30 @@ function handleSubmit() {
     })
     .then(res => console.log(res));
 }
+
+function getSubjectsByGradeLevel (classroom_id) {
+    fetch(`${BASE_PATH}/api/subjects/${classroom_id}`, {
+        headers:{
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        method: "POST",
+    })
+    .then(res => res.json())
+    .then(data => {
+        const subjects = [];
+        data.payload.forEach(subject => {
+            const subjectSpDp = {
+                [subject.id] :  {
+                    sp: subject.sp_frequency,
+                    dp: subject.dp_frequency,
+                },
+            };
+
+            subjects.push(subjectSpDp);
+        });
+        console.log(subjects);
+    });
+}
+
+getSubjectsByGradeLevel(classroomId);
+

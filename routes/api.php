@@ -1,8 +1,9 @@
 <?php
 
-use App\Models\ClassSchedule;
 use App\Models\Subject;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
+use App\Models\ClassSchedule;
 use App\Models\DefaultSubject;
 use App\Models\SubjectTeacher;
 use App\Models\TeacherSpecialization;
@@ -119,4 +120,15 @@ Route::post('/schedule/store', function(Request $request) {
         ->where('period_slot', $schedule->period_slot)
         ->update(['subject_teacher_id' => $schedule->subject_teacher_id]);
     }
+});
+
+Route::post('/subjects/{classroom_id}', function ($classroom_id) {
+    $result = Classroom::where('classrooms.id', $classroom_id)
+        ->join('subjects', 'subjects.gr_level_id', 'classrooms.grade_level_id')
+        ->join('default_subjects', 'default_subjects.id', 'subjects.default_subject_id')
+        ->where('default_subjects.subject_type_id', 1)
+        ->select('subjects.*')
+        ->get();
+
+        return response()->json(['payload' => $result], 200);
 });
