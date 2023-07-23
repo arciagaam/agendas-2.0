@@ -30,7 +30,7 @@
         <div class="flex flex-col w-full gap-1 col-span-6">
             <p class="text-sm whitespace-nowrap">Selected <strong id="section_count" class="font-normal text-amber-500">0</strong> Section/s</p>
             <div id="selected_sections_container" class="flex flex-wrap gap-2">
-                <p id="empty_text" class=" text-amber-500 text-sm">No selected sections yet.</p>
+                <p id="empty_text" class="pl-2 text-amber-500 text-sm">No selected sections yet.</p>
             </div>
         </div>
     </div>
