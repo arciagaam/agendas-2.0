@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
-            $table->tinyInteger('sex');
+            $table->tinyInteger('sex')->nullable();
             $table->foreignId('user_type_id')->nullable()->constrained('user_types')->cascadeOnUpdate()->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();

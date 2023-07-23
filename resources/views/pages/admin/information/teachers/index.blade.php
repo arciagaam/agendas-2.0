@@ -31,21 +31,21 @@
         
         <div class="form-input-container">
             <label class="text-sm" for="rows">Rows</label>
+
+            @php
+                $rowValues = [10,20,30,40,50,75];
+            @endphp
             
-            <select class="form-input text-sm" name="rows" id="rows">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
-                <option value="75">75</option>
-                <option value="100">100</option>
+            <select class="form-input text-sm" name="rows" id="rows" onchange="this.form.submit()">
+                @foreach ($rowValues as $rowValue)
+                    <option value="{{$rowValue}}" @if ($rowValue == count($teachers)) selected @endif>{{$rowValue}}</option>
+                @endforeach
             </select>
         </div>
 
     </x-table.actions>
 
-    @php
+    {{-- @php
         $teachers = [
             collect([
                 'full_name' => 'Allen Padilla',
@@ -67,7 +67,7 @@
                 'specializations' => 'Earth',
             ]),
         ]
-    @endphp
+    @endphp --}}
 
     <table class="border-separate border-spacing-0">
         <thead>
@@ -80,9 +80,17 @@
         <tbody>
             @foreach ($teachers as $index => $teacher)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$teacher['full_name']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last">{{$teacher['specializations']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last"></x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$teacher['honorific'].' '.$teacher['first_name'].' '.$teacher['last_name']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$teacher['max_hours']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">
+                        <x-page.actions>
+                            <x-anchor url="{{route('admin.information.teachers.edit', ['teacher' => $teacher['teacher_id']])}}" label="Edit" type="primary">
+                                <x-slot:icon>
+                                    <box-icon name='edit'></box-icon>
+                                </x-slot:icon>
+                            </x-anchor>
+                        </x-page.actions>
+                    </x-table.td>
                 </tr>
             @endforeach
         </tbody>

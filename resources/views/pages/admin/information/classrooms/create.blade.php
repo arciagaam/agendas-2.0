@@ -14,12 +14,12 @@
             </div>
 
             <div class="form-input-container">
-                <label for="grade_level">Grade Level</label>
+                <label for="grade_level_id">Grade Level</label>
 
-                <select class="form-input" name="grade_level" id="grade_level">
-                    @for ($i = 0; $i<10; $i++)
-                        <option value="{{$i+1}}" >{{$i+1}}</option>
-                    @endfor
+                <select class="form-input" name="grade_level_id" id="grade_level_id">
+                    @foreach ($grade_levels as $grade_level)
+                        <option value="{{$grade_level->id}}" >{{$grade_level->gr_level}}</option>
+                    @endforeach
                 </select>
             </div>
 
@@ -30,7 +30,12 @@
 
             <div class="form-input-container">
                 <label for="adviser_id">Adviser</label>
-                <input class="form-input" type="text" name="adviser_id" id="adviser_id">
+                <select class="form-input" name="adviser_id" id="adviser_id">
+                    <option value="">Select an adviser</option>
+                    @foreach ($advisers as $adviser)
+                        <option value="{{$adviser->adviser_id}}">{{$adviser->honorific . ' ' . $adviser->first_name . ' ' . $adviser->last_name}}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="form-input-container">

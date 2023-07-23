@@ -46,17 +46,18 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Room $room)
     {
-        //
+        return view('pages.admin.information.rooms.edit', ['room' => $room, 'buildings' => Building::all()]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RoomStoreRequest $request, Room $room)
     {
-        //
+        $room->update($request->validated());
+        return redirect()->route('admin.information.rooms.index');
     }
 
     /**

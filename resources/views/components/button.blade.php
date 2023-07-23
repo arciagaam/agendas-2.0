@@ -1,11 +1,12 @@
-@props(['label' => '', 'icon' => '', 'type' => 'primary', 'class' => ''])
+@props(['label' => '', 'icon' => '', 'type' => 'primary', 'class' => '', 'id' => ''])
 
-<button 
+<button id="{{$id}}"
 @class([
     'rounded-lg py-2 px-4 transition-all duration-200 ease-in-out text-sm font-medium',
     'border border-2 border-project-gray-default hover:border-project-accent hover:text-project-accent hover:fill-project-accent' => $type == 'primary',
-    'bg-' => $type == 'secondary',
+    'bg-project-gray-light' => $type == 'secondary', $class
     ])
+
 >
     <div class="flex items-center justify-center gap-2">
         

@@ -43,31 +43,17 @@
             </select>
         </div>
 
+        <div class="form-input-container">
+            <label class="text-sm" for="gr_level_id">Grade level</label>
+
+            <select class="form-input" name="gr_level_id" id="gr_level_id" onchange="this.form.submit()">
+                @foreach ($grade_levels as $grade_level)
+                    <option value="{{ $grade_level->id }}" @if ($grade_level->id == $subjects[0]->gr_level_id) selected @endif>{{ $grade_level->gr_level }}</option>
+                @endforeach
+            </select>
+        </div>
+
     </x-table.actions>
-
-    @php
-        $subjects = [
-            collect([
-                'name' => 'Math',
-                'code' => 'MATH-1',
-            ]),
-
-            collect([
-                'name' => 'English',
-                'code' => 'ENG-1',
-            ]),
-
-            collect([
-                'name' => 'Science',
-                'code' => 'SCI-1',
-            ]),
-
-            collect([
-                'name' => 'Filipino',
-                'code' => 'FIL-1',
-            ]),
-        ]
-    @endphp
 
     <table class="border-separate border-spacing-0">
         <thead>
@@ -80,9 +66,17 @@
         <tbody>
             @foreach ($subjects as $index => $subject)
                 <tr>
-                    <x-table.td :trPosition="$loop->last">{{$subject['name']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last">{{$subject['code']}}</x-table.td>
-                    <x-table.td :trPosition="$loop->last"></x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$subject['subject_name']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">{{$subject['subject_code']}}</x-table.td>
+                    <x-table.td :trPosition="$loop->last">
+                        <x-page.actions>
+                            <x-anchor url="{{route('admin.information.subjects.edit', ['subject' => $subject->id])}}" label="Edit" type="primary">
+                                <x-slot:icon>
+                                    <box-icon name='edit'></box-icon>
+                                </x-slot:icon>
+                            </x-anchor>
+                        </x-page.actions>
+                    </x-table.td>
                 </tr>
             @endforeach
         </tbody>

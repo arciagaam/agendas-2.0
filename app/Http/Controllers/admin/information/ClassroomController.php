@@ -4,7 +4,9 @@ namespace App\Http\Controllers\admin\information;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassroomStoreRequest;
+use App\Models\Adviser;
 use App\Models\Classroom;
+use App\Models\GradeLevel;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -23,7 +25,10 @@ class ClassroomController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.information.classrooms.create', ['rooms' => Room::get()]);
+        return view('pages.admin.information.classrooms.create', [
+            'rooms' => Room::get(), 
+            'grade_levels' => GradeLevel::getGradeLevelsOnly()->get(), 
+            'advisers' => Adviser::getAdvisers()->get()]);
     }
 
     /**
@@ -31,9 +36,12 @@ class ClassroomController extends Controller
      */
     public function store(ClassroomStoreRequest $request)
     {
-        Classroom::create($request->validated());
-        return redirect()->route('admin.information.classrooms.index');
+        $classroom = Classroom::create($request->validated());
 
+        if ($request->adviser_id) {
+            Adviser::where('id', $request->adviser_id)->update(['classroom_id' => $classroom->id]);
+        }
+        return redirect()->route('admin.information.classrooms.index');
     }
 
     /**
@@ -47,17 +55,29 @@ class ClassroomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Classroom $classroom)
     {
-        //
+        $adviser = Adviser::where('classroom_id', $classroom->id)->first();
+        return view('pages.admin.information.classrooms.edit', [
+            'classroom' => $classroom, 
+            'rooms' => Room::get(), 
+            'grade_levels' => GradeLevel::getGradeLevelsOnly()->get(), 
+            'advisers' => Adviser::getAdvisers()->get(),
+            'classroom_adviser' => $adviser]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ClassroomStoreRequest $request, Classroom $classroom)
     {
-        //
+        $classroom->update($request->validated());
+
+        if ($request->adviser_id) {
+            Adviser::where('classroom_id', $classroom->id)->update(['classroom_id' => null]);
+            Adviser::where('id', $request->adviser_id)->update(['classroom_id' => $classroom->id]);
+        }
+        return redirect()->route('admin.information.classrooms.index');
     }
 
     /**

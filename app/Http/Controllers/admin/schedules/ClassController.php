@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\admin\schedules;
 
 use App\Http\Controllers\Controller;
+use App\Models\Classroom;
+use App\Models\ClassSchedule;
+use App\Models\GradeLevel;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class ClassController extends Controller
@@ -12,8 +16,20 @@ class ClassController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.schedules.classes.index');
+
+        if(!request()->grade_level_id && request()->classroom_id){
+            return redirect()->route('admin.schedules.classes.index');
+        }
+
+        return view('pages.admin.schedules.classes.index',[
+            'gradeLevels' => GradeLevel::getGradeLevelsOnly()->latest()->get(),
+            'sections' => Classroom::classScheduleClassrooms()->latest()->get(),
+            'subjects' => Subject::getSubjectsByGradeLevel()->with('defaultSubject')->get(),
+            'classSchedule' => ClassSchedule::getClassSchedule()->get(),
+        ]);
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
