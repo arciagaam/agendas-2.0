@@ -68,11 +68,6 @@
                                         
                                         <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" class="td-container" aria-colindex="{{$day->id}}">
                                             <div class="absolute inset-0 flex flex-col justify-center items-center h-full">
-                                                {{-- {{$cellData->subject_name ?? 'Vacant'}} --}}
-                                                @php
-                                                    // $subjects = ['Math', 'Science', 'English'];
-                                                    $teachers = ['Mr. Alberto Arciaga', 'Mr. Allen Padilla', 'Mr. Justine Valenzuela', 'Mr. Paul Caabay'];
-                                                @endphp
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
 

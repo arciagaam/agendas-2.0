@@ -140,8 +140,8 @@ Route::post('/teacher_hours', function () {
     return response()->json(['payload' => $result], 200);
 });
 
-Route::post('/schedules/show', function () {
-    $result = ClassSchedule::where('school_year_id', 1)->get();
+Route::post('/schedules', function () {
+    $result = ClassSchedule::where('school_year_id', 1)->getClassSchedule()->get();
 
     return response()->json(['payload' => $result], 200);
 });
