@@ -1,33 +1,25 @@
 <x-main-layout>
+    <div class="flex justify-between items-center">
+        <x-page.header title="New Template" />
+        <x-page.actions>
+            <x-button id="submit_schedule_template" label="Save" type="primary">
+                <x-slot:icon>
+                    <box-icon name='save'></box-icon>
+                </x-slot:icon>
+            </x-button>
+        </x-page.actions>
+    </div>
 
-    <div class="flex gap-5">
-        <div class="form-input-container">
-            <label class="text-sm" for="grade_level_id">Grade Level</label>
-            
-            <select class="form-input text-sm" name="grade_level_id" id="grade_level_id">
-                <option value={{null}}>Select Grade Level</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="6">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-
+    <div class="grid grid-cols-8 gap-5 border bg-project-gray-light p-4 rounded-lg">
         <x-sections-dropdown label="Choose Section/s">
             @foreach ($sections as $section)
     
                 <x-sections-selection gradeLevel="{{$section->gr_level}}">
                     @foreach ($section->classrooms as $classroom)
     
-                        <div class="flex gap-2 pl-3">
-                            <input type="checkbox" name="select_sections[]" class="select_sections" value="{{$classroom->id}}" data-section="{{$classroom->section}}">
-                            <p>{{$classroom->section}}</p>
+                        <div class="flex gap-2 pl-3 hover:bg-project-gray-default">
+                            <input id="{{$classroom->section}}" type="checkbox" name="select_sections[]" class="select_sections" value="{{$classroom->id}}" data-section="{{$classroom->section}}">
+                            <label class="w-full text-sm" for="{{$classroom->section}}">{{$classroom->section}}</label>
                         </div>
     
                     @endforeach
@@ -35,41 +27,43 @@
     
             @endforeach
         </x-sections-dropdown>
-
-        <div id="selected_sections_container" class="flex flex-wrap">
-            
+        <div class="flex flex-col w-full gap-1 col-span-6">
+            <p class="text-sm whitespace-nowrap">Selected <strong id="section_count" class="font-normal text-amber-500">0</strong> Section/s</p>
+            <div id="selected_sections_container" class="flex flex-wrap gap-2">
+                <p id="empty_text" class="pl-2 text-amber-500 text-sm">No selected sections yet.</p>
+            </div>
         </div>
     </div>
 
-    <div id="table_container" class="flex flex-wrap gap-5">
-        <table data-tableNumber="1" class="mt-12 table-auto border-separate border-spacing-2">
+    <div id="table_container" class="flex flex-wrap gap-5 border p-4 rounded-lg">
+        <table data-tableNumber="1" class="table-auto border-separate border-spacing-2">
             <thead>
                 <tr class="relative text-center">
                     <th>Time</th>
     
                     <th aria-colindex="1" class="">
-                        <div class="flex flex-col gap-5 w-full">
+                        <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
                             <p class="align-middle w-full">Monday</p>
                         </div>
                     </th>
     
                     <th aria-colindex="2" class="">
-                        <div class="flex flex-col gap-4">
+                        <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
                             <p>Tuesday</p>
                         </div>
                     </th>
     
                     <th aria-colindex="3" class="">
-                        <div class="flex flex-col gap-4">
+                        <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
                             <p>Wednesday</p>
                         </div>
                     </th>
     
                     <th aria-colindex="4" class="">
-                        <div class="flex flex-col gap-4">
+                        <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
                             <p>Thursday</p>
                         </div>
@@ -77,7 +71,7 @@
                     
     
                     <th aria-colindex="5" class="">
-                        <div class="flex flex-col gap-4">
+                        <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
                             <p>Friday</p>
                         </div>
@@ -88,8 +82,8 @@
             </thead>
             <tbody>
                 <tr class="text-center">
-                    <td>
-                        <div class="flex flex-col">
+                    <td class="td-container gap-3 w-full p-5">
+                        <div class="flex flex-col p-5">
                             <input class="absolute top-0 left-0 h-1/2 w-full bg-transparent outline-0 cursor-pointer text-center" type="time" name="time_start[]">
                             <input class="absolute bottom-0 left-0 h-1/2 w-full bg-transparent outline-0 cursor-pointer text-center" type="time" name="time_end[]">
                         </div>
@@ -127,8 +121,8 @@
     
                     <td class="body-actions">
                         <div class="flex gap-2">
-                            <button type="button" class="remove-row bg-red-500 p-1 px-2">-</button>
-                            <button type="button" class="add-row bg-green-500 p-1 px-2">+</button>
+                            <button type="button" class="remove-row bg-red-500 py-2 px-4 rounded-lg">-</button>
+                            <button type="button" class="add-row bg-green-500 py-2 px-4 rounded-lg">+</button>
                         </div>
                     </td>
                 </tr>
@@ -136,9 +130,6 @@
             </tbody>
         </table>
     </div>
-
-    <button id="submit_schedule_template">SAVE</button>
-
 
 </x-main-layout>
 
