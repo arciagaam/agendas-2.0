@@ -65,6 +65,7 @@
                                             </td>
                                         @endif
                                         {{-- @dd($cellData) --}}
+                                        
                                         <td data-classroomId="{{$cellData->classroom_id}}"
                                             data-timetable="{{$cellData->timetable}}" 
                                             data-dayId="{{$cellData->day_id}}" 

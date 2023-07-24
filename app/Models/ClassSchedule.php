@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ClassSchedule extends Model
 {
@@ -53,5 +55,9 @@ class ClassSchedule extends Model
             'users.first_name as first_name',
             'users.last_name as last_name',
         ]);
+    }
+
+    public function subjectTeachers() : BelongsTo {
+        return $this->belongsTo(SubjectTeacher::class, 'subject_teacher_id');
     }
 }

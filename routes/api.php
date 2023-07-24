@@ -115,11 +115,11 @@ Route::post('/schedule/store', function (Request $request) {
     $schedules = json_decode($request->schedules);
     foreach ($schedules as $schedule) {
         ClassSchedule::where('classroom_id', $schedule->classroom_id)
-            ->where('school_year_id', 1)
-            ->where('timetable', $schedule->timetable)
-            ->where('day_id', $schedule->day_id)
-            ->where('period_slot', $schedule->period_slot)
-            ->update(['subject_teacher_id' => $schedule->subject_teacher_id]);
+        ->where('school_year_id', 1)
+        ->where('timetable', $schedule->timetable)
+        ->where('day_id', $schedule->day_id)
+        ->where('period_slot', $schedule->period_slot)
+        ->update(['subject_teacher_id' => $schedule->subject_teacher_id == null ? null : intval($schedule->subject_teacher_id)]);
     }
 });
 
