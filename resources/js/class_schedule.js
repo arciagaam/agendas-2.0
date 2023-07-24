@@ -70,16 +70,16 @@ async function getTeacherHours() {
         },
         method: "POST",
     })
-        .then(res => res.json())
-        .then(data => {
+    .then(res => res.json())
+    .then(data => {
 
-            data.payload.forEach(teacher => {
-                teacher_hours[`${teacher.id}`] = {
-                    max_hours: teacher.max_hours,
-                    regular_load: teacher.regular_load,
-                }
-            });
+        data.payload.forEach(teacher => {
+            teacher_hours[`${teacher.id}`] = {
+                max_hours: teacher.max_hours,
+                regular_load: teacher.regular_load,
+            }
         });
+    });
 }
 
 async function getClassSchedules() {
@@ -93,15 +93,6 @@ async function getClassSchedules() {
         .then(data => {
 
             data.payload.forEach(schedule => {
-                //TESTING LANG KASI ALA YUNG TEACHER ID SA TEACHER HOURS PA
-                const time_start = moment(schedule.time_start, "HH:mm");
-                const time_end = moment(schedule.time_end, "HH:mm");
-
-                const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
-
-                const result = teacher_hours[1]['regular_load'] - period_duration;
-
-                console.log(result);
                 if (schedule.teacher_id in teacher_hours) {
 
                     // install mo moment using npm --DONE
@@ -130,15 +121,34 @@ async function getClassSchedules() {
 }
 
 
-
 function initialCountSpDp() {
     tableRows.forEach((row, rowindex) => {
         const cols = row.querySelectorAll('td');
         cols.forEach((col, colindex) => {
             if (colindex != 0) {
+                let type = 'sp';
+                const prevRowColumns = tableRows[rowindex - 1]?.querySelectorAll('td');
+                const nextRowColumns = tableRows[rowindex + 1]?.querySelectorAll('td');
                 const subjectId = col.querySelector('.subject-select-dropdown .selectedOption').id;
+
+                if (prevRowColumns) {
+                    const prevId = prevRowColumns[colindex].querySelector('.subject-select-dropdown .selectedOption').id;
+
+                    if (subjectId == prevId) {
+                        type = 'dp';
+                    }
+                }
+
+                if (nextRowColumns) {
+                    const nextId = nextRowColumns[colindex].querySelector('.subject-select-dropdown .selectedOption').id;
+
+                    if (subjectId == nextId) {
+                        type = 'dp';
+                    }
+                }
+
                 if (subjects[subjectId]) {
-                    computeSpDp(subjectId, 'sp', 'subtract');
+                    computeSpDp(subjectId, type, 'subtract');
                 }
             }
         })
@@ -152,23 +162,52 @@ function computeSpDp(subjectId, type, operation) {
     }
 }
 
+function saveCurrentScheduleToLocalStorage() {
+    const schedule = [];
+    const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
+
+    tableRows.forEach((row, rowindex) => {
+        const cols = row.querySelectorAll('td');
+        cols.forEach((col, colindex) => {
+            if (colindex != 0) {
+                const rowData = {
+                    classroom_id: classroomId,
+                    timetable: col.closest('table').dataset.tablenumber,
+                    subject_teacher_id: col.dataset.subjectteacherid ?? null,
+                    subject_id: col.querySelector('.subject-select-dropdown .selectedOption').id,
+                    teacher_id: col.querySelector('.teacher-select-dropdown .selectedOption').id,
+                    day_id: col.ariaColIndex,
+                    period_slot: rowindex + 1,
+                }
+
+                schedule.push(rowData);
+            }
+        })
+    })
+
+    localStorage.setItem(document.querySelector('#classroom_id').value, JSON.stringify(schedule));
+}
+
 const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subject');
 
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
         computeSpDp(item.dataset.id, 'sp', 'subtract');
+        saveCurrentScheduleToLocalStorage();
+        console.log(JSON.parse(localStorage.getItem(document.querySelector('#classroom_id').value)))
     });
 });
+
 
 window.addEventListener('load', async () => {
     if (saveBtn) {
         await getSubjectsByGradeLevel(classroomId);
         await getTeacherHours();
         await getClassSchedules();
-
         initialCountSpDp();
 
-        console.log(teacher_hours);
+        // sa dulo lagi dapat to
+        saveCurrentScheduleToLocalStorage();
     }
 })
 
