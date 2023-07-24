@@ -95,20 +95,14 @@ async function getClassSchedules() {
             data.payload.forEach(schedule => {
                 if (schedule.teacher_id in teacher_hours) {
 
-                    // install mo moment using npm --DONE
-                    // pa kuha nung difference nung time_start at time_end --DONE
-                    // teacher hours - yung difference ni TS and TE --DONE
-                    // pa convert to hours yung sagot? --DONE
-                    // pa console log ty --DONE
-
                     const time_start = moment(schedule.time_start, "HH:mm");
                     const time_end = moment(schedule.time_end, "HH:mm");
 
                     const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
-                    teacher_hours = teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
+                    teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
 
-                    const result = teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
+                    teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
 
                     // console.log(result);
 
@@ -162,7 +156,7 @@ function computeSpDp(subjectId, type, operation) {
     }
 }
 
-function saveCurrentScheduleToLocalStorage() {
+async function saveToServerSession() {
     const schedule = [];
     const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 
@@ -170,14 +164,24 @@ function saveCurrentScheduleToLocalStorage() {
         const cols = row.querySelectorAll('td');
         cols.forEach((col, colindex) => {
             if (colindex != 0) {
+
                 const rowData = {
                     classroom_id: classroomId,
-                    timetable: col.closest('table').dataset.tablenumber,
                     subject_teacher_id: col.dataset.subjectteacherid ?? null,
-                    subject_id: col.querySelector('.subject-select-dropdown .selectedOption').id,
-                    teacher_id: col.querySelector('.teacher-select-dropdown .selectedOption').id,
-                    day_id: col.ariaColIndex,
-                    period_slot: rowindex + 1,
+                    // school_year_id: col.dataset.schoolyearid,
+                    timetable: col.dataset.timetable,
+                    day_id: col.dataset.dayid,
+                    period_slot: col.dataset.periodslot,
+                    time_start: col.dataset.timestart,
+                    time_end: col.dataset.timeend,
+                    subject_id: col.dataset.subjectid,
+                    subject_name: col.dataset.subjectname,
+                    default_subject_id: col.dataset.defaultsubjectid,
+                    subject_type_id: col.dataset.subjecttypeid,
+                    teacher_id: col.dataset.teacherid,
+                    honorific: col.dataset.honorific,
+                    first_name: col.dataset.firstname,
+                    last_name: col.dataset.lastname,
                 }
 
                 schedule.push(rowData);
@@ -185,7 +189,18 @@ function saveCurrentScheduleToLocalStorage() {
         })
     })
 
-    localStorage.setItem(document.querySelector('#classroom_id').value, JSON.stringify(schedule));
+    const form = new FormData();
+    form.append('schedule', JSON.stringify(schedule));
+
+    await fetch(BASE_PATH + '/admin/schedules/classes/store-session', {
+        headers: {
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        method: "POST",
+        body: form
+    });
+    console.log(schedule);
+    console.log('saved session');
 }
 
 const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subject');
@@ -193,8 +208,7 @@ const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subje
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
         computeSpDp(item.dataset.id, 'sp', 'subtract');
-        saveCurrentScheduleToLocalStorage();
-        console.log(JSON.parse(localStorage.getItem(document.querySelector('#classroom_id').value)))
+        saveToServerSession();
     });
 });
 
@@ -205,11 +219,9 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
 
     const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
-    const result = teacher_hours[teacherId]['regular_load'] - period_duration;
-
     switch (operation) {
-        case 'add': teacher_hours = teacher_hours[teacherId]['regular_load'] + period_duration; break;
-        case 'subtract': teacher_hours = teacher_hours[teacherId]['regular_load'] - period_duration; break;
+        case 'add': teacher_hours[teacherId]['regular_load'] + period_duration; break;
+        case 'subtract': teacher_hours[teacherId]['regular_load'] - period_duration; break;
     }
 }
 
@@ -217,34 +229,37 @@ document.addEventListener('click', (e) => {
     const target = e.target;
     if(target.classList.contains('teacher') || target.closest('.teacher')) {
         const teacherItem = target.closest('.teacher') ?? target;
+
+        console.log(teacherItem);
+        const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
         
         const time_start = teacherItem.closest('td').dataset.timestart;
         const time_end = teacherItem.closest('td').dataset.timeend;
         const teacher_id = teacherItem.dataset.id;
-        const previous_teacher_id = teacherItem.closest('.teacher-select-dropdown').dataset.previousteacherid;
+        const previous_teacher_id = teacherDropdown.dataset.previousteacherid;
 
         const teacherContent = teacherItem.dataset.content;
-        const teacherId = teacherItem.dataset.id;
-        const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
         const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
 
         selectedTeacher.textContent = teacherContent;
-        selectedTeacher.id = teacherId;
+        selectedTeacher.id = teacher_id;
 
         computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
         computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
+        saveToServerSession();
     }
 })
 
 window.addEventListener('load', async () => {
     if (saveBtn) {
+
         await getSubjectsByGradeLevel(classroomId);
         await getTeacherHours();
         await getClassSchedules();
         initialCountSpDp();
 
         // sa dulo lagi dapat to
-        saveCurrentScheduleToLocalStorage();
+        saveToServerSession();
     }
 })
 

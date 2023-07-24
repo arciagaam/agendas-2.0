@@ -25,7 +25,6 @@
             </x-table.actions>
 
             <input id="classroom_id" type="hidden" value="{{request()->classroom_id}}">
-
             @if (request()->classroom_id && request()->grade_level_id)
                 @for ($tables = 0; $tables < getTimetableCount($classSchedule); $tables++)
 
@@ -65,8 +64,27 @@
                                                 </div>
                                             </td>
                                         @endif
-                                        
-                                        <td data-subjectTeacherId="{{$cellData->subject_teacher_id}}" data-timeStart="{{$cellData->time_start}}" data-timeEnd="{{$cellData->time_end}}" class="td-container" aria-colindex="{{$day->id}}">
+                                        {{-- @dd($cellData) --}}
+                                        <td data-classroomId="{{$cellData->classroom_id}}"
+                                            data-timetable="{{$cellData->timetable}}" 
+                                            data-dayId="{{$cellData->day_id}}" 
+                                            data-periodslot="{{$cellData->period_slot}}" 
+                                            data-timeStart="{{$cellData->time_start}}" 
+                                            data-timeEnd="{{$cellData->time_end}}" 
+
+                                            data-subjectId="{{$cellData->subject_id}}" 
+                                            data-subjectName="{{$cellData->subject_name}}" 
+                                            data-defaultSubjectId="{{$cellData->default_subject_id}}" 
+                                            data-subjectTypeId="{{$cellData->subject_type_id}}" 
+                                            
+                                            data-subjectTeacherId="{{$cellData->subject_teacher_id}}" 
+                                            data-teacherId="{{$cellData->teacher_id}}" 
+                                            data-honorific="{{$cellData->honorific}}" 
+                                            data-firstName="{{$cellData->first_name}}" 
+                                            data-lastName="{{$cellData->last_name}}" 
+                                            
+                                            
+                                            class="td-container" aria-colindex="{{$day->id}}">
                                             <div class="absolute inset-0 flex flex-col justify-center items-center h-full">
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
@@ -102,9 +120,11 @@
                                                     </div>
                                                 </x-subject-select>
 
+
+
                                                 <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName($cellData)}}">
 
-
+                                                    
                                                 </x-teacher-select>
                                             </div>
                                         </td>

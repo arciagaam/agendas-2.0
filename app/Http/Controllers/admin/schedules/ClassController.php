@@ -25,7 +25,7 @@ class ClassController extends Controller
             'gradeLevels' => GradeLevel::getGradeLevelsOnly()->latest()->get(),
             'sections' => Classroom::classScheduleClassrooms()->latest()->get(),
             'subjects' => Subject::getSubjectsByGradeLevel()->with('defaultSubject')->get(),
-            'classSchedule' => ClassSchedule::getClassSchedule()->get(),
+            'classSchedule' => session()->missing("unsaved.schedule.".request()->classroom_id) ? ClassSchedule::getClassSchedule()->get() : collect(session("unsaved.schedule.".request()->classroom_id)),
         ]);
     }
 
@@ -77,5 +77,15 @@ class ClassController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function storeSession() {
+        $schedule = json_decode(request()->schedule);
+        $classroomId = $schedule[0]->classroom_id;
+        session(["unsaved.schedule.$classroomId" => $schedule]);
+    }
+
+    public function removeSession($classroomId) {
+        session()->forget("unsaved.schedule.$classroomId");
     }
 }

@@ -56,8 +56,11 @@ subjectItems.forEach(item => {
                 const mainContainer = Object.assign(document.createElement('div'), {
                     className: 'teacher'
                 });
+
+                console.log(teacher);
                 mainContainer.dataset.id = teacher.id;
                 mainContainer.dataset.content = `${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
+                mainContainer.dataset.subjectteacherid = teacher.subject_teacher_id;
 
                 const teacherName = Object.assign(document.createElement('p'), {
                     innerText: `${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`

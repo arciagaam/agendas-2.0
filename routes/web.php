@@ -57,7 +57,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
     });
 
     Route::prefix('schedules')->name('schedules.')->group(function() {
+        Route::prefix('classes')->name('classes.')->group(function() {
+            Route::post('/store-session', [ClassController::class, 'storeSession']);
+            Route::get('/remove-session/{classroomId}', [ClassController::class, 'removeSession']);
+        });
         Route::resource('classes', ClassController::class);
+
+
         Route::resource('events', EventController::class);
         Route::resource('exams', ExamController::class);
     });
