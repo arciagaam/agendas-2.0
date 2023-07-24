@@ -209,6 +209,13 @@ subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
         computeSpDp(item.dataset.id, 'sp', 'subtract');
         saveToServerSession();
+        
+        const td = item.closest('td');
+        td.dataset.subjectid = item.dataset.id;
+        td.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
+        td.dataset.subjectname = item.dataset.content;
+        td.dataset.subjecttypeid = item.dataset.subjecttypeid;
+
     });
 });
 
@@ -230,7 +237,7 @@ document.addEventListener('click', (e) => {
     if(target.classList.contains('teacher') || target.closest('.teacher')) {
         const teacherItem = target.closest('.teacher') ?? target;
 
-        console.log(teacherItem);
+        // console.log(teacherItem);
         const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
         
         const time_start = teacherItem.closest('td').dataset.timestart;
@@ -244,9 +251,17 @@ document.addEventListener('click', (e) => {
         selectedTeacher.textContent = teacherContent;
         selectedTeacher.id = teacher_id;
 
-        computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
-        computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
+        // computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
+        // computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
         saveToServerSession();
+
+        const td = teacherItem.closest('td');
+        td.dataset.subjectteacherid = teacherItem.dataset.subjectteacherid;
+        td.dataset.teacherid = teacherItem.dataset.teacherid;
+        td.dataset.honorific = teacherItem.dataset.honorific;
+        td.dataset.firstname = teacherItem.dataset.firstname;
+        td.dataset.lastname = teacherItem.dataset.lastname;
+
     }
 })
 

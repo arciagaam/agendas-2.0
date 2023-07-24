@@ -59,11 +59,14 @@ subjectItems.forEach(item => {
 
                 console.log(teacher);
                 mainContainer.dataset.id = teacher.id;
-                mainContainer.dataset.content = `${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
+                mainContainer.dataset.content = `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
                 mainContainer.dataset.subjectteacherid = teacher.subject_teacher_id;
+                mainContainer.dataset.honorific = teacher.honorific;
+                mainContainer.dataset.firstname = teacher.first_name;
+                mainContainer.dataset.lastname = teacher.last_name;
 
                 const teacherName = Object.assign(document.createElement('p'), {
-                    innerText: `${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`
+                    innerText: `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`
                 })
 
                 mainContainer.append(teacherName);

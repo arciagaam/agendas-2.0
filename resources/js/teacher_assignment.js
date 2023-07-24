@@ -6,6 +6,7 @@ const selectedTeachersContainerList = document.querySelectorAll('.selected-teach
 let timeout;
 let teachersArray = [];
 
+console.log(buttonList);
 buttonList.forEach(function (button, index) {
   button.addEventListener('click', function () {
     var input = inputList[index];
