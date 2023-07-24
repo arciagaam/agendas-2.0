@@ -211,8 +211,6 @@ subjectItems2.forEach(item => {
         if(item.dataset.id in subjects){
             computeSpDp(item.dataset.id, 'sp', 'subtract');
         }
-        
-        console.log(item);
 
         const td = item.closest('td');
         td.dataset.subjectid = item.dataset.id;
@@ -220,7 +218,7 @@ subjectItems2.forEach(item => {
         td.dataset.subjectname = item.dataset.content;
         td.dataset.subjecttypeid = item.dataset.subjecttypeid;
         
-        td.dataset.subjectteacherid = null;
+        td.dataset.subjectteacherid = item.dataset.subjectteacherid;
         td.dataset.teacherid = '';
         td.dataset.honorific = '';
         td.dataset.firstname = '';
