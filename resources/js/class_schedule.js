@@ -70,16 +70,22 @@ async function getTeacherHours() {
         },
         method: "POST",
     })
-    .then(res => res.json())
-    .then(data => {
+        .then(res => res.json())
+        .then(data => {
 
-        data.payload.forEach(teacher => {
-            teacher_hours[`${teacher.id}`] = {
-                max_hours: teacher.max_hours,
-                regular_load: teacher.regular_load,
+            data.payload.forEach(teacher => {
+                teacher_hours[`${teacher.id}`] = {
+                    max_hours: teacher.max_hours,
+                    regular_load: teacher.regular_load,
+                }
+            });
+
+            //localStorage 
+            if (localStorage) {
+                localStorage.setItem(`unsaved.teacher_hours`, JSON.stringify(teacher_hours));
             }
+
         });
-    });
 }
 
 async function getClassSchedules() {
@@ -100,11 +106,13 @@ async function getClassSchedules() {
 
                     const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
-                    teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
+                    teacher_hours[schedule.teacher_id]['regular_load'] -= period_duration;
 
-                    teacher_hours[schedule.teacher_id]['regular_load'] - period_duration;
+                    teacher_hours[schedule.teacher_id]['regular_load'] -= period_duration;
 
-                    // console.log(result);
+                    if (localStorage) {
+                        localStorage.setItem(`unsaved.teacher_hours`, JSON.stringify(teacher_hours));
+                    }
 
 
                 }
@@ -199,6 +207,11 @@ async function saveToServerSession() {
         method: "POST",
         body: form
     });
+
+    //localStorage 
+    if (localStorage) {
+        localStorage.setItem(`unsaved.schedule.${classroomId}`, JSON.stringify(schedule));
+    }
     console.log(schedule);
     console.log('saved session');
 }
@@ -208,7 +221,7 @@ const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subje
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
 
-        if(item.dataset.id in subjects){
+        if (item.dataset.id in subjects) {
             computeSpDp(item.dataset.id, 'sp', 'subtract');
         }
 
@@ -217,7 +230,7 @@ subjectItems2.forEach(item => {
         td.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
         td.dataset.subjectname = item.dataset.content;
         td.dataset.subjecttypeid = item.dataset.subjecttypeid;
-        
+
         td.dataset.subjectteacherid = item.dataset.subjectteacherid;
         td.dataset.teacherid = '';
         td.dataset.honorific = '';
@@ -235,20 +248,30 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
 
     const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
-    switch (operation) {
-        case 'add': teacher_hours[teacherId]['regular_load'] + period_duration; break;
-        case 'subtract': teacher_hours[teacherId]['regular_load'] - period_duration; break;
+    const unsaved_teacher_hours = JSON.parse(localStorage.getItem(`unsaved.teacher_hours`));
+    console.log(unsaved_teacher_hours, 'before');
+
+    if (teacherId) {
+        switch (operation) {
+            case 'add': unsaved_teacher_hours[teacherId]['regular_load'] += period_duration; break;
+            case 'subtract': unsaved_teacher_hours[teacherId]['regular_load'] -= period_duration; break;
+        }
     }
+
+    console.log(unsaved_teacher_hours, 'after');
+
+    const updatedTeacherHours = JSON.stringify(unsaved_teacher_hours);
+
+    localStorage.setItem(`unsaved.teacher_hours`, updatedTeacherHours);
 }
 
 document.addEventListener('click', (e) => {
     const target = e.target;
-    if(target.classList.contains('teacher') || target.closest('.teacher')) {
+    if (target.classList.contains('teacher') || target.closest('.teacher')) {
         const teacherItem = target.closest('.teacher') ?? target;
 
-        // console.log(teacherItem);
         const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
-        
+
         const time_start = teacherItem.closest('td').dataset.timestart;
         const time_end = teacherItem.closest('td').dataset.timeend;
         const teacher_id = teacherItem.dataset.id;
@@ -260,16 +283,19 @@ document.addEventListener('click', (e) => {
         selectedTeacher.textContent = teacherContent;
         selectedTeacher.id = teacher_id;
 
-        // computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
-        // computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
-        saveToServerSession();
-
+        computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
+        computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
         const td = teacherItem.closest('td');
         td.dataset.subjectteacherid = teacherItem.dataset.subjectteacherid;
         td.dataset.teacherid = teacherItem.dataset.id;
         td.dataset.honorific = teacherItem.dataset.honorific;
         td.dataset.firstname = teacherItem.dataset.firstname;
         td.dataset.lastname = teacherItem.dataset.lastname;
+
+        saveToServerSession();
+        
+        const test = JSON.parse(localStorage.getItem(`unsaved.teacher_hours`));
+        console.log(test);
     }
 })
 
