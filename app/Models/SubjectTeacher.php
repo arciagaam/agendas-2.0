@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SubjectTeacher extends Model
 {
@@ -22,6 +23,10 @@ class SubjectTeacher extends Model
         ->where('default_subjects.subject_type_id', 2)
         ->orWhere('default_subjects.subject_type_id', 3)
         ->select(['subject_teachers.id', 'subjects.subject_name']);
+    }
+
+    public function teacher() : BelongsTo {
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
 }

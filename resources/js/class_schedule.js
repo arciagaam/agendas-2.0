@@ -141,7 +141,7 @@ function initialCountSpDp() {
                     }
                 }
 
-                if (subjects[subjectId]) {
+                if (subjectId in subjects) {
                     computeSpDp(subjectId, type, 'subtract');
                 }
             }
@@ -207,21 +207,24 @@ const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subje
 
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
-        computeSpDp(item.dataset.id, 'sp', 'subtract');
-        saveToServerSession();
+
+        if(item.dataset.id in subjects){
+            computeSpDp(item.dataset.id, 'sp', 'subtract');
+        }
         
         const td = item.closest('td');
         td.dataset.subjectid = item.dataset.id;
         td.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
         td.dataset.subjectname = item.dataset.content;
         td.dataset.subjecttypeid = item.dataset.subjecttypeid;
-
+        
         td.dataset.subjectteacherid = null;
         td.dataset.teacherid = '';
         td.dataset.honorific = '';
         td.dataset.firstname = '';
         td.dataset.lastname = '';
 
+        saveToServerSession();
     });
 });
 
@@ -267,7 +270,6 @@ document.addEventListener('click', (e) => {
         td.dataset.honorific = teacherItem.dataset.honorific;
         td.dataset.firstname = teacherItem.dataset.firstname;
         td.dataset.lastname = teacherItem.dataset.lastname;
-
     }
 })
 
