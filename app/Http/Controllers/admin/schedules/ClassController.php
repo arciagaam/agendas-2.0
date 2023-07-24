@@ -22,7 +22,6 @@ class ClassController extends Controller
         }
 
         session()->forget("unsaved.schedule.".request()->classroom_id);
-        // dd(ClassSchedule::getClassSchedule()->with('subjectTeachers.teacher')->get());
         return view('pages.admin.schedules.classes.index',[
             'gradeLevels' => GradeLevel::getGradeLevelsOnly()->latest()->get(),
             'sections' => Classroom::classScheduleClassrooms()->latest()->get(),

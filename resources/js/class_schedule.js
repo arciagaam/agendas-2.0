@@ -212,6 +212,8 @@ subjectItems2.forEach(item => {
             computeSpDp(item.dataset.id, 'sp', 'subtract');
         }
         
+        console.log(item);
+
         const td = item.closest('td');
         td.dataset.subjectid = item.dataset.id;
         td.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
