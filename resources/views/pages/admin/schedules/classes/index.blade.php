@@ -107,7 +107,11 @@
                                                         Non-Academic Subjects
             
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 2) as $subject)
-                                                        <div class="subject" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                        <div class="subject" 
+                                                            data-id="{{$subject->id}}"
+                                                            data-defaultSubjectId="{{$subject->default_subject_id}}" 
+                                                            data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
+                                                            data-content="{{$subject->subject_name}}">
                                                             <p>{{$subject->subject_name}}</p>
                                                         </div>
                                                         @endforeach
@@ -117,7 +121,11 @@
                                                         Breaks
             
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 3) as $subject)
-                                                        <div class="subject whitespace-nowrap" data-id="{{$subject->id}}" data-content="{{$subject->subject_name}}">
+                                                        <div class="subject whitespace-nowrap" 
+                                                            data-id="{{$subject->id}}"
+                                                            data-defaultSubjectId="{{$subject->default_subject_id}}" 
+                                                            data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
+                                                            data-content="{{$subject->subject_name}}">
                                                             <p class="whitespace-nowrap">{{$subject->subject_name}}</p>
                                                         </div>
                                                         @endforeach

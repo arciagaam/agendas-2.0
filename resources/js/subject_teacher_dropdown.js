@@ -40,6 +40,8 @@ subjectItems.forEach(item => {
         // empty teacher dropdown
         const td = item.closest('td');
         const teacherDropdown = td.querySelector('.teacher_select_dropdown_body');
+        const selectedTeacher = td.querySelector('.teacher_select_dropdown_label .selectedOption');
+        selectedTeacher.textContent = 'Select Teacher';
         teacherDropdown.innerText = "";
 
 

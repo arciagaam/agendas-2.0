@@ -216,6 +216,12 @@ subjectItems2.forEach(item => {
         td.dataset.subjectname = item.dataset.content;
         td.dataset.subjecttypeid = item.dataset.subjecttypeid;
 
+        td.dataset.subjectteacherid = null;
+        td.dataset.teacherid = '';
+        td.dataset.honorific = '';
+        td.dataset.firstname = '';
+        td.dataset.lastname = '';
+
     });
 });
 
@@ -257,7 +263,7 @@ document.addEventListener('click', (e) => {
 
         const td = teacherItem.closest('td');
         td.dataset.subjectteacherid = teacherItem.dataset.subjectteacherid;
-        td.dataset.teacherid = teacherItem.dataset.teacherid;
+        td.dataset.teacherid = teacherItem.dataset.id;
         td.dataset.honorific = teacherItem.dataset.honorific;
         td.dataset.firstname = teacherItem.dataset.firstname;
         td.dataset.lastname = teacherItem.dataset.lastname;
