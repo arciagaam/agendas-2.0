@@ -5,8 +5,9 @@ const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const classroomId = document.querySelector('#classroom_id').value;
 const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
-const resetSubjects = {};
-let subjects = {};
+let subjects = {
+    reset: {}, current: {}
+};
 const teacher_hours = {};
 
 if (saveBtn) {
@@ -55,12 +56,11 @@ async function getSubjectsByGradeLevel(classroom_id) {
     .then(res => res.json())
     .then(data => {
         data.payload.forEach(subject => {
-            subjects[subject.id] = {
+            subjects['reset'][subject.id] = {
                 sp: subject.sp_frequency,
                 dp: subject.dp_frequency,
             };
-
-            resetSubjects[subject.id] = {
+            subjects['current'][subject.id] = {
                 sp: subject.sp_frequency,
                 dp: subject.dp_frequency,
             };
@@ -127,13 +127,17 @@ async function getClassSchedules() {
         });
 }
 
+function deepCopy(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
+
 function resetSubjectsSpDp() {
-    subjects = {...resetSubjects};
+    subjects.current = deepCopy(subjects.reset);
 }
 
 function initialCountSpDp() {
     resetSubjectsSpDp();
-
+    
     const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 
     tableRows.forEach((row, rowindex) => {
@@ -143,10 +147,10 @@ function initialCountSpDp() {
                 let type = 'sp';
                 const prevRowColumns = tableRows[rowindex - 1]?.querySelectorAll('td');
                 const nextRowColumns = tableRows[rowindex + 1]?.querySelectorAll('td');
-                const subjectId = col.querySelector('.subject-select-dropdown .selectedOption').id;
+                const subjectId = col.dataset.subjectid;
 
                 if (prevRowColumns) {
-                    const prevId = prevRowColumns[colindex].querySelector('.subject-select-dropdown .selectedOption').id;
+                    const prevId = prevRowColumns[colindex].dataset.subjectid;
                     
                     if (subjectId == prevId) {
                         prevRowColumns[colindex].dataset.marker = 'dp'
@@ -155,14 +159,14 @@ function initialCountSpDp() {
                 }
 
                 if (nextRowColumns) {
-                    const nextId = nextRowColumns[colindex].querySelector('.subject-select-dropdown .selectedOption').id;
+                    const nextId = nextRowColumns[colindex].dataset.subjectid;
                     if (subjectId == nextId) {
                         nextRowColumns[colindex].dataset.marker = 'dp'
                         type = 'dp';
                     }
                 }
-
-                if (subjectId in subjects) {
+                
+                if (subjectId in subjects.current) {
                     computeSpDp(subjectId, type, 'subtract');
                 }
             }
@@ -173,15 +177,13 @@ function initialCountSpDp() {
     document.querySelectorAll('[data-marker]').forEach(cell => {
         cell.removeAttribute('data-marker');
     })
-
-    console.log(subjects[1]);
 }
 
 
 function computeSpDp(subjectId, type, operation) {
     switch (operation) {
-        case 'add': subjects[subjectId][type] += 1; break;
-        case 'subtract': subjects[subjectId][type] -= 1; break;
+        case 'add': subjects.current[subjectId][type] += 1; break;
+        case 'subtract': subjects.current[subjectId][type] -= 1; break;
     }
 }
 
@@ -241,7 +243,7 @@ const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subje
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
         const currentCell = item.closest('td');
-
+        console.log(item.dataset.id);
         currentCell.dataset.subjectid = item.dataset.id;
         currentCell.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
         currentCell.dataset.subjectname = item.dataset.content;
@@ -276,7 +278,7 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
 
 
     const updatedTeacherHours = JSON.stringify(unsaved_teacher_hours);
-
+    console.log(unsaved_teacher_hours);
     localStorage.setItem(`unsaved.teacher_hours`, updatedTeacherHours);
 }
 
@@ -308,8 +310,6 @@ document.addEventListener('click', (e) => {
         td.dataset.lastname = teacherItem.dataset.lastname;
 
         saveToServerSession();
-        
-        const test = JSON.parse(localStorage.getItem(`unsaved.teacher_hours`));
     }
 })
 
