@@ -104,7 +104,6 @@ const teacherItems = document.querySelectorAll('.teacher-select-dropdown .teache
 document.addEventListener('click', (e) => {
     const target = e.target;
     if(target.classList.contains('teacher') || target.closest('.teacher')) {
-        
         closeAllSubjectSelections();
     }
 })
