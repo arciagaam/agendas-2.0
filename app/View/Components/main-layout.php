@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class main-layout extends Component
+class mainLayout extends Component
 {
     /**
      * Create a new component instance.

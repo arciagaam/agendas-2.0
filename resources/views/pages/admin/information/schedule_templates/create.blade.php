@@ -10,7 +10,7 @@
         </x-page.actions>
     </div>
 
-    <div class="grid grid-cols-8 gap-5 border bg-project-gray-light p-4 rounded-lg">
+    <div class="grid grid-cols-8 gap-5 border border-project-gray-default bg-project-gray-light p-4 rounded-lg">
         <x-sections-dropdown label="Choose Section/s">
             @foreach ($sections as $section)
     
@@ -35,45 +35,47 @@
         </div>
     </div>
 
-    <div id="table_container" class="flex flex-wrap gap-5 border p-4 rounded-lg">
+    <div id="table_container" class="flex flex-wrap p-4 gap-5 border border-project-gray-default rounded-lg">
         <table data-tableNumber="1" class="table-auto border-separate border-spacing-2">
             <thead>
                 <tr class="relative text-center">
-                    <th>Time</th>
+                    <th>
+                        <p class="absolute bottom-0 left-0 align-middle w-full">Time</p>
+                    </th>
     
-                    <th aria-colindex="1" class="">
+                    <th aria-colindex="1" class="h-20">
                         <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
-                            <p class="align-middle w-full">Monday</p>
+                            <p class="absolute bottom-0 left-0 align-middle w-full">Monday</p>
                         </div>
                     </th>
     
-                    <th aria-colindex="2" class="">
+                    <th aria-colindex="2" class="h-20">
                         <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
-                            <p>Tuesday</p>
+                            <p class="absolute bottom-0 left-0 align-middle w-full">Tuesday</p>
                         </div>
                     </th>
     
-                    <th aria-colindex="3" class="">
+                    <th aria-colindex="3" class="h-20">
                         <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
-                            <p>Wednesday</p>
+                            <p class="absolute bottom-0 left-0 align-middle w-full">Wednesday</p>
                         </div>
                     </th>
     
-                    <th aria-colindex="4" class="">
+                    <th aria-colindex="4" class="h-20">
                         <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
-                            <p>Thursday</p>
+                            <p class="absolute bottom-0 left-0 align-middle w-full">Thursday</p>
                         </div>
                     </th>
                     
     
-                    <th aria-colindex="5" class="">
+                    <th aria-colindex="5" class="h-20">
                         <div class="flex flex-col w-full p-5">
                             <x-timetable-selection/>
-                            <p>Friday</p>
+                            <p class="absolute bottom-0 left-0 align-middle w-full">Friday</p>
                         </div>
                     </th>
                     
@@ -82,39 +84,39 @@
             </thead>
             <tbody>
                 <tr class="text-center">
-                    <td class="td-container gap-3 w-full p-5">
-                        <div class="flex flex-col p-5">
+                    <td class="td-container gap-3">
+                        <div class="td-content">
                             <input class="absolute top-0 left-0 h-1/2 w-full bg-transparent outline-0 cursor-pointer text-center" type="time" name="time_start[]">
                             <input class="absolute bottom-0 left-0 h-1/2 w-full bg-transparent outline-0 cursor-pointer text-center" type="time" name="time_end[]">
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="1">
-                        <div>
+                        <div class="td-content">
                             <x-cell-type :types="$types"/>
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="2">
-                        <div>
+                        <div class="td-content">
                             <x-cell-type :types="$types" />
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="3">
-                        <div>
+                        <div class="td-content">
                             <x-cell-type :types="$types" />
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="4">
-                        <div>
+                        <div class="td-content">
                             <x-cell-type :types="$types" />
                         </div>
                     </td>
     
                     <td class="td-container" aria-colindex="5">
-                        <div>
+                        <div class="td-content">
                             <x-cell-type :types="$types" />
                         </div>
                     </td>

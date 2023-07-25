@@ -1,6 +1,17 @@
 <x-main-layout>    
+        <div class="flex justify-between items-center">
+            <x-page.header title="Class Schedule" />
+            <x-page.actions>
+                <x-button id="submit_schedule_template" label="Save" type="primary">
+                    <x-slot:icon>
+                        <box-icon name='save'></box-icon>
+                    </x-slot:icon>
+                </x-button>
+            </x-page.actions>
+        </div>
+
         <div class="flex flex-col gap-5">
-            <x-table.actions>
+            <x-table.actions class="border border-project-gray-default">
                 <div class="form-input-container">
                     <label class="text-sm" for="grade_level_id">Grade Level</label>
                     
@@ -28,15 +39,15 @@
             @if (request()->classroom_id && request()->grade_level_id)
                 @for ($tables = 0; $tables < getTimetableCount($classSchedule); $tables++)
 
-                    <div id="table_container" class="flex flex-wrap gap-5">
-                        <table data-tableNumber="1" class="mt-12 table-auto border-separate border-spacing-2">
+                    <div id="table_container" class="flex flex-wrap p-4 gap-5 border border-project-gray-default rounded-lg">
+                        <table data-tableNumber="1" class="table-auto border-separate border-spacing-2">
                             <thead>
                                 <tr class="relative text-center">
 
                                     <th>Time</th>
                                     @foreach (getTimetableDays($classSchedule, $tables+1) as $day_id => $day)
                                         <th aria-colindex="{{$day->id}}">
-                                            <div class="flex flex-col gap-5 w-full">
+                                            <div class="flex flex-col w-full">
                                                 <p class="align-middle w-full">{{$day->day}}</p>
                                             </div>
                                         </th>
@@ -58,9 +69,10 @@
 
                                         @if($index == 0)
                                             <td class="td-container">
-                                                <div class="flex flex-col gap-1 items-center justify-center">
-                                                    <p>{{$cellData->time_start}}</p>
-                                                    <p>{{$cellData->time_end}}</p>
+                                                <div class="flex flex-row gap-2 rounded-lg bg-gray-100 ring-1 ring-project-gray-default items-center justify-center">
+                                                    <p class="bg-transparent text-center py-8">{{$cellData->time_start}}</p>
+                                                    <p>-</p>
+                                                    <p class="bg-transparent text-center py-8">{{$cellData->time_end}}</p>
                                                 </div>
                                             </td>
                                         @endif
@@ -86,15 +98,15 @@
                                             
                                             
                                             class="td-container" aria-colindex="{{$day->id}}">
-                                            <div class="absolute inset-0 flex flex-col justify-center items-center h-full">
+                                            <div class="flex flex-col justify-center items-center h-full bg-gray-100 rounded-lg ring-1 ring-project-gray-default">
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
 
                                                     <div class="flex flex-col gap-2">
-                                                        Academic Subjects
+                                                        <p class="bg-project-primary text-project-accent">Academic Subjects</p>
             
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
-                                                        <div class="subject" 
+                                                        <div class="subject bg-project-primary text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}" 
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -108,9 +120,9 @@
                                                     </div>
 
                                                     <div class="flex flex-col gap-2">
-                                                        Non-Academic Subjects
+                                                        <p class="bg-project-primary text-project-accent">Non-Academic Subjects</p>
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 2) as $subject)
-                                                        <div class="subject" 
+                                                        <div class="subject bg-project-primary text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}"
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -123,9 +135,9 @@
                                                     </div>
 
                                                     <div class="flex flex-col gap-2">
-                                                        Breaks
+                                                        <p class="bg-project-primary text-project-accent">Breaks</p>
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 3) as $subject)
-                                                        <div class="subject whitespace-nowrap" 
+                                                        <div class="subject whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}"
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -155,7 +167,6 @@
                             </tbody>
                         </table>
 
-                        <button id="save_schedule" class="bg-green-500 text-white py-2 px-4 rounded-md">Save Class Schedule</button>
                     </div>
                 @endfor
             @else

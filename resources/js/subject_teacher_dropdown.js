@@ -56,7 +56,7 @@ subjectItems.forEach(item => {
         .then(data => {
             data.payload.forEach(teacher => {
                 const mainContainer = Object.assign(document.createElement('div'), {
-                    className: 'teacher'
+                    className: 'teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark'
                 });
 
                 mainContainer.dataset.id = teacher.id;
