@@ -37,7 +37,7 @@ function getTimetableRowColCount($classSchedule, int $timetableNumber) : array {
 
 function getCellData($classSchedule, int $timetableNumber, int $row, int $day_id) {
     $filteredClassSchedule = filterClassSchedule($classSchedule, $timetableNumber);
-    
+
     $cellData = array();
     foreach($filteredClassSchedule as $value) {
         if($value->period_slot == $row && $value->day_id == $day_id) {
@@ -52,7 +52,28 @@ function getCellData($classSchedule, int $timetableNumber, int $row, int $day_id
 }
 
 function formatCellPersonName($holder) : null|string {
-    if(!$holder->first_name && !$holder->last_name) return null;
-    
-    return $holder->honorific ?? '' . ' ' . $holder->first_name ?? '' . ' ' . $holder->middle_name ?? '' . ' ' . $holder->last_name ?? '';
+    if(!isset($holder['first_name']) || $holder['first_name'] == '') return 'Select Teacher';
+
+    $name = ($holder['honorific'] ?? '' ) . ' ' . ($holder['first_name'] ?? '') . ' ' . ($holder['middle_name'] ?? '') . ' ' . ($holder['last_name'] ?? '');
+
+    return $name;
+}
+
+function getTeachersPerSubject($subjectId, $subjectTypeId, $subjects) {
+
+    if($subjectId == '' || $subjectId == null || $subjectTypeId != 1) {
+        return [];
+    }
+
+    $teachersPerSubject = array();
+
+    foreach($subjects as $subject) {
+        foreach($subject->subjectTeachers as $subjectTeacher) {
+            if($subjectTeacher->subject_id == $subjectId) {
+                array_push($teachersPerSubject, $subjectTeacher);
+            }
+        }
+    }
+
+    return $teachersPerSubject;
 }

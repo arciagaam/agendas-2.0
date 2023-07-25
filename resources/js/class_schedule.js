@@ -5,9 +5,7 @@ const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const classroomId = document.querySelector('#classroom_id').value;
 const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
-
-
-let schedules = [];
+const classSchedules = {};
 
 let subjects = {
     reset: {}, current: {}
@@ -74,34 +72,8 @@ async function saveToServerSession() {
 
 // Submit
 function handleSubmit() {
-    const schedule = [];
-
-    tableRows.forEach((row, rowindex) => {
-        const cols = row.querySelectorAll('td');
-        cols.forEach((col, colindex) => {
-            if (colindex != 0) {
-                const rowData = {
-                    classroom_id: classroomId,
-                    timetable: col.closest('table').dataset.tablenumber,
-                    subject_teacher_id: col.dataset.subjectteacherid ?? null,
-                    day_id: col.ariaColIndex,
-                    period_slot: rowindex + 1,
-                }
-                schedule.push(rowData);
-            }
-        })
-    })
-
-    const form = new FormData;
-    form.append('schedules', JSON.stringify(schedule));
-
-    fetch(`${BASE_PATH}/api/schedule/store`, {
-        headers: {
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        method: "POST",
-        body: form,
-    })
+    localStorage.clear();
+    fetch(BASE_PATH + '/admin/schedules/classes/save')
     .then(res => console.log(res));
 }
 
@@ -133,7 +105,6 @@ async function getTeacherHours() {
 
     if(localStorage.getItem('unsaved.teacher_hours')) {
         const teachers = JSON.parse(localStorage.getItem('unsaved.teacher_hours'));
-
         for(let key in teachers.current) {
             teacher_hours.reset[`${key}`] = {
                 max_hours: teachers.current[key].max_hours,
@@ -145,11 +116,8 @@ async function getTeacherHours() {
                 regular_load: teachers.current[key].regular_load,
             }
         }
-
         return;
     }
-
-    console.log('dumaan dito kahit di dapat')
 
 
     await fetch(`${BASE_PATH}/api/teacher_hours`, {
@@ -174,12 +142,11 @@ async function getTeacherHours() {
         });
 
     });
-
-    localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
-
 }
 
 async function getClassSchedules() {
+    
+
     await fetch(`${BASE_PATH}/api/schedules`, {
         headers: {
             'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -188,19 +155,26 @@ async function getClassSchedules() {
     })
     .then(res => res.json())
     .then(data => {
-        schedules = [...data.payload];
-
         data.payload.forEach(schedule => {
-            if (schedule.teacher_id in teacher_hours) {
-                const time_start = moment(schedule.time_start, "HH:mm");
-                const time_end = moment(schedule.time_end, "HH:mm");
 
-                const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
-
-                teacher_hours[schedule.teacher_id]['regular_load'] -= period_duration;
-                localStorage.setItem(`unsaved.teacher_hours`, JSON.stringify(teacher_hours));
+            if(!localStorage.getItem('unsaved.class_schedules')){
+                if(!(schedule.classroom_id in classSchedules)) {
+                    classSchedules[schedule.classroom_id] = {};
+                }
+                
+                classSchedules[schedule.classroom_id][`${schedule.timetable}_${schedule.period_slot}_${schedule.day_id}`] = schedule;
             }
-        })
+
+            if(!localStorage.getItem('unsaved.teacher_hours')){
+                if (schedule.teacher_id in teacher_hours.current) {
+                    const timeStart = moment(schedule.time_start, "HH:mm");
+                    const timeEnd = moment(schedule.time_end, "HH:mm");
+    
+                    computeTeacherHours(schedule.teacher_id , timeStart, timeEnd, 'subtract');
+                }
+            }
+        });
+
 
     });
 }
@@ -280,6 +254,22 @@ subjectItems2.forEach(item => {
         currentCell.dataset.firstname = '';
         currentCell.dataset.lastname = '';
 
+        const changeSubject = JSON.parse(localStorage.getItem('unsaved.class_schedules'));
+
+        const row = currentCell.dataset.periodslot;
+        const col = currentCell.dataset.dayid;
+        const timetable = currentCell.dataset.timetable;
+        
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].default_subject_id = item.dataset.defaultsubjectid;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].first_name = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].last_name = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].honorific = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subjectid = item.dataset.id;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_name = item.dataset.content;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = item.dataset.subjectteacherid;
+
+        localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
+
         initialCountSpDp();
         saveToServerSession();
     });
@@ -290,6 +280,7 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
     const time_end = moment(timeEnd, "HH:mm");
 
     const period_duration = moment.duration(time_end.diff(time_start)).asHours();
+
     if (teacherId) {
         switch (operation) {
             case 'add': teacher_hours.current[teacherId]['regular_load'] += period_duration; break;
@@ -304,9 +295,10 @@ document.addEventListener('click', (e) => {
         const teacherItem = target.closest('.teacher') ?? target;
 
         const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
+        const td = teacherItem.closest('td');
 
-        const time_start = teacherItem.closest('td').dataset.timestart;
-        const time_end = teacherItem.closest('td').dataset.timeend;
+        const time_start = td.dataset.timestart;
+        const time_end = td.dataset.timeend;
         const teacher_id = teacherItem.dataset.id;
         const previous_teacher_id = teacherDropdown.dataset.previousteacherid;
 
@@ -318,28 +310,46 @@ document.addEventListener('click', (e) => {
 
         computeTeacherHours(teacher_id, time_start, time_end, 'subtract');
         computeTeacherHours(previous_teacher_id, time_start, time_end, 'add');
-        const td = teacherItem.closest('td');
+        
         td.dataset.subjectteacherid = teacherItem.dataset.subjectteacherid;
         td.dataset.teacherid = teacherItem.dataset.id;
         td.dataset.honorific = teacherItem.dataset.honorific;
         td.dataset.firstname = teacherItem.dataset.firstname;
         td.dataset.lastname = teacherItem.dataset.lastname;
 
+        const changeSubject = JSON.parse(localStorage.getItem('unsaved.class_schedules'));
+
+        const row = td.dataset.periodslot;
+        const col = td.dataset.dayid;
+        const timetable = td.dataset.timetable;
+        
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].first_name = teacherItem.dataset.firstname;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].last_name = teacherItem.dataset.lastname;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].honorific = teacherItem.dataset.honorific;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = teacherItem.dataset.subjectteacherid;
+
         saveToServerSession();
         localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
-        console.log(teacher_hours);
+        localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
     }
 })
 
 window.addEventListener('load', async () => {
     if (saveBtn) {
-
         await getSubjectsByGradeLevel(classroomId);
         await getTeacherHours();
         await getClassSchedules();
         initialCountSpDp();
         // sa dulo lagi dapat to
         saveToServerSession();
+
+        localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
+
+        if(!localStorage.getItem('unsaved.class_schedules')) {
+            localStorage.setItem('unsaved.class_schedules', JSON.stringify(classSchedules));
+        }
+
+        console.log(classSchedules);
     }
 })
 
