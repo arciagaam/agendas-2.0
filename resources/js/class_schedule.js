@@ -5,7 +5,8 @@ const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const classroomId = document.querySelector('#classroom_id').value;
 const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
-const subjects = {};
+const resetSubjects = {};
+let subjects = {};
 const teacher_hours = {};
 
 if (saveBtn) {
@@ -51,16 +52,20 @@ async function getSubjectsByGradeLevel(classroom_id) {
         },
         method: "POST",
     })
-        .then(res => res.json())
-        .then(data => {
-            data.payload.forEach(subject => {
-                subjects[subject.id] = {
-                    sp: subject.sp_frequency,
-                    dp: subject.dp_frequency,
-                };
-            });
-        });
+    .then(res => res.json())
+    .then(data => {
+        data.payload.forEach(subject => {
+            subjects[subject.id] = {
+                sp: subject.sp_frequency,
+                dp: subject.dp_frequency,
+            };
 
+            resetSubjects[subject.id] = {
+                sp: subject.sp_frequency,
+                dp: subject.dp_frequency,
+            };
+        });
+    });
 }
 
 async function getTeacherHours() {
@@ -122,12 +127,19 @@ async function getClassSchedules() {
         });
 }
 
+function resetSubjectsSpDp() {
+    subjects = {...resetSubjects};
+}
 
 function initialCountSpDp() {
+    resetSubjectsSpDp();
+
+    const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
+
     tableRows.forEach((row, rowindex) => {
         const cols = row.querySelectorAll('td');
         cols.forEach((col, colindex) => {
-            if (colindex != 0) {
+            if (colindex != 0 && !col.hasAttribute('data-marker')) {
                 let type = 'sp';
                 const prevRowColumns = tableRows[rowindex - 1]?.querySelectorAll('td');
                 const nextRowColumns = tableRows[rowindex + 1]?.querySelectorAll('td');
@@ -135,16 +147,17 @@ function initialCountSpDp() {
 
                 if (prevRowColumns) {
                     const prevId = prevRowColumns[colindex].querySelector('.subject-select-dropdown .selectedOption').id;
-
+                    
                     if (subjectId == prevId) {
+                        prevRowColumns[colindex].dataset.marker = 'dp'
                         type = 'dp';
                     }
                 }
 
                 if (nextRowColumns) {
                     const nextId = nextRowColumns[colindex].querySelector('.subject-select-dropdown .selectedOption').id;
-
                     if (subjectId == nextId) {
+                        nextRowColumns[colindex].dataset.marker = 'dp'
                         type = 'dp';
                     }
                 }
@@ -153,9 +166,17 @@ function initialCountSpDp() {
                     computeSpDp(subjectId, type, 'subtract');
                 }
             }
-        })
+        });
+    
     })
+
+    document.querySelectorAll('[data-marker]').forEach(cell => {
+        cell.removeAttribute('data-marker');
+    })
+
+    console.log(subjects[1]);
 }
+
 
 function computeSpDp(subjectId, type, operation) {
     switch (operation) {
@@ -212,31 +233,27 @@ async function saveToServerSession() {
     if (localStorage) {
         localStorage.setItem(`unsaved.schedule.${classroomId}`, JSON.stringify(schedule));
     }
-    console.log(schedule);
-    console.log('saved session');
+
 }
 
 const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subject');
 
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
+        const currentCell = item.closest('td');
 
-        if (item.dataset.id in subjects) {
-            computeSpDp(item.dataset.id, 'sp', 'subtract');
-        }
+        currentCell.dataset.subjectid = item.dataset.id;
+        currentCell.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
+        currentCell.dataset.subjectname = item.dataset.content;
+        currentCell.dataset.subjecttypeid = item.dataset.subjecttypeid;
 
-        const td = item.closest('td');
-        td.dataset.subjectid = item.dataset.id;
-        td.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
-        td.dataset.subjectname = item.dataset.content;
-        td.dataset.subjecttypeid = item.dataset.subjecttypeid;
+        currentCell.dataset.subjectteacherid = item.dataset.subjectteacherid;
+        currentCell.dataset.teacherid = '';
+        currentCell.dataset.honorific = '';
+        currentCell.dataset.firstname = '';
+        currentCell.dataset.lastname = '';
 
-        td.dataset.subjectteacherid = item.dataset.subjectteacherid;
-        td.dataset.teacherid = '';
-        td.dataset.honorific = '';
-        td.dataset.firstname = '';
-        td.dataset.lastname = '';
-
+        initialCountSpDp();
         saveToServerSession();
     });
 });
@@ -249,7 +266,6 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
     const period_duration = moment.duration(time_end.diff(time_start)).asHours(); //time_end - time_start
 
     const unsaved_teacher_hours = JSON.parse(localStorage.getItem(`unsaved.teacher_hours`));
-    console.log(unsaved_teacher_hours, 'before');
 
     if (teacherId) {
         switch (operation) {
@@ -258,7 +274,6 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
         }
     }
 
-    console.log(unsaved_teacher_hours, 'after');
 
     const updatedTeacherHours = JSON.stringify(unsaved_teacher_hours);
 
@@ -295,7 +310,6 @@ document.addEventListener('click', (e) => {
         saveToServerSession();
         
         const test = JSON.parse(localStorage.getItem(`unsaved.teacher_hours`));
-        console.log(test);
     }
 })
 
