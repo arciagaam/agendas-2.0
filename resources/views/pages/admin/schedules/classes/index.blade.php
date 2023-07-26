@@ -2,11 +2,13 @@
         <div class="flex justify-between items-center">
             <x-page.header title="Class Schedule" />
             <x-page.actions>
-                <x-button id="save_schedule" label="Save" type="primary">
-                    <x-slot:icon>
-                        <box-icon name='save'></box-icon>
-                    </x-slot:icon>
-                </x-button>
+                @if (request()->classroom_id && request()->grade_level_id)
+                    <x-button id="save_schedule" label="Save" type="primary">
+                        <x-slot:icon>
+                            <box-icon name='save'></box-icon>
+                        </x-slot:icon>
+                    </x-button>
+                @endif
             </x-page.actions>
         </div>
 
