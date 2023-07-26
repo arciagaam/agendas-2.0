@@ -24,7 +24,7 @@ class TeacherFactory extends Factory
         return [
             'user_id' => $user->id,
             'honorific_id' => fake()->numberBetween(1,4),
-            'max_hours' => 14,
+            'max_hours' => 6,
             'regular_load' => 10,
             'is_available' => 1,
         ];

@@ -14,4 +14,4 @@
     </div>
 </div>
 
-@vite('resources/js/subject_teacher_dropdown.js')
+{{-- @vite('resources/js/subject_teacher_dropdown.js') --}}

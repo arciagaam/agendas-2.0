@@ -1,10 +1,13 @@
 import moment from "moment/moment";
-
-// import moment from 'moment';
 const saveBtn = document.querySelector('#save_schedule');
 const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute('content');
 const classroomId = document.querySelector('#classroom_id').value;
 const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
+
+const labels = document.querySelectorAll('.subject_select_dropdown_label');
+const selectSubjects = document.querySelectorAll('input[name="select_subjects[]"]');
+const selectionBodies = document.querySelectorAll('.subject_select_dropdown_body, .teacher_select_dropdown_body');
+
 const classSchedules = {};
 let classSchedulesArray = [];
 
@@ -183,10 +186,7 @@ async function getClassSchedules() {
 
             if(!localStorage.getItem('unsaved.teacher_hours')){
                 if (schedule.teacher_id in teacher_hours.current) {
-                    const timeStart = moment(schedule.time_start, "HH:mm");
-                    const timeEnd = moment(schedule.time_end, "HH:mm");
-    
-                    computeTeacherHours(schedule.teacher_id , timeStart, timeEnd, 'subtract');
+                    computeTeacherHours(schedule.teacher_id , schedule.time_start, schedule.time_end, 'subtract');
                 }
             }
         });
@@ -299,7 +299,7 @@ subjectItems2.forEach(item => {
         initialCountSpDp();
         saveToServerSession();
         saveSchedulesArrayToLocal();
-
+        
         checkConflicts(currentCell);
 
     });
@@ -317,6 +317,13 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
             case 'subtract': teacher_hours.current[teacherId]['regular_load'] -= period_duration; break;
         }
     }
+}
+
+function displayTeacherHours() {
+    document.querySelectorAll('.teacher').forEach(teacher => {
+        teacher.querySelector('.max-hours').innerText = 'Available for this day: ' + teacher_hours.current[teacher.dataset.id]['max_hours'];
+        teacher.querySelector('.regular-load').innerText = 'Regular load: ' + teacher_hours.current[teacher.dataset.id]['regular_load'];
+    })
 }
 
 // Select teacher
@@ -361,6 +368,7 @@ document.addEventListener('click', (e) => {
         changeSubject[classroomId][`${timetable}_${row}_${col}`].teacher_id = teacherItem.dataset.id;
 
         saveToServerSession();
+        displayTeacherHours();
         localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
         localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
         saveSchedulesArrayToLocal();
@@ -370,7 +378,7 @@ document.addEventListener('click', (e) => {
 
 function checkConflicts(cellData) {
     const schedules = JSON.parse(localStorage.getItem('unsaved.class_schedules_array'));
-
+    
     const filteredSchedules = schedules.filter(schedule => {
         const cellDataTimeStart = moment(cellData.dataset.timestart, 'hh:mm');
         const scheduleTimeStart = moment(schedule.time_start, 'hh:mm');
@@ -399,6 +407,124 @@ function checkConflicts(cellData) {
 
 }
 
+function closeAllSubjectSelections() {
+    selectionBodies.forEach(selectionBody => {
+        selectionBody.ariaExpanded = false;
+    })
+}
+
+labels.forEach(selection => {
+    selection.addEventListener('click', () => {
+        const selectionBody = selection.closest('div').querySelector('.subject_select_dropdown_body');
+
+        if (selectionBody.ariaExpanded == 'true') {
+            selectionBody.ariaExpanded = false;
+        } else {
+            closeAllSubjectSelections();
+            selectionBody.ariaExpanded = true;
+        }
+    });
+});
+
+const subjectItems = document.querySelectorAll('.subject-select-dropdown .subject');
+
+subjectItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const content = item.dataset.content;
+        const id = item.dataset.id;
+        const dropdown = item.closest('.subject-select-dropdown');
+        const selectedSubject = dropdown.querySelector('.selectedOption');
+
+        selectedSubject.textContent = content;
+        dropdown.id = id;
+
+        // empty teacher dropdown
+        const td = item.closest('td');
+        const teacherDropdown = td.querySelector('.teacher_select_dropdown_body');
+        const selectedTeacher = td.querySelector('.teacher_select_dropdown_label .selectedOption');
+        selectedTeacher.textContent = 'Select Teacher';
+        teacherDropdown.innerText = "";
+
+        //fetch( na kukuha ng teachers ng pinili na subject)
+        fetch(BASE_PATH + `/api/teachers_by_subject/${id}`, {
+            headers: {
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            method: 'POST',
+        })
+            .then(res => res.json())
+            .then(data => {
+                data.payload.forEach(teacher => {
+                    const mainContainer = Object.assign(document.createElement('div'), {
+                        className: 'teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark'
+                    });
+
+                    mainContainer.dataset.id = teacher.id;
+                    mainContainer.dataset.content = `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
+                    mainContainer.dataset.subjectteacherid = teacher.subject_teacher_id;
+                    mainContainer.dataset.honorific = teacher.honorific;
+                    mainContainer.dataset.firstname = teacher.first_name;
+                    mainContainer.dataset.lastname = teacher.last_name;
+
+                    const pContainer = Object.assign(document.createElement('div'), {
+                        className: 'flex flex-col p-3'
+                    });
+
+                    const teacherName = Object.assign(document.createElement('p'), {
+                        className: 'whitespace-nowrap',
+                        innerText: `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`
+                    });
+
+                    const maxHours = Object.assign(document.createElement('p'), {
+                        className: 'max-hours text-xs',
+                        innerText: 'Available for this day: ' + teacher_hours.current[teacher.id]['max_hours']
+                    });
+
+                    const regularLoad = Object.assign(document.createElement('p'), {
+                        className: 'regular-load text-xs',
+                        innerText: 'Regular load: ' + teacher_hours.current[teacher.id]['regular_load']
+                    });
+
+                    mainContainer.append(pContainer);
+                    pContainer.append(teacherName);
+                    pContainer.append(maxHours);
+                    pContainer.append(regularLoad);
+                    teacherDropdown.append(mainContainer);
+                    teacherDropdown.id = teacher.id;
+                    td.dataset.subjectteacherid = teacher.subject_teacher_id;
+
+                })
+            });
+
+        closeAllSubjectSelections();
+    });
+});
+
+const teacherLabels = document.querySelectorAll('.teacher_select_dropdown_label');
+
+teacherLabels.forEach(teacherSelection => {
+    teacherSelection.addEventListener('click', () => {
+        const teacherSelectionBody = teacherSelection.closest('div').querySelector('.teacher_select_dropdown_body');
+
+        if (teacherSelectionBody.ariaExpanded == 'true') {
+            teacherSelectionBody.ariaExpanded = false;
+        } else {
+            closeAllSubjectSelections();
+            teacherSelectionBody.ariaExpanded = true;
+            const previousTeacherId = teacherSelection.querySelector('.selectedOption').id;
+            const teacherSelectDropdown = teacherSelection.closest('.teacher-select-dropdown');
+            teacherSelectDropdown.dataset.previousteacherid = previousTeacherId;
+        }
+    });
+});
+
+document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('teacher') || target.closest('.teacher')) {
+        closeAllSubjectSelections();
+    }
+})
+
 window.addEventListener('load', async () => {
     if (saveBtn && document.querySelectorAll('table').length) {
         // Always take note of the order!!!
@@ -413,13 +539,12 @@ window.addEventListener('load', async () => {
         }
 
         initialCountSpDp();
+        displayTeacherHours();
 
         localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
         
         // sa dulo lagi dapat to
         saveToServerSession();
-
-        console.log(subjects.current)
     }
 })
 

@@ -12,7 +12,7 @@ function closeAllSubjectSelections() {
 labels.forEach(selection => {
     selection.addEventListener('click', () => {
         const selectionBody = selection.closest('div').querySelector('.subject_select_dropdown_body');
-        
+
         if (selectionBody.ariaExpanded == 'true') {
             selectionBody.ariaExpanded = false;
         } else {
@@ -45,33 +45,59 @@ subjectItems.forEach(item => {
         fetch(BASE_PATH + `/api/teachers_by_subject/${id}`, {
             headers: {
                 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-              },
-              method: 'POST',
+            },
+            method: 'POST',
         })
-        .then(res => res.json())
-        .then(data => {
-            data.payload.forEach(teacher => {
-                const mainContainer = Object.assign(document.createElement('div'), {
-                    className: 'teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark'
-                });
+            .then(res => res.json())
+            .then(data => {
+                data.payload.forEach(teacher => {
+                    const mainContainer = Object.assign(document.createElement('div'), {
+                        className: 'teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark'
+                    });
 
-                mainContainer.dataset.id = teacher.id;
-                mainContainer.dataset.content = `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
-                mainContainer.dataset.subjectteacherid = teacher.subject_teacher_id;
-                mainContainer.dataset.honorific = teacher.honorific;
-                mainContainer.dataset.firstname = teacher.first_name;
-                mainContainer.dataset.lastname = teacher.last_name;
+                    mainContainer.dataset.id = teacher.id;
+                    mainContainer.dataset.content = `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`;
+                    mainContainer.dataset.subjectteacherid = teacher.subject_teacher_id;
+                    mainContainer.dataset.honorific = teacher.honorific;
+                    mainContainer.dataset.firstname = teacher.first_name;
+                    mainContainer.dataset.lastname = teacher.last_name;
 
-                const teacherName = Object.assign(document.createElement('p'), {
-                    innerText: `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`
+                    const pContainer = Object.assign(document.createElement('div'), {
+                        className: 'flex flex-col p-3'
+                    });
+
+                    const teacherName = Object.assign(document.createElement('p'), {
+                        className: 'whitespace-nowrap',
+                        innerText: `${teacher.honorific} ${teacher.first_name} ${teacher.middle_name ?? ''} ${teacher.last_name}`
+                    });
+
+                    const maxHours = Object.assign(document.createElement('p'), {
+                        className: 'max-hours text-xs',
+                        innerText: 'Available for this day: ' + teacher_hours.current[teacher.dataset.id]['max_hours']
+                    });
+
+                    const regularLoad = Object.assign(document.createElement('p'), {
+                        className: 'max-hours text-xs',
+                        innerText: 'Regular load: ' + teacher_hours.current[teacher.dataset.id]['regular_load']
+                    });
+
+                    mainContainer.append(pContainer);
+                    pContainer.append(teacherName);
+                    pContainer.append(maxHours);
+                    pContainer.append(regularLoad);
+                    teacherDropdown.append(mainContainer);
+                    teacherDropdown.id = teacher.id;
+                    td.dataset.subjectteacherid = teacher.subject_teacher_id;
+
+
+                    // document.querySelectorAll('.teacher').forEach(teacher => {
+                    //     console.log(teacher);
+                    //     teacher.querySelector('.max-hours').innerText = 'Available for this day: ' + teacher_hours.current[teacher.dataset.id]['max_hours'];
+                    //     teacher.querySelector('.regular-load').innerText = 'Regular load: ' + teacher_hours.current[teacher.dataset.id]['regular_load'];
+                    // })
+
                 })
-
-                mainContainer.append(teacherName);
-                teacherDropdown.append(mainContainer);
-                teacherDropdown.id = teacher.id;
-                td.dataset.subjectteacherid = teacher.subject_teacher_id;
-            })
-        });
+            });
 
         closeAllSubjectSelections();
     });
@@ -99,21 +125,10 @@ const teacherItems = document.querySelectorAll('.teacher-select-dropdown .teache
 
 document.addEventListener('click', (e) => {
     const target = e.target;
-    if(target.classList.contains('teacher') || target.closest('.teacher')) {
+    if (target.classList.contains('teacher') || target.closest('.teacher')) {
         closeAllSubjectSelections();
     }
 })
 
-// teacherItems.forEach(teacherItem => {
-//     teacherItem.addEventListener('click', () => {
-//         const teacherContent = teacherItem.dataset.content;
-//         const teacherDropdown = teacherItem.closest('.teacher-select-dropdown');
-//         const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
-
-//         console.log('Teacher Content', teacherContent);
-
-//         selectedTeacher.textContent = teacherContent;
-//     });
-// });
 
 

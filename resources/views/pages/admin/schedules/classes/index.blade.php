@@ -161,7 +161,7 @@
                                                 <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName(collect($cellData))}}">
                                                     @foreach (getTeachersPerSubject($cellData->subject_id, $cellData->subject_type_id, $subjects) as $subjectTeacher)
                                                     
-                                                        <div class="teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark" 
+                                                        <div class="teacher whitespace-nowrap justify-start items-start bg-project-primary text-white hover:bg-project-gray-dark" 
                                                         data-id="{{$subjectTeacher->teacher->id}}"
                                                         data-content="{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}"
                                                         data-subjectTeacherId="{{$subjectTeacher->id}}"
@@ -169,7 +169,12 @@
                                                         data-firstName="{{$subjectTeacher->teacher->user->first_name}}"
                                                         data-lastName="{{$subjectTeacher->teacher->user->last_name}}"
                                                         >
-                                                            <p class="whitespace-nowrap">{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}</p>
+                                                        
+                                                        <div class="flex flex-col p-3">
+                                                                <p class="whitespace-nowrap">{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}</p>
+                                                                <p class="max-hours text-xs">Available for this day: {{$subjectTeacher->teacher->max_hours}}</p>
+                                                                <p class="regular-load text-xs">Regular load: {{$subjectTeacher->teacher->regular_load}}</p>
+                                                        </div>
                                                         </div>
                                                     @endforeach
 
