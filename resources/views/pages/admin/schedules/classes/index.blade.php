@@ -105,10 +105,10 @@
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
 
                                                     <div class="flex flex-col gap-2 p-3">
-                                                        <p class="bg-project-primary text-project-accent">Academic Subjects</p>
+                                                        <p class="bg-project-primary-600 text-project-accent-500">Academic Subjects</p>
 
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
-                                                        <div class="subject bg-project-primary text-white hover:bg-project-gray-dark" 
+                                                        <div class="subject bg-project-primary-600 text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}" 
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -126,10 +126,10 @@
                                                         @endforeach
                                                     </div>
 
-                                                    <div class="flex flex-col gap-2">
-                                                        <p class="bg-project-primary text-project-accent">Non-Academic Subjects</p>
+                                                    <div class="flex flex-col gap-2 p-3">
+                                                        <p class="bg-project-primary text-project-accent-500">Non-Academic Subjects</p>
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 2) as $subject)
-                                                        <div class="subject bg-project-primary text-white hover:bg-project-gray-dark" 
+                                                        <div class="subject bg-project-primary-600 text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}"
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -141,10 +141,10 @@
                                                         @endforeach
                                                     </div>
 
-                                                    <div class="flex flex-col gap-2">
-                                                        <p class="bg-project-primary text-project-accent">Breaks</p>
+                                                    <div class="flex flex-col gap-2 p-3">
+                                                        <p class="bg-project-primary text-project-accent-500">Breaks</p>
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 3) as $subject)
-                                                        <div class="subject whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark" 
+                                                        <div class="subject whitespace-nowrap bg-project-primary-600 text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}"
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -161,7 +161,7 @@
                                                 <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName(collect($cellData))}}">
                                                     @foreach (getTeachersPerSubject($cellData->subject_id, $cellData->subject_type_id, $subjects) as $subjectTeacher)
                                                     
-                                                        <div class="teacher whitespace-nowrap justify-start items-start bg-project-primary text-white hover:bg-project-gray-dark" 
+                                                        <div class="teacher whitespace-nowrap justify-start items-start bg-project-primary-600 text-white hover:bg-project-gray-dark" 
                                                         data-id="{{$subjectTeacher->teacher->id}}"
                                                         data-content="{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}"
                                                         data-subjectTeacherId="{{$subjectTeacher->id}}"

@@ -125,7 +125,7 @@ async function getTeacherHours() {
                 max_hours: {},
                 regular_load: teachers[key].regular_load,
             }
-            
+            console.log(key)
             for (let i = 1; i < 7; i++) {
                 teacher_hours[`${key}`].max_hours[i] = teachers[`${key}`].max_hours[i];
             }
@@ -466,7 +466,7 @@ subjectItems.forEach(item => {
             .then(data => {
                 data.payload.forEach(teacher => {
                     const mainContainer = Object.assign(document.createElement('div'), {
-                        className: 'teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark'
+                        className: 'teacher whitespace-nowrap bg-project-primary-600 text-white hover:bg-project-gray-dark'
                     });
 
                     mainContainer.dataset.id = teacher.id;
