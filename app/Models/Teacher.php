@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Teacher extends Model
 {
@@ -47,5 +48,9 @@ class Teacher extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function honorific() : BelongsTo {
+        return $this->belongsTo(Honorific::class, 'honorific_id');
     }
 }

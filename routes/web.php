@@ -60,6 +60,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::prefix('classes')->name('classes.')->group(function() {
             Route::post('/store-session', [ClassController::class, 'storeSession']);
             Route::get('/remove-session/{classroomId}', [ClassController::class, 'removeSession']);
+            Route::get('/save', [ClassController::class, 'save']);
         });
         Route::resource('classes', ClassController::class);
 

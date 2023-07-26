@@ -2,11 +2,13 @@
         <div class="flex justify-between items-center">
             <x-page.header title="Class Schedule" />
             <x-page.actions>
-                <x-button id="submit_schedule_template" label="Save" type="primary">
-                    <x-slot:icon>
-                        <box-icon name='save'></box-icon>
-                    </x-slot:icon>
-                </x-button>
+                @if (request()->classroom_id && request()->grade_level_id)
+                    <x-button id="save_schedule" label="Save" type="primary">
+                        <x-slot:icon>
+                            <box-icon name='save'></box-icon>
+                        </x-slot:icon>
+                    </x-button>
+                @endif
             </x-page.actions>
         </div>
 
@@ -104,7 +106,7 @@
 
                                                     <div class="flex flex-col gap-2">
                                                         <p class="bg-project-primary text-project-accent">Academic Subjects</p>
-            
+
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
                                                         <div class="subject bg-project-primary text-white hover:bg-project-gray-dark" 
                                                             data-id="{{$subject->id}}" 
@@ -150,12 +152,22 @@
                                                         @endforeach
                                                     </div>
                                                 </x-subject-select>
-
-
-
-                                                <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName($cellData)}}">
-
+                                                
+                                                <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName(collect($cellData))}}">
+                                                    @foreach (getTeachersPerSubject($cellData->subject_id, $cellData->subject_type_id, $subjects) as $subjectTeacher)
                                                     
+                                                        <div class="teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark" 
+                                                        data-id="{{$subjectTeacher->id}}"
+                                                        data-content="{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}"
+                                                        data-subjectTeacherId="{{$subjectTeacher->id}}"
+                                                        data-honorific="{{$subjectTeacher->teacher->honorific->honorific}}"
+                                                        data-firstName="{{$subjectTeacher->teacher->user->first_name}}"
+                                                        data-lastName="{{$subjectTeacher->teacher->user->last_name}}"
+                                                        >
+                                                            <p class="whitespace-nowrap">{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}</p>
+                                                        </div>
+                                                    @endforeach
+
                                                 </x-teacher-select>
                                             </div>
                                         </td>

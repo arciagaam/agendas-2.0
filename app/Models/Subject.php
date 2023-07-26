@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +38,7 @@ class Subject extends Model
         ->appends(request()->query());
     }
 
+
     public function scopeGetSubjectsByGradeLevel(Builder $query) {
 
         $subquery = SubjectTeacher::join('subjects', 'subjects.id', 'subject_teachers.subject_id')
@@ -66,5 +68,9 @@ class Subject extends Model
     
     public function defaultSubject() : BelongsTo {
         return $this->belongsTo(DefaultSubject::class, 'default_subject_id');
+    }
+
+    public function subjectTeachers() : HasMany {
+        return $this->hasMany(SubjectTeacher::class, 'subject_id');
     }
 }

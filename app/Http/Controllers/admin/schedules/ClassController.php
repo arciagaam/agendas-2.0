@@ -21,16 +21,13 @@ class ClassController extends Controller
             return redirect()->route('admin.schedules.classes.index');
         }
 
-        // session()->forget("unsaved.schedule.".request()->classroom_id);
         return view('pages.admin.schedules.classes.index',[
             'gradeLevels' => GradeLevel::getGradeLevelsOnly()->latest()->get(),
             'sections' => Classroom::classScheduleClassrooms()->latest()->get(),
-            'subjects' => Subject::getSubjectsByGradeLevel()->with('defaultSubject')->get(),
+            'subjects' => Subject::getSubjectsByGradeLevel()->with(['defaultSubject', 'subjectTeachers.teacher.user'])->get(),
             'classSchedule' => session()->missing("unsaved.schedule.".request()->classroom_id) ? ClassSchedule::getClassSchedule()->get() : collect(session("unsaved.schedule.".request()->classroom_id)),
         ]);
     }
-
-    
 
     /**
      * Show the form for creating a new resource.
@@ -88,5 +85,23 @@ class ClassController extends Controller
 
     public function removeSession($classroomId) {
         session()->forget("unsaved.schedule.$classroomId");
+    }
+
+    public function save() {
+        $classrooms = session()->pull('unsaved.schedule');
+
+        foreach($classrooms as $classroomId => $classroom) {
+            foreach($classroom as $schedule) {
+                ClassSchedule::where('classroom_id', $classroomId)
+                ->where('timetable', $schedule->timetable)
+                ->where('period_slot', $schedule->period_slot)
+                ->where('day_id', $schedule->day_id)
+                ->update([
+                    'subject_teacher_id' => $schedule->subject_teacher_id == '' ? null : $schedule->subject_teacher_id
+                ]);
+            }    
+        }
+
+        return response(['message' => 'Schedule successfully saved.', 200]);
     }
 }
