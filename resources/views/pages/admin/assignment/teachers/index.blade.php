@@ -103,7 +103,7 @@
                     </x-table.td>
                     <x-table.td :trPosition="$loop->last">
                         <x-page.actions>
-                            <x-button label="Edit" type="secondary" class="edit-assignment-btn" id="edit_button_{{$subject->default_subject_id}}">
+                            <x-button label="Edit" type="tertiary" size="none" class="edit-assignment-btn" id="edit_button_{{$subject->default_subject_id}}">
                                 <x-slot:icon>
                                     <box-icon name='edit'></box-icon>
                                 </x-slot:icon>

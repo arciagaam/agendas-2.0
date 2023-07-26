@@ -22,7 +22,15 @@ class BuildingStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required'
+            'name' => 'required|unique:buildings,name'
+        ];
+    }
+
+    public function messages()
+    {
+        return[
+            'name.unique' => 'Building name already exists.',
+            'name.required' => 'Building name field name field cannot be blank.',
         ];
     }
 }

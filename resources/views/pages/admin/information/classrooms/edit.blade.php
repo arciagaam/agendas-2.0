@@ -43,7 +43,10 @@
                 <input class="form-input" type="text" name="class_link" id="class_link" value="{{$classroom->class_link}}">
             </div>
 
-            <x-button label="Add Classroom"/>
+            <div class="flex flex-row gap-3">
+                <x-anchor label="Cancel" type="inactive" url="{{route('admin.information.subjects.index')}}"/>
+                <x-button label="Save"/>
+            </div>
         </div>
     </form>
 </x-main-layout>

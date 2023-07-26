@@ -31,7 +31,7 @@ class BuildingController extends Controller
     public function store(BuildingStoreRequest $request)
     {
         Building::create($request->validated());
-        return redirect()->route('admin.information.buildings.index');
+        return redirect()->route('admin.information.buildings.index')->with('success', 'A new building has been created.');
     }
 
     /**
@@ -56,7 +56,7 @@ class BuildingController extends Controller
     public function update(BuildingStoreRequest $request, Building $building)
     {
         $building->update($request->validated());
-        return redirect()->route('admin.information.buildings.index');
+        return redirect()->route('admin.information.buildings.index')->with('success', 'Building information updated successfully.');
     }
 
     /**

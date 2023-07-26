@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="relative flex h-screen font-inter text-project-primary">
-
+        <x-toast />
         <x-navigation.navbar/>
         
         <div class="relative ml-[3.5rem] flex flex-col w-full">

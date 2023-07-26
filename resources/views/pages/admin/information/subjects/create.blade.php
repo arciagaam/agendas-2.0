@@ -1,4 +1,8 @@
 <x-main-layout>
+    <div class="flex justify-between items-center">
+        <x-page.header title="Add Subject" />
+    </div>
+
     <form method="POST" action="{{route('admin.information.subjects.store')}}">
         @csrf
         <div class="flex flex-col gap-5 w-1/2">
@@ -13,7 +17,7 @@
                 </select>
 
                 @error('default_subject_id')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -32,7 +36,7 @@
                 </select>
 
                 @error('gr_level_id')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -64,7 +68,7 @@
                 <input class="form-input" type="time" name="priority_time" id="priority_time">
                 
                 @error('priority_time')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -78,7 +82,7 @@
                 </select>
 
                 @error('priority_day')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -87,7 +91,10 @@
                 <textarea class="form-input" name="subject_description" id="subject_description" rows="10"></textarea>
             </div>
 
-            <x-button label="Add Subject"/>
+            <div class="flex flex-row gap-3">
+                <x-anchor label="Cancel" type="inactive" url="{{route('admin.information.subjects.index')}}"/>
+                <x-button label="Create"/>
+            </div>
         </div>
     </form>
 </x-main-layout>

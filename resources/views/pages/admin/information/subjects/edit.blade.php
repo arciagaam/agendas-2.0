@@ -1,4 +1,8 @@
 <x-main-layout>
+    <div class="flex justify-between items-center">
+        <x-page.header title="Edit Subject Information" />
+    </div>
+
     <form method="POST" action="{{route('admin.information.subjects.update', ['subject' => $subject])}}">
         @csrf
         @method('PUT')
@@ -88,7 +92,10 @@
                 <textarea class="form-input" name="subject_description" id="subject_description" rows="10">{{$subject->subject_description}}</textarea>
             </div>
 
-            <x-button label="Edit Subject"/>
+            <div class="flex flex-row gap-3">
+                <x-anchor label="Cancel" type="inactive" url="{{route('admin.information.subjects.index')}}"/>
+                <x-button label="Save"/>
+            </div>
         </div>
     </form>
 </x-main-layout>
