@@ -123,8 +123,8 @@
     
                     <td class="body-actions">
                         <div class="flex gap-2">
-                            <button type="button" class="remove-row bg-red-500 py-2 px-4 rounded-lg">-</button>
-                            <button type="button" class="add-row bg-green-500 py-2 px-4 rounded-lg">+</button>
+                            <button type="button" class="remove-row ring-1 text-sm text-red-500 ring-project-gray-default hover:text-red-500 hover:ring-red-500 py-2 px-4 rounded-lg duration-200">-</button>
+                            <button type="button" class="add-row ring-1 text-sm text-green-500 ring-project-gray-default hover:text-green-500 hover:ring-green-500 py-2 px-4 rounded-lg duration-200">+</button>
                         </div>
                     </td>
                 </tr>

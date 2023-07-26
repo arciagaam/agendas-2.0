@@ -50,7 +50,7 @@ selectSections.forEach(select => {
             selectedSectionsContainer.append(test);
             Object.assign (sectionCount ,{
                 innerText: selectedSectionsContainer.childElementCount,
-                classList: 'font-normal text-project-accent',
+                classList: 'font-normal text-project-accent-500',
             }) 
         }else {
             document.getElementById(select.value).remove();
