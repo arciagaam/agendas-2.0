@@ -100,11 +100,11 @@
                                             
                                             
                                             class="td-container" aria-colindex="{{$day->id}}">
-                                            <div class="flex flex-col justify-center items-center h-full bg-gray-100 rounded-lg ring-1 ring-project-gray-default">
+                                            <div class="flex flex-col justify-start items-start h-full bg-gray-100 rounded-lg ring-1 ring-project-gray-default">
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
 
-                                                    <div class="flex flex-col gap-2">
+                                                    <div class="flex flex-col gap-2 p-3">
                                                         <p class="bg-project-primary text-project-accent">Academic Subjects</p>
 
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
@@ -115,8 +115,13 @@
                                                             data-content="{{$subject->subject_name}}"
                                                             data-subjectTeacherId="{{$subject->subject_teacher_id}}"
                                                             >
+
+                                                            <div class="flex flex-col">
+                                                                <p>{{$subject->subject_name}}</p>
+                                                                <p class="sp text-xs">sp: {{$subject->sp_frequency}}</p>
+                                                                <p class="dp text-xs">dp: {{$subject->dp_frequency}}</p>
+                                                            </div>
                                                             
-                                                            <p>{{$subject->subject_name}}</p>
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -157,7 +162,7 @@
                                                     @foreach (getTeachersPerSubject($cellData->subject_id, $cellData->subject_type_id, $subjects) as $subjectTeacher)
                                                     
                                                         <div class="teacher whitespace-nowrap bg-project-primary text-white hover:bg-project-gray-dark" 
-                                                        data-id="{{$subjectTeacher->id}}"
+                                                        data-id="{{$subjectTeacher->teacher->id}}"
                                                         data-content="{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}"
                                                         data-subjectTeacherId="{{$subjectTeacher->id}}"
                                                         data-honorific="{{$subjectTeacher->teacher->honorific->honorific}}"

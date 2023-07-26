@@ -6,6 +6,7 @@ const BASE_PATH = document.querySelector('meta[name="base-path"]').getAttribute(
 const classroomId = document.querySelector('#classroom_id').value;
 const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
 const classSchedules = {};
+let classSchedulesArray = [];
 
 let subjects = {
     reset: {}, current: {}
@@ -16,6 +17,19 @@ let teacher_hours = {
 
 if (saveBtn) {
     saveBtn.addEventListener('click', handleSubmit);
+}
+
+function saveSchedulesArrayToLocal() {
+    const classSchedule = JSON.parse(localStorage.getItem('unsaved.class_schedules'));
+    const classScheduleArray = [];
+
+    for(let classroom in classSchedule) {
+        for(let schedule in classSchedule[classroom]) {
+            classScheduleArray.push(classSchedule[classroom][schedule]);
+        }
+    }
+
+    localStorage.setItem('unsaved.class_schedules_array', JSON.stringify(classScheduleArray));
 }
 
 // Save to laravel session via fetch
@@ -158,6 +172,8 @@ async function getClassSchedules() {
         data.payload.forEach(schedule => {
 
             if(!localStorage.getItem('unsaved.class_schedules')){
+                classSchedulesArray = data.payload;
+
                 if(!(schedule.classroom_id in classSchedules)) {
                     classSchedules[schedule.classroom_id] = {};
                 }
@@ -203,8 +219,9 @@ function initialCountSpDp() {
 
                 if (prevRowColumns) {
                     const prevId = prevRowColumns[colindex].dataset.subjectid;
-                    
-                    if (subjectId == prevId) {
+                    const hasMarker = prevRowColumns[colindex].hasAttribute('data-marker');
+
+                    if (subjectId == prevId && !hasMarker) {
                         prevRowColumns[colindex].dataset.marker = 'dp'
                         type = 'dp';
                     }
@@ -222,13 +239,20 @@ function initialCountSpDp() {
                     computeSpDp(subjectId, type, 'subtract');
                 }
             }
+
+            checkConflicts(col)
         });
     
+    });
+
+    document.querySelectorAll('.subject[data-subjecttypeid="1"]').forEach(subject => {
+        subject.querySelector('.sp').innerText = 'SP: ' + subjects.current[subject.dataset.id]['sp']
+        subject.querySelector('.dp').innerText = 'DP: ' + subjects.current[subject.dataset.id]['dp']
     })
 
     document.querySelectorAll('[data-marker]').forEach(cell => {
         cell.removeAttribute('data-marker');
-    })
+    });
 }
 
 function computeSpDp(subjectId, type, operation) {
@@ -236,10 +260,13 @@ function computeSpDp(subjectId, type, operation) {
         case 'add': subjects.current[subjectId][type] += 1; break;
         case 'subtract': subjects.current[subjectId][type] -= 1; break;
     }
+
+    return subjects.current[subjectId][type];
 }
 
 const subjectItems2 = document.querySelectorAll('.subject-select-dropdown .subject');
 
+// Select subject
 subjectItems2.forEach(item => {
     item.addEventListener('click', () => {
         const currentCell = item.closest('td');
@@ -269,9 +296,12 @@ subjectItems2.forEach(item => {
         changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = item.dataset.subjectteacherid;
 
         localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
-
         initialCountSpDp();
         saveToServerSession();
+        saveSchedulesArrayToLocal();
+
+        checkConflicts(currentCell);
+
     });
 });
 
@@ -289,6 +319,7 @@ function computeTeacherHours(teacherId, timeStart, timeEnd, operation) {
     }
 }
 
+// Select teacher
 document.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('teacher') || target.closest('.teacher')) {
@@ -316,9 +347,9 @@ document.addEventListener('click', (e) => {
         td.dataset.honorific = teacherItem.dataset.honorific;
         td.dataset.firstname = teacherItem.dataset.firstname;
         td.dataset.lastname = teacherItem.dataset.lastname;
-
+        
         const changeSubject = JSON.parse(localStorage.getItem('unsaved.class_schedules'));
-
+        
         const row = td.dataset.periodslot;
         const col = td.dataset.dayid;
         const timetable = td.dataset.timetable;
@@ -327,29 +358,70 @@ document.addEventListener('click', (e) => {
         changeSubject[classroomId][`${timetable}_${row}_${col}`].last_name = teacherItem.dataset.lastname;
         changeSubject[classroomId][`${timetable}_${row}_${col}`].honorific = teacherItem.dataset.honorific;
         changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = teacherItem.dataset.subjectteacherid;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].teacher_id = teacherItem.dataset.id;
 
         saveToServerSession();
         localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
         localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
+        saveSchedulesArrayToLocal();
+        checkConflicts(td);
     }
 })
 
+function checkConflicts(cellData) {
+    const schedules = JSON.parse(localStorage.getItem('unsaved.class_schedules_array'));
+
+    const filteredSchedules = schedules.filter(schedule => {
+        const cellDataTimeStart = moment(cellData.dataset.timestart, 'hh:mm');
+        const scheduleTimeStart = moment(schedule.time_start, 'hh:mm');
+        const cellDataTimeEnd = moment(cellData.dataset.timeend, 'hh:mm');
+        const scheduleTimeEnd = moment(schedule.time_end, 'hh:mm');
+
+        return (
+            cellData.dataset.dayid == schedule.day_id &&
+            (
+                (cellDataTimeStart.isAfter(scheduleTimeStart) && cellDataTimeStart.isBefore(scheduleTimeStart)) ||
+                (cellDataTimeEnd.isAfter(scheduleTimeStart) && cellDataTimeEnd.isBefore(scheduleTimeEnd)) ||
+                (cellDataTimeStart.isBefore(scheduleTimeStart) && cellDataTimeEnd.isAfter(scheduleTimeEnd)) ||
+                cellDataTimeStart.isSame(scheduleTimeStart) ||
+                cellDataTimeEnd.isSame(scheduleTimeEnd)
+            ) &&
+            cellData.dataset.teacherid == schedule.teacher_id
+        )
+    })
+
+    if(filteredSchedules.length > 1) {
+        cellData.children[0].classList.add('bg-red-50');
+    }else {
+        cellData.children[0].classList.remove('bg-red-50');
+        
+    }
+
+}
+
 window.addEventListener('load', async () => {
-    if (saveBtn) {
+    if (saveBtn && document.querySelectorAll('table').length) {
+        // Always take note of the order!!!
+
         await getSubjectsByGradeLevel(classroomId);
         await getTeacherHours();
         await getClassSchedules();
-        initialCountSpDp();
-        // sa dulo lagi dapat to
-        saveToServerSession();
-
-        localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
 
         if(!localStorage.getItem('unsaved.class_schedules')) {
             localStorage.setItem('unsaved.class_schedules', JSON.stringify(classSchedules));
+            localStorage.setItem('unsaved.class_schedules_array', JSON.stringify(classSchedulesArray));
         }
 
-        console.log(classSchedules);
+        initialCountSpDp();
+
+        localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
+        
+        // sa dulo lagi dapat to
+        saveToServerSession();
+
+        console.log(subjects.current)
     }
 })
+
+
 

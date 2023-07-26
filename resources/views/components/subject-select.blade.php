@@ -1,7 +1,7 @@
 @props(['fetchedSubject' => '', 'fetchedSubjectId'])
 
 <div {{$attributes->class([
-    'subject-select-dropdown w-full relative text-center cursor-pointer hover:bg-gray-200 duration-100 rounded-lg'
+    'subject-select-dropdown w-full relative cursor-pointer hover:bg-gray-200 duration-100 rounded-lg'
 ])}}>
     {{-- @dd($fetchedSubject) --}}
     <button class="subject_select_dropdown_label flex gap-2 w-full justify-between p-2.5">

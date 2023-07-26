@@ -24,7 +24,13 @@ class ClassController extends Controller
         return view('pages.admin.schedules.classes.index',[
             'gradeLevels' => GradeLevel::getGradeLevelsOnly()->latest()->get(),
             'sections' => Classroom::classScheduleClassrooms()->latest()->get(),
-            'subjects' => Subject::getSubjectsByGradeLevel()->with(['defaultSubject', 'subjectTeachers.teacher.user'])->get(),
+            'subjects' => Subject::getSubjectsByGradeLevel()->with([
+                'defaultSubject',
+                'subjectTeachers' => [
+                    'teacher.user',
+                    'teacher.honorific'
+                ]
+            ])->get(),
             'classSchedule' => session()->missing("unsaved.schedule.".request()->classroom_id) ? ClassSchedule::getClassSchedule()->get() : collect(session("unsaved.schedule.".request()->classroom_id)),
         ]);
     }

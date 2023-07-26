@@ -31,9 +31,6 @@ subjectItems.forEach(item => {
         const dropdown = item.closest('.subject-select-dropdown');
         const selectedSubject = dropdown.querySelector('.selectedOption');
 
-        console.log('Content', content)
-        console.log('selectedSubject Content');
-
         selectedSubject.textContent = content;
         dropdown.id = id;
 
@@ -43,7 +40,6 @@ subjectItems.forEach(item => {
         const selectedTeacher = td.querySelector('.teacher_select_dropdown_label .selectedOption');
         selectedTeacher.textContent = 'Select Teacher';
         teacherDropdown.innerText = "";
-
 
         //fetch( na kukuha ng teachers ng pinili na subject)
         fetch(BASE_PATH + `/api/teachers_by_subject/${id}`, {
