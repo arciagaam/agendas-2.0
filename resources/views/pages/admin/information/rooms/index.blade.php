@@ -3,7 +3,7 @@
         <x-page.header title="Rooms" />
         <x-page.actions>
 
-            <x-button label="Upload CSV" type="primary">
+            <x-button label="Upload CSV" type="secondary">
                 <x-slot:icon>
                     <box-icon name='upload'></box-icon>
                 </x-slot:icon>
@@ -62,7 +62,7 @@
                     <x-table.td :trPosition="$loop->last">{{$room->building}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">
                         <x-page.actions>
-                            <x-anchor url="{{route('admin.information.rooms.edit', ['room' => $room->id])}}" label="Edit" type="primary">
+                            <x-anchor label="Edit" type="tertiary" size="none" url="{{route('admin.information.rooms.edit', ['room' => $room->id])}}">
                                 <x-slot:icon>
                                     <box-icon name='edit'></box-icon>
                                 </x-slot:icon>

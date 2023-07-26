@@ -1,13 +1,14 @@
 <x-main-layout>
-    <script>
-        var teacher_id = {{$teacher->id}}
-    </script>
+    <div class="flex justify-between items-center">
+        <x-page.header title="Edit Teacher Information" />
+    </div>
+    <script> var teacher_id = {{$teacher->id}}</script>
     <form method="POST" action="{{ route('admin.information.teachers.update', ['teacher' => $teacher]) }}">
         @csrf
         @method('PUT')
-        <div class="flex flex-col gap-5 w-1/2">
+        <div class="flex flex-col gap-5">
 
-            <div class="flex flex-row justify-between">
+            <div class="flex flex-row gap-5">
                 <div class="form-input-container">
                     <label for="honorific_id">Honorific</label>
                     <select class="form-input" name="honorific_id" id="honorific_id">
@@ -18,7 +19,7 @@
                     </select>
 
                     @error('honorific_id')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -27,7 +28,7 @@
                     <input class="form-input" type="text" name="last_name" id="last_name" value="{{$user_details->last_name}}">
 
                     @error('last_name')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -36,7 +37,7 @@
                     <input class="form-input" type="text" name="first_name" id="first_name" value="{{$user_details->first_name}}">
 
                     @error('first_name')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -45,18 +46,18 @@
                     <input class="form-input" type="text" name="middle_name" id="middle_name" value="{{$user_details->middle_name}}">
 
                     @error('middle_name')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
-            <div class="flex flex-row justify-between">
+            <div class="flex flex-row gap-5">
                 <div class="form-input-container">
                     <label for="max_hours">Max Hours</label>
                     <input class="form-input " type="number" name="max_hours" id="max_hours" value="{{$teacher->max_hours}}">
 
                     @error('max_hrs')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -65,7 +66,7 @@
                     <input class="form-input " type="number" name="regular_load" id="regular_load" value="{{$teacher->regular_load}}">
 
                     @error('regular_load')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -77,7 +78,7 @@
                     </select>
 
                     @error('is_adviser')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -86,7 +87,7 @@
                     <input class="form-input" type="text" name="username" id="username"  value="{{$user_details->username}}">
     
                     @error('username')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
@@ -99,14 +100,17 @@
                             <input id="search_specialization" name="search_specialization" class="outline-none min-w-[40px] flex-1 text-regular" type="text">
                         </div>
     
-                        <div id="specializations_container" aria-hidden="true" class="absolute top-[100%] bg-project-dominant border border-t-0 rounded-b-lg border-gray-3 p-2 w-full flex flex-col aria-hidden:hidden gap-2">
+                        <div id="specializations_container" aria-hidden="true" class="absolute top-[100%] bg-project-dominant border border-t-0 rounded-b-lg border-gray-3 w-full flex flex-col aria-hidden:hidden gap-2">
                         </div>
                     </div>
             </div>
 
-            <x-button label="Edit Teacher" />
+            <div class="flex flex-row gap-3">
+                <x-anchor label="Cancel" type="inactive" url="{{route('admin.information.teachers.index')}}"/>
+                <x-button label="Save"/>
+            </div>
         </div>
     </form>
 </x-main-layout>
 
-@vite('resources/js/add_specialization.js');
+@vite('resources/js/add_specialization.js')

@@ -22,9 +22,20 @@ class RoomStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'number' => 'nullable|numeric',
+            'name' => 'required|unique:rooms,name,,id,building_id,' . $this->input('building_id'),
+            'number' => 'nullable|numeric|unique:rooms,number,,id,building_id,' . $this->input('building_id'),
             'building_id' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return[
+            'name.required' => 'Room name field cannot be blank.',
+            'name.unique' => 'Room '.$this->input('name').' already exists in the selected building.',
+            'number.numeric' => 'Input must be numeric.',
+            'number.unique' => 'Room Number '.$this->input('name').' already exists in the selected building.',
+            'building_id.required' => 'Please select a building.',
         ];
     }
 }

@@ -66,7 +66,7 @@ function fetchSpecializations(searchQuery) {
         if (data.payload) {
             data.payload.forEach(specialization => {
                 const searchItemContainer = Object.assign(document.createElement('div'), {
-                    className: 'flex w-full'
+                    className: 'flex w-full hover:bg-project-gray-default py-1 px-2'
                 });
 
                 const searchItem = Object.assign(document.createElement('p'), {
@@ -96,7 +96,7 @@ function handleSelectSpecialization(specialization) {
     });
 
     const capsule = Object.assign(document.createElement('div'), {
-        className: 'flex ring-1 ring-blue-400 px-3 text-xs rounded-full text-blue-400 w-full gap-3',
+        className: 'flex ring-1 ring-blue-400 px-2 py-1 text-xs rounded-full text-blue-400 w-full gap-3',
         innerText: specialization.name
     });
 

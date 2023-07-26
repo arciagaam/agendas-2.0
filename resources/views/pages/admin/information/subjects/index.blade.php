@@ -3,7 +3,7 @@
         <x-page.header title="Subjects" />
         <x-page.actions>
 
-            <x-button label="Upload CSV" type="primary">
+            <x-button label="Upload CSV" type="secondary">
                 <x-slot:icon>
                     <box-icon name='upload'></box-icon>
                 </x-slot:icon>
@@ -70,7 +70,7 @@
                     <x-table.td :trPosition="$loop->last">{{$subject['subject_code']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">
                         <x-page.actions>
-                            <x-anchor url="{{route('admin.information.subjects.edit', ['subject' => $subject->id])}}" label="Edit" type="primary">
+                            <x-anchor label="Edit" type="tertiary" size="none" url="{{route('admin.information.subjects.edit', ['subject' => $subject->id])}}">
                                 <x-slot:icon>
                                     <box-icon name='edit'></box-icon>
                                 </x-slot:icon>

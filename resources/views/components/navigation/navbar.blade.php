@@ -1,4 +1,4 @@
-<nav id="side_nav" class="fixed max-w-[3.5rem] h-full top-0 left-0 bg-black text-white z-50 overflow-x-hidden transition-all ease-in-out duration-500 delay-0">
+<nav id="side_nav" class="fixed max-w-[3.5rem] h-full top-0 left-0 bg-project-primary-800 text-white z-50 overflow-x-hidden transition-all ease-in-out duration-500 delay-0">
     <div class="flex flex-col w-full items-start pl-4 gap-5">
         <div id="nav-chevron" class="flex items-center justify-center cursor-pointer min-h-[3.5rem] transition-all ease-in-out duration-500 delay-0 ml-0">
             <box-icon name='chevrons-right' type='solid' color="white"></box-icon>

@@ -3,7 +3,7 @@
         <x-page.header title="Teachers" />
         <x-page.actions>
 
-            <x-button label="Upload CSV" type="primary">
+            <x-button label="Upload CSV" type="secondary">
                 <x-slot:icon>
                     <box-icon name='upload'></box-icon>
                 </x-slot:icon>
@@ -84,7 +84,7 @@
                     <x-table.td :trPosition="$loop->last">{{$teacher['max_hours']}}</x-table.td>
                     <x-table.td :trPosition="$loop->last">
                         <x-page.actions>
-                            <x-anchor url="{{route('admin.information.teachers.edit', ['teacher' => $teacher['teacher_id']])}}" label="Edit" type="primary">
+                            <x-anchor label="Edit" type="tertiary" size="none" url="{{route('admin.information.teachers.edit', ['teacher' => $teacher['teacher_id']])}}">
                                 <x-slot:icon>
                                     <box-icon name='edit'></box-icon>
                                 </x-slot:icon>

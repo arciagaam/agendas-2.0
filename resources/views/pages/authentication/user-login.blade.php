@@ -8,7 +8,7 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-    <div class="flex h-screen bg-project-primary">
+    <div class="flex h-screen bg-project-primary-800">
         <div class="flex flex-1 p-10 text-white">
             <p class="font-bold text-5xl">AGENDAS</p>
         </div>
@@ -22,11 +22,13 @@
                 <div class="flex flex-col gap-5">
                     <div class="form-input-container">
                         <label for="username">Username</label>
-                        <input class="form-input" name="username" id="username" type="text">
+                        <input class="form-input" name="username" id="username" type="text" placeholder="Username">
+                        @error('username') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
                     <div class="form-input-container">
                         <label for="password">Password</label>
-                        <input class="form-input" name="password" id="password" type="password">
+                        <input class="form-input" name="password" id="password" type="password" placeholder="Password">
+                        @error('password') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
                 </div>
 

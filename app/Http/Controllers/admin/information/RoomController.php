@@ -32,7 +32,7 @@ class RoomController extends Controller
     public function store(RoomStoreRequest $request)
     {
         Room::create($request->validated());
-        return redirect()->route('admin.information.rooms.index');
+        return redirect()->route('admin.information.rooms.index')->with('success', 'A new room has been created.');
     }
 
     /**
@@ -57,7 +57,7 @@ class RoomController extends Controller
     public function update(RoomStoreRequest $request, Room $room)
     {
         $room->update($request->validated());
-        return redirect()->route('admin.information.rooms.index');
+        return redirect()->route('admin.information.rooms.index')->with('success', 'Room information updated successfully.');
     }
 
     /**

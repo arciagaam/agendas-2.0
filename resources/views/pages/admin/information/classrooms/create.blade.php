@@ -1,4 +1,7 @@
 <x-main-layout>
+    <div class="flex justify-between items-center">
+        <x-page.header title="Edit Classroom Information" />
+    </div>
     <form method="POST" action="{{route('admin.information.classrooms.store')}}">
         @csrf
         <div class="flex flex-col gap-5 w-1/2">
@@ -43,7 +46,10 @@
                 <input class="form-input" type="text" name="class_link" id="class_link">
             </div>
 
-            <x-button label="Add Classroom"/>
+            <div class="flex flex-row gap-3">
+                <x-anchor label="Cancel" type="inactive" url="{{route('admin.information.classrooms.index')}}"/>
+                <x-button label="Create"/>
+            </div>
         </div>
     </form>
 </x-main-layout>
