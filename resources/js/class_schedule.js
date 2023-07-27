@@ -553,6 +553,71 @@ document.addEventListener('click', (e) => {
     }
 })
 
+const clearCellButtons = document.querySelectorAll('.clear_cell');
+
+clearCellButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const currentCell = button.closest('td');
+        currentCell.dataset.subjectid = '';
+        currentCell.dataset.defaultsubjectid = '';
+        currentCell.dataset.subjectname = '';
+        currentCell.dataset.subjecttypeid = '';
+
+        currentCell.dataset.subjectteacherid = '';
+        currentCell.dataset.teacherid = '';
+        currentCell.dataset.honorific = '';
+        currentCell.dataset.firstname = '';
+        currentCell.dataset.lastname = '';
+
+        const changeSubject = JSON.parse(localStorage.getItem('unsaved.class_schedules'));
+
+        const row = currentCell.dataset.periodslot;
+        const col = currentCell.dataset.dayid;
+        const timetable = currentCell.dataset.timetable;
+        
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].default_subject_id = null
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].first_name = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].last_name = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].honorific = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subjectid = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_name = null;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = null;
+
+        const subjectDropdown = currentCell.querySelector('.subject-select-dropdown');
+        const selectedSubject = subjectDropdown.querySelector('.selectedOption');
+
+        selectedSubject.textContent = 'Select Subject';
+        selectedSubject.id = null;
+
+        //teacher-related reset cell
+        const teacherDropdown = currentCell.querySelector('.teacher-select-dropdown');
+        const teacherDropdownBody = teacherDropdown.querySelector('.teacher_select_dropdown_body');
+        const selectedTeacher = teacherDropdown.querySelector('.selectedOption');
+
+        const time_start = currentCell.dataset.timestart;
+        const time_end = currentCell.dataset.timeend;
+        const day_id = currentCell.dataset.dayid;
+        const previous_teacher_id = teacherDropdown.dataset.previousteacherid;
+
+        selectedTeacher.textContent = 'Select Teacher';
+        selectedTeacher.id = null;
+        teacherDropdownBody.innerHTML = '';
+
+        computeTeacherHours(previous_teacher_id, day_id, time_start, time_end, 'add');
+       
+        displayTeacherHours();
+        localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
+        localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
+        initialCountSpDp();
+        saveToServerSession();
+        saveSchedulesArrayToLocal();
+
+        checkConflicts(currentCell);
+        closeAllSubjectSelections();
+    });
+});
+
+//ONLOAD
 window.addEventListener('load', async () => {
     if (saveBtn && document.querySelectorAll('table').length) {
         // Always take note of the order!!!
