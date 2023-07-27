@@ -125,7 +125,7 @@ async function getTeacherHours() {
                 max_hours: {},
                 regular_load: teachers[key].regular_load,
             }
-            console.log(key)
+            
             for (let i = 1; i < 7; i++) {
                 teacher_hours[`${key}`].max_hours[i] = teachers[`${key}`].max_hours[i];
             }
@@ -247,6 +247,16 @@ function initialCountSpDp() {
     document.querySelectorAll('.subject[data-subjecttypeid="1"]').forEach(subject => {
         subject.querySelector('.sp').innerText = 'SP: ' + subjects.current[subject.dataset.id]['sp']
         subject.querySelector('.dp').innerText = 'DP: ' + subjects.current[subject.dataset.id]['dp']
+
+        if (subjects.current[subject.dataset.id]['sp'] == 0 && subjects.current[subject.dataset.id]['dp'] == 0) {
+            subject.classList.add('bg-white');
+            subject.classList.add('text-black');
+            subject.classList.add('pointer-events-none');
+        } else {
+            subject.classList.remove('bg-white');
+            subject.classList.remove('text-black');
+            subject.classList.remove('pointer-events-none');
+        }
     })
 
     document.querySelectorAll('[data-marker]').forEach(cell => {
@@ -331,7 +341,15 @@ function displayTeacherHours() {
         const dayId = teacher.closest('td').dataset.dayid;
         teacher.querySelector('.max-hours').innerText = 'Available for this day: ' + teacher_hours[teacher.dataset.id]['max_hours'][dayId];
         teacher.querySelector('.regular-load').innerText = 'Regular load: ' + teacher_hours[teacher.dataset.id]['regular_load'];
-
+        if (teacher_hours[teacher.dataset.id]['max_hours'][dayId] == 0 || teacher_hours[teacher.dataset.id]['regular_load'] == 0) {
+            teacher.classList.add('bg-white');
+            teacher.classList.add('text-black');
+            teacher.classList.add('pointer-events-none');
+        } else {
+            teacher.classList.remove('bg-white');
+            teacher.classList.remove('text-black');
+            teacher.classList.remove('pointer-events-none');
+        }
     })
 }
 
