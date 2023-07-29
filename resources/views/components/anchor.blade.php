@@ -2,7 +2,7 @@
 
 <a href="{{$url}}"
 @class([
-    'rounded-lg transition-all duration-200 ease-in-out text-sm font-medium',
+    'rounded-lg transition-all duration-200 ease-in-out text-sm font-medium z-20',
     'bg-project-accent-500 text-white ring-1 ring-project-accent-500 fill-white hover:ring-project-accent-400 hover:fill-white hover:bg-project-accent-400' => $type == 'primary',
     'bg-white text-project-primary-600 ring-1 ring-project-gray-default fill-project-primary-600 hover:ring-project-accent-500 hover:text-project-accent-500 hover:fill-project-accent-400' => $type == 'secondary',
     'text-project-primary-600 fill-project-primary-600 hover:text-project-accent-500 hover:fill-project-accent-400' => $type == 'tertiary',
