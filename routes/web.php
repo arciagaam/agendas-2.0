@@ -61,6 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
             Route::post('/store-session', [ClassController::class, 'storeSession']);
             Route::get('/remove-session/{classroomId}', [ClassController::class, 'removeSession']);
             Route::get('/save', [ClassController::class, 'save']);
+            Route::get('/automate', [ClassController::class, 'automate'])->name('automate');
         });
         Route::resource('classes', ClassController::class);
 

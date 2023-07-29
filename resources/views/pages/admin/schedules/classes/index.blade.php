@@ -3,6 +3,12 @@
             <x-page.header title="Class Schedule" />
             <x-page.actions>
                 @if (request()->classroom_id && request()->grade_level_id)
+                    <x-anchor url="{{route('admin.schedules.classes.automate')}}" id="automate_schedule" label="Auto Fill" type="primary">
+                        <x-slot:icon>
+                            <box-icon name='save'></box-icon>
+                        </x-slot:icon>
+                    </x-anchor>
+
                     <x-button id="save_schedule" label="Save" type="primary">
                         <x-slot:icon>
                             <box-icon name='save'></box-icon>
