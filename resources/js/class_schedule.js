@@ -161,8 +161,6 @@ async function getTeacherHours() {
 }
 
 async function getClassSchedules() {
-
-
     await fetch(`${BASE_PATH}/api/schedules`, {
         headers: {
             'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -283,12 +281,13 @@ subjectItems2.forEach(item => {
         currentCell.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
         currentCell.dataset.subjectname = item.dataset.content;
         currentCell.dataset.subjecttypeid = item.dataset.subjecttypeid;
-
-        currentCell.dataset.subjectteacherid = item.dataset.subjectteacherid;
+        currentCell.dataset.subjectteacherid = '';
         currentCell.dataset.teacherid = '';
         currentCell.dataset.honorific = '';
         currentCell.dataset.firstname = '';
         currentCell.dataset.lastname = '';
+
+        console.log(currentCell.dataset)
 
         const changeSubject = JSON.parse(localStorage.getItem('unsaved.class_schedules'));
 
@@ -302,7 +301,7 @@ subjectItems2.forEach(item => {
         changeSubject[classroomId][`${timetable}_${row}_${col}`].honorific = null;
         changeSubject[classroomId][`${timetable}_${row}_${col}`].subjectid = item.dataset.id;
         changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_name = item.dataset.content;
-        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = item.dataset.subjectteacherid;
+        changeSubject[classroomId][`${timetable}_${row}_${col}`].subject_teacher_id = item.dataset.subjecttypeid != 1 ? item.dataset.subjectteacherid : '';
 
         localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
         initialCountSpDp();
@@ -400,14 +399,57 @@ document.addEventListener('click', (e) => {
         localStorage.setItem('unsaved.teacher_hours', JSON.stringify(teacher_hours));
         localStorage.setItem('unsaved.class_schedules', JSON.stringify(changeSubject));
         saveSchedulesArrayToLocal();
+        initialCountSpDp();
         checkConflicts(td);
     }
 })
 
 function checkConflicts(cellData) {
+
+    function resetBgColors(cellData) {
+        cellData.children[0].classList.remove('bg-red-50');
+        cellData.children[0].classList.remove('bg-green-50');
+        cellData.children[0].classList.remove('bg-amber-500/20');
+    }
+
+    resetBgColors(cellData);
+
+    if(!cellData.ariaColIndex) {
+        resetBgColors(cellData);
+        return;
+    }
+    
+    if(!cellData.dataset.subjectteacherid) {
+        resetBgColors(cellData);
+        return;
+    }
+
+    if(cellData.dataset.subjecttypeid != 1) {
+        cellData.children[0].classList.add('bg-green-50');
+    }
+
     const schedules = JSON.parse(localStorage.getItem('unsaved.class_schedules_array'));
 
-    const filteredSchedules = schedules.filter(schedule => {
+    const warningSchedules = schedules.filter(schedule => {
+        if(schedule.subject_type_id != 1) return false;
+
+        return (
+            cellData.dataset.classroomid == schedule.classroom_id &&
+            cellData.dataset.subjectid == schedule.subject_id &&
+            cellData.dataset.teacherid != schedule.teacher_id
+        )
+    })
+
+
+    if(warningSchedules.length > 0) {
+        cellData.children[0].classList.add('bg-amber-500/20');
+    } else {
+        cellData.children[0].classList.remove('bg-amber-500/20');
+    }
+
+    const conflictSchedules = schedules.filter(schedule => {
+
+
         const cellDataTimeStart = moment(cellData.dataset.timestart, 'hh:mm');
         const scheduleTimeStart = moment(schedule.time_start, 'hh:mm');
         const cellDataTimeEnd = moment(cellData.dataset.timeend, 'hh:mm');
@@ -426,11 +468,13 @@ function checkConflicts(cellData) {
         )
     })
 
-    if (filteredSchedules.length > 1) {
+    if (conflictSchedules.length > 1) {
+        cellData.children[0].classList.remove('bg-amber-500/20');
+        cellData.children[0].classList.remove('bg-green-50');
         cellData.children[0].classList.add('bg-red-50');
     } else {
         cellData.children[0].classList.remove('bg-red-50');
-
+        cellData.children[0].classList.add('bg-green-50');
     }
 
 }
@@ -519,7 +563,6 @@ subjectItems.forEach(item => {
                     pContainer.append(regularLoad);
                     teacherDropdown.append(mainContainer);
                     teacherDropdown.id = teacher.id;
-                    td.dataset.subjectteacherid = teacher.subject_teacher_id;
 
                 })
             });

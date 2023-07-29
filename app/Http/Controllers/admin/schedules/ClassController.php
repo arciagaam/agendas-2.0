@@ -7,6 +7,8 @@ use App\Models\Classroom;
 use App\Models\ClassSchedule;
 use App\Models\GradeLevel;
 use App\Models\Subject;
+use App\Models\SubjectTeacher;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class ClassController extends Controller
@@ -94,6 +96,39 @@ class ClassController extends Controller
     }
 
     public function save() {
+        $this->saveSchedule();
+        return response(['message' => 'Schedule successfully saved.', 200]);
+    }
+
+    public function automate() {
+        if(session()->has('unsaved.schedule')) {
+            $this->saveSchedule();
+        }
+
+        $subjects = Subject::with('defaultSubject.subjectType')->get();
+        $teachers = SubjectTeacher::with('teacher', 'subject')->get();
+        $classrooms = Classroom::all();
+        
+        $subjectHours = array();
+
+        foreach($classrooms as $classroom) {
+            $subjectHours[$classroom->id] = array();
+        }
+
+        foreach($subjectHours as $key => $classroom) {
+            
+            
+            foreach($subjects as $subject) {
+                $subjectHours[$key][$subject->id] = ['sp' => $subject->sp_frequency, 'dp' => $subject->dp_frequency];
+            }
+        }
+
+        $classSchedules = ClassSchedule::where('school_year_id', 1)->get();
+
+        dd($subjectHours[1]);
+    }
+
+    public function saveSchedule() {
         $classrooms = session()->pull('unsaved.schedule');
 
         foreach($classrooms as $classroomId => $classroom) {
@@ -107,7 +142,5 @@ class ClassController extends Controller
                 ]);
             }    
         }
-
-        return response(['message' => 'Schedule successfully saved.', 200]);
     }
 }
