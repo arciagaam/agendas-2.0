@@ -1,4 +1,7 @@
-<x-main-layout>    
+<x-main-layout>   
+        @if(session()->has('clear'))
+        <input type="hidden" id="clear" value="true">
+        @endif 
         <div class="flex justify-between items-center">
             <x-page.header title="Class Schedule" />
             <x-page.actions>
@@ -14,6 +17,8 @@
                             <box-icon name='save'></box-icon>
                         </x-slot:icon>
                     </x-button>
+
+                    <a href="{{route('clearall')}}">CLEAR</a>
                 @endif
             </x-page.actions>
         </div>

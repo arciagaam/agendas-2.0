@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\ClassSchedule;
 use App\Models\SubjectTeacher;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Faker\Core\Number;
 
 class ClassController extends Controller
@@ -151,9 +152,10 @@ class ClassController extends Controller
         }
 
 
-        $classSchedules = ClassSchedule::where('school_year_id', 1)->get();
+        $classSchedules = ClassSchedule::forAutomation()->where('school_year_id', 1)->get();
 
-        foreach ($classSchedules as $schedule) {
+        $markedAsChecked = [];
+        foreach ($classSchedules as $index => $schedule) {
             //di ko sure if kailangan to 
             // if ($schedule->subject_teacher_id == null) continue;
 
@@ -186,26 +188,105 @@ class ClassController extends Controller
 
             //subtract subject sp frequency
             if ($subjectId !== null) {
-                $subjectHours[$schedule->classroom_id][$subjectId]['sp'] -= $durationInHours;
+                if(in_array($schedule, $markedAsChecked)) {
+                    continue;
+                }
+
+                // check for dp
+                $dpCheck = $classSchedules->filter(function($filterCS) use ($schedule, $subjectId) {
+                    return 
+                    $schedule->classroom_id == $filterCS->classroom_id &&
+                    $schedule->timetable == $filterCS->timetable &&
+                    $schedule->day_id == $filterCS->day_id &&
+                    $schedule->period_slot + 1 == $filterCS->period_slot &&
+                    $subjectId == $filterCS->subject_id;
+                });
+
+                if(count($dpCheck)) {
+                    $subjectHours[$schedule->classroom_id][$subjectId]['dp'] -= 1;
+                    array_push($markedAsChecked, ...$dpCheck);
+                }else {
+                    $subjectHours[$schedule->classroom_id][$subjectId]['sp'] -= 1;
+                }
             }
         }
+        
+        $updateSchedules = [];
+        // automate
+        foreach($classSchedules as $schedule) {
+            if($schedule->subject_id != null) continue;
+            $subjectTeachers = $teachers->filter(fn($st) => $st->subject->gr_level_id == $schedule->grade_level_id)->toArray();
+            shuffle($subjectTeachers);
 
-    }
-    
-    //shuffle function from agendas 1.0 
-    public function shuffleArray(&$array)
-    {
-        $currentIndex = count($array);
-        while ($currentIndex !== 0) {
-            // Pick a remaining element.
-            $randomIndex = mt_rand(0, $currentIndex - 1);
-            $currentIndex--;
 
-            // And swap it with the current element.
-            [$array[$currentIndex], $array[$randomIndex]] = [$array[$randomIndex], $array[$currentIndex]];
+            foreach($subjectTeachers as $subjectTeacher) {
+                $subjectTeacher = (object) $subjectTeacher;
+                
+                //check existing subject in same day
+                $existingSubjectSameDay = $classSchedules->filter(function($cs) use($schedule, $subjectTeacher) {
+                    return $cs->day_id == $schedule->day_id &&
+                    $cs->subject_teacher_id == $subjectTeacher->id &&
+                    $cs->period_slot != $schedule->period_slot;
+                });
+
+                if(count($existingSubjectSameDay)) {
+                    continue;
+                }
+
+                // check teacher conflict
+                $checkTeacherConflict = $classSchedules->filter(function($cs) use($schedule, $subjectTeacher) {
+                    $scheduleTimeStart = Carbon::parse($cs->time_start);
+                    $scheduleTimeEnd = Carbon::parse($cs->time_end);
+                    
+                    $cellDataTimeStart = Carbon::parse($schedule->time_start);
+                    $cellDataTimeEnd = Carbon::parse($schedule->time_end);
+                    
+                    // if($cs->teacher_id == $subjectTeacher->teacher_id){
+                    //     dd($cs->teacher_id == $subjectTeacher->teacher_id);
+                    // }
+
+                    return 
+                    $cs->day_id == $schedule->day_id &&
+                    $cs->timetable == $schedule->timetable &&
+                    $cs->teacher_id == $subjectTeacher->teacher_id &&
+                    (
+                    ($cellDataTimeStart->isAfter($scheduleTimeStart) && $cellDataTimeStart->isBefore($scheduleTimeEnd)) ||
+                    ($cellDataTimeEnd->isAfter($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
+                    ($cellDataTimeStart->isBefore($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
+                    $cellDataTimeStart->isSameAs($scheduleTimeStart) ||
+                    $cellDataTimeEnd->isSameAs($scheduleTimeEnd)
+                    );
+                });
+                
+                if(count($checkTeacherConflict)) {
+                    continue;
+                }
+
+                //check sp
+                if($subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['sp'] > 0) {
+                    array_push($updateSchedules, ['id' => $schedule->class_schedule_id, 'subject_teacher_id' => $subjectTeacher->id]);
+                    $schedule['subject_teacher_id'] = $subjectTeacher->id;
+                    $schedule['teacher_id'] = $subjectTeacher->teacher_id;
+                    $schedule['subject_id'] = $subjectTeacher->subject_id;
+
+                    $subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['sp'] -= 1;
+                    break;
+                }
+
+                //check dp
+
+            }
+            // dd($subjects);
+
+
+            // dd($subjectTeachers);
         }
 
-        return $array;
+        foreach($updateSchedules as $updateSchedule) {
+            ClassSchedule::where('id', $updateSchedule['id'])->update($updateSchedule);
+        }
+
+        return back();
     }
 
     public function saveSchedule()

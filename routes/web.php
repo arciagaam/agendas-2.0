@@ -15,6 +15,7 @@ use App\Http\Controllers\admin\schedules\ClassController;
 use App\Http\Controllers\admin\schedules\EventController;
 use App\Http\Controllers\admin\schedules\ExamController;
 use App\Http\Controllers\AuthenticationController;
+use App\Models\ClassSchedule;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/clearall', function() {
+    ClassSchedule::where('subject_teacher_id', '!=', null)->update(['subject_teacher_id' => null]);
+    session()->forget('unsaved.schedule');
+    return back()->with('clear', true);
+})->name('clearall');
 
 
 Route::get('/', [AuthenticationController::class, 'userLogin']);

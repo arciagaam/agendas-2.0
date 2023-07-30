@@ -452,13 +452,14 @@ function checkConflicts(cellData) {
 
         const cellDataTimeStart = moment(cellData.dataset.timestart, 'hh:mm');
         const scheduleTimeStart = moment(schedule.time_start, 'hh:mm');
+
         const cellDataTimeEnd = moment(cellData.dataset.timeend, 'hh:mm');
         const scheduleTimeEnd = moment(schedule.time_end, 'hh:mm');
 
         return (
             cellData.dataset.dayid == schedule.day_id &&
             (
-                (cellDataTimeStart.isAfter(scheduleTimeStart) && cellDataTimeStart.isBefore(scheduleTimeStart)) ||
+                (cellDataTimeStart.isAfter(scheduleTimeStart) && cellDataTimeStart.isBefore(scheduleTimeEnd)) ||
                 (cellDataTimeEnd.isAfter(scheduleTimeStart) && cellDataTimeEnd.isBefore(scheduleTimeEnd)) ||
                 (cellDataTimeStart.isBefore(scheduleTimeStart) && cellDataTimeEnd.isAfter(scheduleTimeEnd)) ||
                 cellDataTimeStart.isSame(scheduleTimeStart) ||
@@ -662,7 +663,11 @@ clearCellButtons.forEach(button => {
 
 //ONLOAD
 window.addEventListener('load', async () => {
-    if (saveBtn && document.querySelectorAll('table').length) {
+    if(document.querySelector('#clear')) {
+        localStorage.clear();
+    }
+
+    if (saveBtn && document.querySelectorAll('table').length && !document.querySelector('#clear')) {
         // Always take note of the order!!!
 
         await getSubjectsByGradeLevel(classroomId);
