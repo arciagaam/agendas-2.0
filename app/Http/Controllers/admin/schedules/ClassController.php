@@ -217,7 +217,7 @@ class ClassController extends Controller
             if($schedule->subject_id != null) continue;
             $subjectTeachers = $teachers->filter(fn($st) => $st->subject->gr_level_id == $schedule->grade_level_id)->toArray();
             shuffle($subjectTeachers);
-
+            
 
             foreach($subjectTeachers as $subjectTeacher) {
                 $subjectTeacher = (object) $subjectTeacher;
@@ -233,6 +233,18 @@ class ClassController extends Controller
                     continue;
                 }
 
+                // foreach($classSchedules as $cs) {
+                //     if ($cs->classroom_id == $schedule->classroom_id) {
+                //         if ($cs->subject_teacher_id == $subjectTeacher->id) {
+                //                 foreach($subjectTeachers as $st) {
+                //                 if ($st['subject_id'] == $subjectTeacher->subject_id && $st['teacher_id'] != $subjectTeacher->teacher_id) {
+                //                     continue;
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+
                 // check teacher conflict
                 $checkTeacherConflict = $classSchedules->filter(function($cs) use($schedule, $subjectTeacher) {
                     $scheduleTimeStart = Carbon::parse($cs->time_start);
@@ -244,18 +256,18 @@ class ClassController extends Controller
                     // if($cs->teacher_id == $subjectTeacher->teacher_id){
                     //     dd($cs->teacher_id == $subjectTeacher->teacher_id);
                     // }
-
+                    
                     return 
                     $cs->day_id == $schedule->day_id &&
                     $cs->teacher_id == $subjectTeacher->teacher_id &&
-                    $cs->period_slot == $schedule->period_slot; 
-                    // (
-                    // ($cellDataTimeStart->isAfter($scheduleTimeStart) && $cellDataTimeStart->isBefore($scheduleTimeEnd)) ||
-                    // ($cellDataTimeEnd->isAfter($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
-                    // ($cellDataTimeStart->isBefore($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
-                    // $cellDataTimeStart->isSameAs($scheduleTimeStart) ||
-                    // $cellDataTimeEnd->isSameAs($scheduleTimeEnd)
-                    // );
+                    $cs->period_slot == $schedule->period_slot &&
+                    (
+                    ($cellDataTimeStart->isAfter($scheduleTimeStart) && $cellDataTimeStart->isBefore($scheduleTimeEnd)) ||
+                    ($cellDataTimeEnd->isAfter($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
+                    ($cellDataTimeStart->isBefore($scheduleTimeStart) && $cellDataTimeEnd->isAfter($scheduleTimeEnd)) ||
+                    $cellDataTimeStart->isSameAs($scheduleTimeStart) ||
+                    $cellDataTimeEnd->isSameAs($scheduleTimeEnd)
+                    );
                 });
                 
                 if(count($checkTeacherConflict)) {
