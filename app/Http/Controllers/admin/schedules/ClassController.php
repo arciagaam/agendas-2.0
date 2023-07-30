@@ -247,15 +247,15 @@ class ClassController extends Controller
 
                     return 
                     $cs->day_id == $schedule->day_id &&
-                    $cs->timetable == $schedule->timetable &&
                     $cs->teacher_id == $subjectTeacher->teacher_id &&
-                    (
-                    ($cellDataTimeStart->isAfter($scheduleTimeStart) && $cellDataTimeStart->isBefore($scheduleTimeEnd)) ||
-                    ($cellDataTimeEnd->isAfter($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
-                    ($cellDataTimeStart->isBefore($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
-                    $cellDataTimeStart->isSameAs($scheduleTimeStart) ||
-                    $cellDataTimeEnd->isSameAs($scheduleTimeEnd)
-                    );
+                    $cs->period_slot == $schedule->period_slot; 
+                    // (
+                    // ($cellDataTimeStart->isAfter($scheduleTimeStart) && $cellDataTimeStart->isBefore($scheduleTimeEnd)) ||
+                    // ($cellDataTimeEnd->isAfter($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
+                    // ($cellDataTimeStart->isBefore($scheduleTimeStart) && $cellDataTimeEnd->isBefore($scheduleTimeEnd)) ||
+                    // $cellDataTimeStart->isSameAs($scheduleTimeStart) ||
+                    // $cellDataTimeEnd->isSameAs($scheduleTimeEnd)
+                    // );
                 });
                 
                 if(count($checkTeacherConflict)) {
