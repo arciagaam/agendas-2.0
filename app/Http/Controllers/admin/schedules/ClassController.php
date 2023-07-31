@@ -289,29 +289,29 @@ class ClassController extends Controller
                     continue;
                 }
 
-                // if ($subjectTeacher->subject['default_subject_id'] == 7) {
-                //     $checkArts = $classSchedules->filter(function ($cs) use ($schedule, $subjectTeacher) {
-                //         return $cs->classroom_id == $schedule->classroom_id &&
-                //         $cs->default_subject_id == 8;
+                if ($subjectTeacher->subject['default_subject_id'] == 7) {
+                    $checkArts = $classSchedules->filter(function ($cs) use ($schedule, $subjectTeacher) {
+                        return $cs->classroom_id == $schedule->classroom_id &&
+                        $cs->default_subject_id == 8;
     
-                //     });
+                    });
 
-                //     if (count($checkArts)) {
-                //         continue;
-                //     }
-                // }
+                    if (count($checkArts)) {
+                        continue;
+                    }
+                }
 
-                // if ($subjectTeacher->subject['default_subject_id'] == 8) {
-                //     $checkMusic = $classSchedules->filter(function ($cs) use ($schedule, $subjectTeacher) {
-                //         return $cs->classroom_id == $schedule->classroom_id &&
-                //         $cs->default_subject_id == 7;
+                if ($subjectTeacher->subject['default_subject_id'] == 8) {
+                    $checkMusic = $classSchedules->filter(function ($cs) use ($schedule, $subjectTeacher) {
+                        return $cs->classroom_id == $schedule->classroom_id &&
+                        $cs->default_subject_id == 7;
     
-                //     });
+                    });
 
-                //     if (count($checkMusic)) {
-                //         continue;
-                //     }
-                // }
+                    if (count($checkMusic)) {
+                        continue;
+                    }
+                }
 
                 //check sp
                 if ($subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['sp'] > 0) {
