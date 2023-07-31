@@ -214,6 +214,7 @@ class ClassController extends Controller
         $updateSchedules = [];
         // automate
         foreach ($classSchedules as $schedule) {
+
             if ($schedule->subject_id != null) continue;
             $subjectTeachers = $teachers->filter(fn ($st) => $st->subject->gr_level_id == $schedule->grade_level_id)->toArray();
             shuffle($subjectTeachers);
@@ -287,6 +288,31 @@ class ClassController extends Controller
                     // dd(3, $differentSubjectTeacher);
                     continue;
                 }
+
+                // if ($subjectTeacher->subject['default_subject_id'] == 7) {
+                //     $checkArts = $classSchedules->filter(function ($cs) use ($schedule, $subjectTeacher) {
+                //         return $cs->classroom_id == $schedule->classroom_id &&
+                //         $cs->default_subject_id == 8;
+    
+                //     });
+
+                //     if (count($checkArts)) {
+                //         continue;
+                //     }
+                // }
+
+                // if ($subjectTeacher->subject['default_subject_id'] == 8) {
+                //     $checkMusic = $classSchedules->filter(function ($cs) use ($schedule, $subjectTeacher) {
+                //         return $cs->classroom_id == $schedule->classroom_id &&
+                //         $cs->default_subject_id == 7;
+    
+                //     });
+
+                //     if (count($checkMusic)) {
+                //         continue;
+                //     }
+                // }
+
                 //check sp
                 if ($subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['sp'] > 0) {
 
@@ -303,12 +329,12 @@ class ClassController extends Controller
                     $scheduleTimeEnd = Carbon::parse($schedule->time_end);
 
                     $periodDuration = $scheduleTimeStart->floatDiffInHours($scheduleTimeEnd);
-                    // dd($teacherHours[$subjectTeacher->teacher_id]['max_hours'][$schedule->day_id] -= $periodDuration);
                     
                     array_push($updateSchedules, ['id' => $schedule->class_schedule_id, 'subject_teacher_id' => $subjectTeacher->id]);
                     $schedule['subject_teacher_id'] = $subjectTeacher->id;
                     $schedule['teacher_id'] = $subjectTeacher->teacher_id;
                     $schedule['subject_id'] = $subjectTeacher->subject_id;
+                    $schedule['default_subject_id'] = $subjectTeacher->subject['default_subject_id'];
 
                     $subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['sp'] -= 1;
                     $teacherHours[$subjectTeacher->teacher_id]['max_hours'][$schedule->day_id] -= $periodDuration;
@@ -331,12 +357,12 @@ class ClassController extends Controller
                     $scheduleTimeEnd = Carbon::parse($schedule->time_end);
 
                     $periodDuration = $scheduleTimeStart->floatDiffInHours($scheduleTimeEnd);
-                    // dd($teacherHours[$subjectTeacher->teacher_id]['max_hours'][$schedule->day_id] -= $periodDuration);
                     
                     array_push($updateSchedules, ['id' => $schedule->class_schedule_id, 'subject_teacher_id' => $subjectTeacher->id]);
                     $schedule['subject_teacher_id'] = $subjectTeacher->id;
                     $schedule['teacher_id'] = $subjectTeacher->teacher_id;
                     $schedule['subject_id'] = $subjectTeacher->subject_id;
+                    $schedule['default_subject_id'] = $subjectTeacher->subject['default_subject_id'];
 
                     $subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['dp'] -= 1;
                     $subjectHours[$schedule->classroom_id][$subjectTeacher->subject_id]['sp'] += 1;
