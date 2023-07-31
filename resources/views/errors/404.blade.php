@@ -7,9 +7,9 @@
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
 </head>
-<body class="h-screen flex items-center justify-center">
+<body class="h-screen flex items-center justify-center overflow-hidden">
     <div class="flex h-full w-[2048px] sm:flex-col md:flex-row">
-        <div class="flex items-center justify-center p-24 sm:w-full md:w-1/2">
+        <div class="flex items-center justify-center p-24 sm:h-full sm:w-full md:w-1/2">
             <div class="flex flex-col w-full gap-4 text-project-primary-700">
                 <div class="relative border rounded-md flex items-center justify-center w-fit p-2">
                     <div class="absolute rounded-full w-20 h-20 border border-gray-100 z-0"></div>
@@ -26,9 +26,9 @@
                 <x-anchor label="Return to dashboard" class="z-20" url="{{ route('admin.dashboard') }}"></x-anchor>
             </div>
         </div>
-        <div class="lg:w-1/2 h-full m-6 flex justify-center items-center">
+        <div class="p-6 flex w-full h-full justify-center items-center overflow-hidden md:w-1/2 sm:h-full">
             <!-- Replace the image URL with your desired image -->
-            <img src="{{ asset('storage/404.jpg') }}" alt="404" class="">
+            <img src="{{ asset('storage/404.jpg') }}" alt="404" class="m-auto h-full w-full object-cover">
         </div>
     </div>
 </body>

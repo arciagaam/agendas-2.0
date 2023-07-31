@@ -114,12 +114,15 @@
                                             <div class="flex flex-col justify-start items-start h-full bg-gray-100 rounded-lg ring-1 ring-project-gray-default">
 
                                                 <x-subject-select fetchedSubjectId="{{$cellData->subject_id}}" fetchedSubject="{{$cellData->subject_name}}">
-
-                                                    <div class="flex flex-col gap-2 p-3">
-                                                        <p class="bg-project-primary-600 text-project-accent-500">Academic Subjects</p>
+                                                    <div class="sub-subject-dropdown flex w-full justify-between p-2.5 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default cursor-pointer aria-expanded:bg-project-gray-default" aria-expanded="false">
+                                                        <p>Academic Subjects</p>
+                                                        <box-icon name="chevron-down"></box-icon>
+                                                    </div>
+                                                    
+                                                    <div class="sub-subject-container flex-col max-h-0 hidden">
 
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 1) as $subject)
-                                                        <div class="subject bg-project-primary-600 text-white hover:bg-project-gray-dark" 
+                                                        <div class="subject max-h-0 hidden bg-project-gray-light py-2 px-3 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default duration-100 cursor-pointer" 
                                                             data-id="{{$subject->id}}" 
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -137,10 +140,15 @@
                                                         @endforeach
                                                     </div>
 
-                                                    <div class="flex flex-col gap-2 p-3">
-                                                        <p class="bg-project-primary text-project-accent-500">Non-Academic Subjects</p>
+                                                    <div class="sub-subject-dropdown flex w-full justify-between p-2.5 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default cursor-pointer aria-expanded:bg-project-gray-default" aria-expanded="false">
+                                                        <p>Non-Academic Subjects</p>
+                                                        <box-icon name="chevron-down"></box-icon>
+                                                    </div>
+
+                                                    <div class="sub-subject-container flex-col max-h-0 hidden">
+                                                        
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 2) as $subject)
-                                                        <div class="subject bg-project-primary-600 text-white hover:bg-project-gray-dark" 
+                                                        <div class="subject max-h-0 hidden bg-project-gray-light py-2 px-3 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default duration-100 cursor-pointer aria-selected:bg-project-gray-default" aria-selected="false" 
                                                             data-id="{{$subject->id}}"
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -152,10 +160,14 @@
                                                         @endforeach
                                                     </div>
 
-                                                    <div class="flex flex-col gap-2 p-3">
-                                                        <p class="bg-project-primary text-project-accent-500">Breaks</p>
+                                                    <div class="sub-subject-dropdown flex w-full justify-between p-2.5 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default cursor-pointer aria-expanded:bg-project-gray-default" aria-expanded="false">
+                                                        <p>Breaks</p>
+                                                        <box-icon name="chevron-down"></box-icon>
+                                                    </div>
+
+                                                    <div class="sub-subject-container flex-col max-h-0 hidden">
                                                         @foreach ($subjects->filter(fn($val) => $val->defaultSubject->subject_type_id == 3) as $subject)
-                                                        <div class="subject whitespace-nowrap bg-project-primary-600 text-white hover:bg-project-gray-dark" 
+                                                        <div class="subject max-h-0 hidden whitespace-nowrap bg-project-gray-light py-2 px-3 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default duration-100 cursor-pointer" 
                                                             data-id="{{$subject->id}}"
                                                             data-defaultSubjectId="{{$subject->default_subject_id}}" 
                                                             data-subjectTypeId="{{$subject->defaultSubject->subject_type_id}}" 
@@ -172,7 +184,7 @@
                                                 <x-teacher-select fetchedTeacherId="{{$cellData->teacher_id}}" fetchedTeacher="{{formatCellPersonName(collect($cellData))}}">
                                                     @foreach (getTeachersPerSubject($cellData->subject_id, $cellData->subject_type_id, $subjects) as $subjectTeacher)
                                                     
-                                                        <div class="teacher whitespace-nowrap justify-start items-start bg-project-primary-600 text-white hover:bg-project-gray-dark" 
+                                                        <div class="teacher whitespace-nowrap justify-start items-start bg-project-gray-light py-2 px-3 text-project-primary-700 fill-project-primary-700 hover:bg-project-gray-default duration-100 cursor-pointer" 
                                                         data-id="{{$subjectTeacher->teacher->id}}"
                                                         data-content="{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}"
                                                         data-subjectTeacherId="{{$subjectTeacher->id}}"
@@ -181,7 +193,7 @@
                                                         data-lastName="{{$subjectTeacher->teacher->user->last_name}}"
                                                         >
                                                         
-                                                        <div class="flex flex-col p-3">
+                                                        <div class="flex flex-col">
                                                                 <p class="whitespace-nowrap">{{formatCellPersonName(collect($subjectTeacher->teacher->user)->merge(collect($subjectTeacher->teacher->honorific)))}}</p>
                                                                 <p class="max-hours text-xs">Available for this day: {{$subjectTeacher->teacher->max_hours}}</p>
                                                                 <p class="regular-load text-xs">Regular load: {{$subjectTeacher->teacher->regular_load}}</p>

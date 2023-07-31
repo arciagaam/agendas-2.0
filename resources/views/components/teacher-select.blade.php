@@ -9,7 +9,7 @@
         <box-icon name="chevron-down"></box-icon>
     </button>
 
-    <div aria-expanded="false" class="teacher_select_dropdown_body absolute top-[100%] z-10 bg-project-primary-600 overflow-y-hidden max-h-0 aria-expanded:max-h-[100rem] transition-all flex flex-col gap-2 w-full">
+    <div aria-expanded="false" class="teacher_select_dropdown_body absolute top-[100%] z-10 bg-project-gray-light overflow-y-hidden max-h-0 aria-expanded:max-h-[100rem] transition-all flex flex-col gap-2 w-full">
         {{$slot}}
     </div>
 </div>

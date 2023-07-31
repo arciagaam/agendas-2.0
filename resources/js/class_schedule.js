@@ -8,6 +8,8 @@ const labels = document.querySelectorAll('.subject_select_dropdown_label');
 const selectSubjects = document.querySelectorAll('input[name="select_subjects[]"]');
 const selectionBodies = document.querySelectorAll('.subject_select_dropdown_body, .teacher_select_dropdown_body');
 
+const subSubjectDropdowns = document.querySelectorAll('.sub-subject-dropdown');
+
 const classSchedules = {};
 let classSchedulesArray = [];
 
@@ -247,12 +249,14 @@ function initialCountSpDp() {
         subject.querySelector('.dp').innerText = 'DP: ' + subjects.current[subject.dataset.id]['dp']
 
         if (subjects.current[subject.dataset.id]['sp'] == 0 && subjects.current[subject.dataset.id]['dp'] == 0) {
-            subject.classList.add('bg-white');
-            subject.classList.add('text-black');
+            subject.classList.add('text-project-gray-disabled');
+            subject.classList.remove('text-project-primary-700');
+            subject.classList.add('cursor-not-allowed');
             subject.classList.add('pointer-events-none');
         } else {
-            subject.classList.remove('bg-white');
-            subject.classList.remove('text-black');
+            subject.classList.remove('text-project-gray-disabled');
+            subject.classList.add('text-project-primary-700');
+            subject.classList.remove('cursor-not-allowed');
             subject.classList.remove('pointer-events-none');
         }
     })
@@ -482,6 +486,10 @@ function checkConflicts(cellData) {
 
 function closeAllSubjectSelections() {
     selectionBodies.forEach(selectionBody => {
+        if(selectionBody.classList.contains('ring-1')) {
+            selectionBody.classList.remove('ring-1');
+            selectionBody.classList.remove('ring-project-gray-disabled');
+        }
         selectionBody.ariaExpanded = false;
     })
 }
@@ -492,9 +500,14 @@ labels.forEach(selection => {
 
         if (selectionBody.ariaExpanded == 'true') {
             selectionBody.ariaExpanded = false;
+            selectionBody.classList.remove('ring-1');
+            selectionBody.classList.remove('ring-project-gray-disabled');
+            
         } else {
             closeAllSubjectSelections();
             selectionBody.ariaExpanded = true;
+            selectionBody.classList.add('ring-1');
+            selectionBody.classList.add('ring-project-gray-disabled');
         }
     });
 });
@@ -503,11 +516,18 @@ const subjectItems = document.querySelectorAll('.subject-select-dropdown .subjec
 
 subjectItems.forEach(item => {
     item.addEventListener('click', () => {
+        const dropDownContainer = item.closest('.subject_select_dropdown_body');
+        const dropDownLabel = item.closest('.sub-subject-container').previousSibling.parentNode;
         const content = item.dataset.content;
         const id = item.dataset.id;
         const dropdown = item.closest('.subject-select-dropdown');
         const selectedSubject = dropdown.querySelector('.selectedOption');
-
+        
+        console.log(item);
+        item.ariaSelected = "true";
+        dropDownLabel.ariaExpanded = "false";
+        dropDownContainer.classList.remove('ring-1')
+        dropDownContainer.classList.remove('ring-projet-gray-dark');
         selectedSubject.textContent = content;
         dropdown.id = id;
 
@@ -529,7 +549,7 @@ subjectItems.forEach(item => {
             .then(data => {
                 data.payload.forEach(teacher => {
                     const mainContainer = Object.assign(document.createElement('div'), {
-                        className: 'teacher whitespace-nowrap bg-project-primary-600 text-white hover:bg-project-gray-dark'
+                        className: 'teacher whitespace-nowrap bg-project-gray-light text-project-primary-700 hover:bg-project-gray-default p-3'
                     });
 
                     mainContainer.dataset.id = teacher.id;
@@ -540,7 +560,7 @@ subjectItems.forEach(item => {
                     mainContainer.dataset.lastname = teacher.last_name;
 
                     const pContainer = Object.assign(document.createElement('div'), {
-                        className: 'flex flex-col p-3'
+                        className: 'flex flex-col'
                     });
 
                     const teacherName = Object.assign(document.createElement('p'), {
@@ -689,5 +709,27 @@ window.addEventListener('load', async () => {
     }
 })
 
+subSubjectDropdowns.forEach(subSubjectDropdown => {
+    subSubjectDropdown.addEventListener('click', () => {
+        const subSubjectContainer = subSubjectDropdown.nextElementSibling;
+        const subSubjects = Array.from(subSubjectContainer.children);
 
+        if (subSubjectDropdown.ariaExpanded == "true") {
+            console.log('a');
+            subSubjectDropdown.ariaExpanded = "false";
+        } else {
+            subSubjectDropdown.ariaExpanded = "true";
+        }
+
+        subSubjectContainer.classList.toggle('hidden');
+        subSubjectContainer.classList.toggle('max-h-0');
+
+        subSubjects.forEach(subSubject => {
+            subSubject.classList.toggle('max-h-0');
+            subSubject.classList.toggle('hidden');
+        });
+
+        console.log(subSubjectDropdown.ariaExpanded);
+    });
+});
 

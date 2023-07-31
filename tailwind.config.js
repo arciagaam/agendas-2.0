@@ -33,7 +33,7 @@ module.exports = {
           primary : {'900': '#111211', '800':'#191A19', '700':'#232523', '600':'#313532', '500':'#484C49'},
           dominant : '#fff',
           accent : {'900':'#031708', '800':'#0B4119', '700':'#178232', '600':'#29A347', '500':'#33CC59', '400': '#42D767', '300': '#7DE898', '200': '#A6F2B9', '100': '#D1FADB'},
-          gray: { default: '#E5E5EA', light: "#F9FAFB", dark: "#3A3A3C"}
+          gray: { default: '#E5E5EA', light: "#F9FAFB", dark: "#3A3A3C", disabled: "#BABAC5"}
         }
       }
     },
