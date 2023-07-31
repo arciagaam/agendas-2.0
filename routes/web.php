@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\schedules\EventController;
 use App\Http\Controllers\admin\schedules\ExamController;
 use App\Http\Controllers\AuthenticationController;
 use App\Models\ClassSchedule;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,10 @@ Route::get('/clearall', function() {
     session()->forget('unsaved.schedule');
     return back()->with('clear', true);
 })->name('clearall');
+
+Route::get('/updateregularload', function () {
+    Teacher::where('regular_load', 10)->update(['regular_load' => 20]);
+})->name('updateregularload');
 
 
 Route::get('/', [AuthenticationController::class, 'userLogin']);
