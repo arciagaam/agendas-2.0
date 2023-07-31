@@ -281,7 +281,7 @@ subjectItems2.forEach(item => {
         currentCell.dataset.defaultsubjectid = item.dataset.defaultsubjectid;
         currentCell.dataset.subjectname = item.dataset.content;
         currentCell.dataset.subjecttypeid = item.dataset.subjecttypeid;
-        currentCell.dataset.subjectteacherid = '';
+        currentCell.dataset.subjectteacherid = item.dataset.subjecttypeid != 1 ? item.dataset.subjectteacherid : '';
         currentCell.dataset.teacherid = '';
         currentCell.dataset.honorific = '';
         currentCell.dataset.firstname = '';
