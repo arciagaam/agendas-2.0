@@ -33,7 +33,7 @@
                 <x-navigation.navlink name="check-shield" label="Roles" url="{{route('admin.user-management.roles.index')}}"/>    
             </x-navigation.nav-accordion>
             
-            <x-navigation.navlink name="cog" label="System Variables" url="{{route('admin.dashboard')}}"/>
+            <x-navigation.navlink name="cog" label="System Variables" url="{{route('admin.system-variables.index')}}"/>
         </div>
     </div>
 </nav>

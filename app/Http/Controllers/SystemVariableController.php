@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\admin\user_management;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AccountController extends Controller
+class SystemVariableController extends Controller
 {
     public function __construct () {
         abort(404);
@@ -15,7 +14,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.users.accounts.index');
+        //
     }
 
     /**

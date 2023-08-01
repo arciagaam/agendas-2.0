@@ -16,7 +16,7 @@
         <x-navigation.navbar/>
         
         <div class="relative ml-[3.5rem] flex flex-col w-full">
-            <x-header-bar/>
+            {{-- <x-header-bar/> --}}
             
             <div class="flex flex-col px-10 py-5 gap-5">
                 {{$slot}}

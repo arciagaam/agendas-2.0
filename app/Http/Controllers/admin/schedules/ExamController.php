@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
+    public function __construct () {
+        abort(404);
+    }
     /**
      * Display a listing of the resource.
      */
