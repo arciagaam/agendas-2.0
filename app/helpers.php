@@ -45,7 +45,9 @@ function getCellData($classSchedule, int $timetableNumber, int $row, int $day_id
         }
     }
 
-    // dd($classSchedule);
+    // if ($timetableNumber == 2) {
+    //     dd($row, $filteredClassSchedule);
+    // }
 
     return $cellData[0] ?? null;
 

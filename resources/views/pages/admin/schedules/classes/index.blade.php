@@ -79,7 +79,7 @@
                                         @php
                                             $cellData = getCellData($classSchedule, $tables+1, $row+1, $day->id);
                                         @endphp
-
+                                        
                                         @if($index == 0)
                                             <td class="td-container">
                                                 <div class="flex flex-row gap-2 rounded-lg bg-gray-100 ring-1 ring-project-gray-default items-center justify-center">

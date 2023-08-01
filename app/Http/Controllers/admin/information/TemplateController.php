@@ -40,6 +40,8 @@ class TemplateController extends Controller
             array_push($classSchedule, (array) $value);
         }
 
+        ClassSchedule::whereIn('classroom_id', json_decode($request->sections))->delete();
+
         // dd($classSchedule);
         ClassSchedule::insert((array) $classSchedule);
     }
