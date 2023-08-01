@@ -205,44 +205,47 @@ function resetSubjects() {
 function initialCountSpDp() {
     resetSubjects();
 
-    const tableRows = document.querySelectorAll('[data-tableNumber] tbody tr');
-
-    tableRows.forEach((row, rowindex) => {
-        const cols = row.querySelectorAll('td');
-        cols.forEach((col, colindex) => {
-            if (colindex != 0 && !col.hasAttribute('data-marker')) {
-                let type = 'sp';
-                const prevRowColumns = tableRows[rowindex - 1]?.querySelectorAll('td');
-                const nextRowColumns = tableRows[rowindex + 1]?.querySelectorAll('td');
-                const subjectId = col.dataset.subjectid;
-
-                if (prevRowColumns) {
-                    const prevId = prevRowColumns[colindex].dataset.subjectid;
-                    const hasMarker = prevRowColumns[colindex].hasAttribute('data-marker');
-
-                    if (subjectId == prevId && !hasMarker) {
-                        prevRowColumns[colindex].dataset.marker = 'dp'
-                        type = 'dp';
+    const tables = document.querySelectorAll('table');
+    tables.forEach(table => {
+        const tableRows = table.querySelectorAll('[data-tableNumber] tbody tr');
+        tableRows.forEach((row, rowindex) => {
+            const cols = row.querySelectorAll('td');
+            cols.forEach((col, colindex) => {
+                if (colindex != 0 && !col.hasAttribute('data-marker')) {
+                    let type = 'sp';
+                    const prevRowColumns = tableRows[rowindex - 1]?.querySelectorAll('td');
+                    const nextRowColumns = tableRows[rowindex + 1]?.querySelectorAll('td');
+                    const subjectId = col.dataset.subjectid;
+    
+                    if (prevRowColumns) {
+                        const prevId = prevRowColumns[colindex].dataset.subjectid;
+                        const hasMarker = prevRowColumns[colindex].hasAttribute('data-marker');
+    
+                        if (subjectId == prevId && !hasMarker) {
+                            prevRowColumns[colindex].dataset.marker = 'dp'
+                            type = 'dp';
+                        }
+                    }
+    
+                    if (nextRowColumns) {
+                        console.log(nextRowColumns);
+                        const nextId = nextRowColumns[colindex].dataset.subjectid;
+                        if (subjectId == nextId) {
+                            nextRowColumns[colindex].dataset.marker = 'dp'
+                            type = 'dp';
+                        }
+                    }
+    
+                    if (subjectId in subjects.current) {
+                        computeSpDp(subjectId, type, 'subtract');
                     }
                 }
-
-                if (nextRowColumns) {
-                    const nextId = nextRowColumns[colindex].dataset.subjectid;
-                    if (subjectId == nextId) {
-                        nextRowColumns[colindex].dataset.marker = 'dp'
-                        type = 'dp';
-                    }
-                }
-
-                if (subjectId in subjects.current) {
-                    computeSpDp(subjectId, type, 'subtract');
-                }
-            }
-
-            checkConflicts(col)
+    
+                checkConflicts(col)
+            });
+    
         });
-
-    });
+    })
 
     document.querySelectorAll('.subject[data-subjecttypeid="1"]').forEach(subject => {
         subject.querySelector('.sp').innerText = 'SP: ' + subjects.current[subject.dataset.id]['sp']
@@ -409,7 +412,7 @@ document.addEventListener('click', (e) => {
 })
 
 function checkConflicts(cellData) {
-
+    console.log(cellData)
     function resetBgColors(cellData) {
         cellData.children[0].classList.remove('bg-red-50');
         cellData.children[0].classList.remove('bg-green-50');
